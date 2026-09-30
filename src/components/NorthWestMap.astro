@@ -25,10 +25,10 @@ const pins = confirmedAreas
 const VX = 23, VY = 90, VW = 600, VH = 930;
 const order = ['lancashire', 'greater-manchester', 'merseyside', 'cheshire'];
 // label lines + nudges (map units, pre-zoom) so names sit comfortably in/next to each county
+// (Merseyside is highlighted but not labelled — site owner's call, 30 Sep)
 const names: Record<string, { lines: string[]; dx: number; dy: number }> = {
   lancashire: { lines: ['LANCASHIRE'], dx: 2, dy: 1.5 },
   'greater-manchester': { lines: ['GREATER', 'MANCHESTER'], dx: 2.5, dy: -0.5 },
-  merseyside: { lines: ['MERSEYSIDE'], dx: -9, dy: 2 },
   cheshire: { lines: ['CHESHIRE'], dx: 4, dy: 1 },
 };
 // zoom: scale about the region's centre, then bring that centre to the middle of the view
@@ -81,7 +81,7 @@ const ctx = [
       {order.map((k) => <path d={counties[k]} class="ukmap__county-line" />)}
       <path d={m.nw} class="ukmap__region" />
 
-      {order.map((k) => (
+      {order.filter((k) => names[k]).map((k) => (
         <text x={labels[k][0] + names[k].dx} y={labels[k][1] + names[k].dy} class="ukmap__label" text-anchor="middle">
           {names[k].lines.map((line, i) => (
             <tspan x={labels[k][0] + names[k].dx} dy={i === 0 ? 0 : 3.9}>{line}</tspan>

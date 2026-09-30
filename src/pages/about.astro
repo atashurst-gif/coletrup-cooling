@@ -23,17 +23,17 @@ const values = [
   { icon: 'gauge', title: 'Technically capable', text: 'Methodical diagnosis and the right solution, not guesswork.' },
   { icon: 'handshake', title: 'Easy to deal with', text: 'Plain-English advice from first enquiry to finished job.' },
 ];
-const gauges = images.engineerInstallDiningDark;
+const story = images.graphicWaves; // decorative until a team/founder photo is supplied
 ---
 
-<BaseLayout {title} {description} path="/about/" ogImage="engineerFilterCleanDark" {breadcrumbs}>
+<BaseLayout {title} {description} path="/about/" ogImage="engineerPortrait" {breadcrumbs}>
   <PageHero
     breadcrumbs={breadcrumbs}
     eyebrow="About Coletrup Cooling"
     title="Specialists in keeping homes and businesses cool."
     lead="Coletrup Cooling provides professional air conditioning installation, servicing and repairs for homes and businesses, alongside specialist refrigeration servicing, maintenance and repairs."
-    image="engineerFilterCleanDark"
-    imagePosition="50% 45%"
+    image="engineerPortrait"
+    imagePosition="50% 30%"
     cta={{ label: 'Get a quote', href: '#quote', track: 'quote' }}
     whatsappMessage="Hi Coletrup Cooling, I'd like to find out more about your services."
   />
@@ -54,8 +54,8 @@ const gauges = images.engineerInstallDiningDark;
         </Placeholder>
       </div>
       <div class="about-story__media" data-reveal style="--reveal-delay:120ms">
-        <div class="frame about-story__frame zoom">
-          <Picture src={gauges.src} alt={gauges.alt} title={gauges.title} widths={[480, 800, 1200]} sizes="(min-width: 1080px) 40vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" fallbackFormat="webp" loading="lazy" decoding="async" quality={80} style="object-position:50% 35%" />
+        <div class="frame about-story__frame">
+          <Picture src={story.src} alt="" widths={[480, 800, 1200]} sizes="(min-width: 1080px) 40vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={80} style="object-position:50% 50%" />
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@ const gauges = images.engineerInstallDiningDark;
 
   <ProcessSteps tone="white" />
 
-  <ReviewSection />
+  <ReviewSection image="graphicDeepWave" />
 
   <QuoteForm id="quote" />
 

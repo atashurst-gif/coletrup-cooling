@@ -61,24 +61,33 @@ Every push to `main` rebuilds and goes live; the content audit and post-build ch
 
 Any other static host works too (Vercel, Cloudflare Pages, S3): upload `dist/` built with `url` set. Set `forms.provider` to `'webhook'` with your endpoint if not on Netlify.
 
-## 3. Replace the images with full-resolution originals
+## 3. Photos — one photo per page, matched to its section
 
-The supplied images are 340–515 px wide. Drop the originals into `src/assets/images/` **using the same filenames** and rebuild — responsive AVIF/WebP sets up to 1600 px are generated automatically. Recommended: ≥ 2000 px wide for the hero and page-hero images.
+**Rule:** every photo appears on exactly one page (and once on it). `node tools/image-audit.mjs` runs as part of `npm run build` and fails the build if a photo is repeated anywhere. Decorative graphics (`coletrup-airflow-graphic*`) are exempt. Uniform rule: engineers indoors wear the shirt; outdoors and around fridges/freezers/cold rooms they wear the black coat.
 
-| File | Used for |
+Where each photo lives (key in `src/lib/images.ts` → page/section):
+
+| Page | Photos |
 | --- | --- |
-| `residential-air-conditioning-living-room.jpg` (02) | Homepage hero, Residential page hero, secondary residential image |
-| `air-conditioning-engineer-servicing-home-unit.jpg` (01) | Residential sections, Installation page hero, service cards |
-| `commercial-air-conditioning-engineer-rooftop.jpg` (03) | Commercial pages, Areas page |
-| `commercial-display-fridges.jpg` (04) | Refrigeration & Display Fridge pages |
-| `air-conditioning-outdoor-unit-fan.jpg` (05) | Servicing & Maintenance, Commercial Repairs |
-| `temperature-control-panel.jpg` (06) | Planned Maintenance, Fridge & Freezer |
-| `cold-room-refrigeration.jpg` (07) | Cold Room page, refrigeration secondary image |
-| `engineer-refrigerant-gauges-diagnostics.jpg` (08) | Repairs pages, About |
-| `coletrup-airflow-graphic.jpg` (09) | Final CTA background |
-| `coletrup-cooling-service-van.jpg` | Trust section, About hero (cropped from the supplied collage) |
+| Home | hero `livingRoomBifold` · selector `engineerHomeDark` / `officeBoardroom` / `supermarketChillers` · residential `openPlanLiving` · commercial `outdoorTablet` · refrigeration `fridgeGaugesCoat` · maintenance `maintenanceChecklist` · trust `van` |
+| Residential | hero `engineerInstallDiningDark` · rooms `bedroom` `livingRoom` `homeOffice` `gardenRoom` `kitchenDiner` `thermostat` |
+| Installation | hero `outdoorElectrical` |
+| Repairs | hero `engineerOutdoorGauges` |
+| Servicing | hero `engineerFilterCleanDark` · split `outdoorFan` |
+| Commercial hub | hero `commercialCassetteInstallDark` · split `restaurantCassette` |
+| Commercial repairs | hero `commercialRooftopGauges` |
+| Commercial maintenance | hero `commercialOfficeFilter` |
+| Refrigeration hub | hero `coldRoomEngineer` |
+| Fridge & freezer | hero `engineerGauges` |
+| Cold rooms | hero `coldRoom` |
+| Display fridges | hero `displayFridges` |
+| Planned maintenance | hero `commercialRestaurantCheckDark` |
+| About | hero `engineerPortrait` · story/trust: graphics until a team photo is supplied |
+| Areas / location pages | the animated North West map (no photo) |
 
-Alt text lives in `src/lib/images.ts`.
+Sections that currently show a branded icon panel instead of a photo (a photo slots straight in — add it to `images.ts` and set `image:` on the section in `services.mjs`): Residential "Start to finish"; Installation "Keep it performing"; Repairs "Servicing helps spot issues early"; Commercial repairs "Reduce the risk of repeat faults"; Commercial maintenance "AC and refrigeration together"; Refrigeration hub, Fridge & freezer, Cold rooms, Display fridges and Planned maintenance splits; the link cards on the Residential, Commercial and Refrigeration hubs and the Installation/Planned duos are icon-only.
+
+Drop new photos into `src/assets/images/` with descriptive SEO filenames (`what-is-happening-where.jpg`, ≥1400 px wide, JPEG), register them in `src/lib/images.ts` with honest alt text, then rebuild — the audit tells you if anything repeats. Retired variants (navy uniform, outdoor polo) are in `tools/photo-originals/retired/`; originals of everything in use are in `tools/photo-originals/`.
 
 ## 4. Editing copy
 
@@ -125,7 +134,8 @@ src/
   data/uk-map.json         ← map geometry (built by tools/map/build-uk.py from ONS boundaries)
 tools/
   content-audit.mjs  (pre-build)   netlify-redirects.mjs · check-build.mjs (post-build)
-  e2e.mjs · a11y.mjs · lh.mjs · shoot.mjs   (QA scripts, need dev deps)
+  image-audit.mjs (post-build: one photo per page) · imgcheck.mjs (every <img> decodes)
+  e2e.mjs · a11y.mjs · lh.mjs · shoot.mjs · snap-hero.mjs   (QA scripts, need dev deps)
   make-logo-svg.py   (vector logo from tools/logo-source/)   map/build-uk.py (UK map data)
   photo-originals/branded/  (the four branded photos supplied 30 Sep — van, rooftop, home, gauges — as used on the site)
   clean-photos.py + upscale.py  (superseded: logo-free versions of the earlier small photos; originals in tools/photo-originals/)

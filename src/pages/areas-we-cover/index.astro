@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
-import AreasSection from '../../components/AreasSection.astro';
 import Icon from '../../components/Icon.astro';
 import Placeholder from '../../components/Placeholder.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
@@ -14,14 +13,13 @@ const description = `Air conditioning installation, servicing and repairs for ho
 const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
 ---
 
-<BaseLayout {title} {description} path="/areas-we-cover/" ogImage="gardenRoom" {breadcrumbs}>
+<BaseLayout {title} {description} path="/areas-we-cover/" ogImage="livingRoomBifold" {breadcrumbs}>
   <PageHero
     breadcrumbs={breadcrumbs}
     eyebrow="Areas we cover"
     title={`Air conditioning ${site.region.phrase}.`}
     lead={`We provide air conditioning installation, servicing and repairs for homes and businesses ${site.region.phrase}, along with specialist refrigeration servicing, maintenance and repairs.`}
-    image="gardenRoom"
-    imagePosition="45% 50%"
+    map
     cta={{ label: 'Check your area', href: '#quote', track: 'quote' }}
     whatsappMessage="Hi Coletrup Cooling, do you cover my area? My postcode is "
   />
@@ -63,8 +61,6 @@ const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
   </section>
 
   <MidCTA id="areas-mid-cta" tone="white" quoteHref="#quote" title="Not sure if we cover you?" text="Send your postcode with a quote request, or ask on WhatsApp — we'll confirm straight away." />
-
-  <AreasSection id="areas-map" compact />
 
   <QuoteForm id="quote" title="Check we cover your area." intro="Tell us what you need and your postcode, and we'll confirm whether we can help." tone="navy" />
 

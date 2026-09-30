@@ -6,12 +6,17 @@
 import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
 import Placeholder from './Placeholder.astro';
-import { images } from '../lib/images';
+import { images, type ImageKey } from '../lib/images';
 import { site } from '../lib/site';
 
+export interface Props {
+  /** Photo (or decorative graphic) for the aside — each page passes a different one. */
+  image?: ImageKey;
+}
+const { image = 'van' } = Astro.props;
 const reviews = site.reviews;
 const accreditations = site.accreditations;
-const van = images.van;
+const aside = images[image];
 ---
 
 <section class="section trust tone-white" id="trust" aria-labelledby="trust-title">
@@ -71,7 +76,7 @@ const van = images.van;
 
       <aside class="trust__aside" data-reveal style="--reveal-delay:200ms">
         <div class="frame trust__van">
-          <Picture src={van.src} alt={van.alt} title={van.title} widths={[480, 800, 1200]} sizes="(min-width: 1080px) 34vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={80} />
+          <Picture src={aside.src} alt={aside.alt} title={aside.title} widths={[480, 800, 1200]} sizes="(min-width: 1080px) 34vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={80} />
         </div>
         <div class="trust__acc">
           <h3 class="trust__acc-title">Accreditations &amp; memberships</h3>

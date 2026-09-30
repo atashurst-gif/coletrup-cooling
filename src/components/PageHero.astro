@@ -6,6 +6,7 @@ import { Picture } from 'astro:assets';
 import Breadcrumbs from './Breadcrumbs.astro';
 import Button from './Button.astro';
 import Airflow from './Airflow.astro';
+import NorthWestMap from './NorthWestMap.astro';
 import { images, type ImageKey } from '../lib/images';
 import { whatsappHref } from '../lib/site';
 
@@ -15,20 +16,23 @@ export interface Props {
   title: string;
   lead?: string;
   image?: ImageKey;
+  /** Show the animated North West map in place of a photo (location pages). */
+  map?: boolean;
   imagePosition?: string;
   chips?: string[];
   cta?: { label: string; href: string; track?: string };
   whatsappMessage?: string;
   compact?: boolean;
 }
-const { breadcrumbs, eyebrow, title, lead, image, imagePosition = '50% 50%', chips = [], cta, whatsappMessage, compact = false } = Astro.props;
-const img = image ? images[image] : null;
+const { breadcrumbs, eyebrow, title, lead, image, map = false, imagePosition = '50% 50%', chips = [], cta, whatsappMessage, compact = false } = Astro.props;
+const img = image && !map ? images[image] : null;
+const hasMedia = Boolean(img) || map;
 ---
 
-<section class:list={['phero', !img && 'phero--text', compact && 'phero--compact']} data-hide-lead-bar>
+<section class:list={['phero', !hasMedia && 'phero--text', map && 'phero--map', compact && 'phero--compact']} data-hide-lead-bar>
   <div class="phero__bg" aria-hidden="true"></div>
   <Airflow tone="light" lines={6} seed={13} intensity={0.8} mask="linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.3) 35%, #000 60%, #000 100%)" />
-  <div class:list={['container', img ? 'phero__grid' : 'phero__single']}>
+  <div class:list={['container', hasMedia ? 'phero__grid' : 'phero__single']}>
     <div class="phero__copy">
       <Breadcrumbs items={breadcrumbs} />
       {eyebrow && <p class="eyebrow phero__eyebrow">{eyebrow}</p>}
@@ -52,6 +56,13 @@ const img = image ? images[image] : null;
         )
       }
     </div>
+    {
+      map && (
+        <div class="phero__media phero__media--map" data-reveal style="--reveal-delay:120ms">
+          <NorthWestMap />
+        </div>
+      )
+    }
     {
       img && (
         <div class="phero__media">
@@ -98,6 +109,10 @@ const img = image ? images[image] : null;
     display: grid;
     gap: 2rem;
     align-items: center;
+  }
+  .phero__media--map :global(.nwmap) {
+    max-width: 520px;
+    margin-inline: auto;
   }
   .phero__single {
     max-width: 820px;

@@ -12,7 +12,7 @@ const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromi
 const page = await browser.newPage({ viewport:{ width:+width, height: +width<600?844:900 }, deviceScaleFactor: +width<600?2:1 });
 page.on('pageerror', e=>console.log('PAGEERROR', e.message)); page.on('console', m=> m.type()==='error' && console.log('CONSOLE', m.text()));
 await page.goto('http://localhost:4321'+path, { waitUntil:'networkidle' });
-await page.evaluate(async()=>{ document.querySelectorAll('[data-reveal]').forEach(e=>e.classList.add('is-visible')); window.scrollTo(0,document.body.scrollHeight); await new Promise(r=>setTimeout(r,300)); window.scrollTo(0,0); await new Promise(r=>setTimeout(r,300)); });
+await page.evaluate(async()=>{ document.querySelectorAll('[data-reveal]').forEach(e=>e.classList.add('is-visible')); const imgs=[...document.querySelectorAll('img')]; imgs.forEach(i=>{ i.loading='eager'; }); window.scrollTo(0,document.body.scrollHeight); await new Promise(r=>setTimeout(r,300)); await Promise.all(imgs.map(i=>i.decode().catch(()=>{}))); window.scrollTo(0,0); await new Promise(r=>setTimeout(r,300)); });
 const out = `/tmp/claude-0/-home-claude/1f819917-8096-5d4e-8eb3-6271fb89cd98/scratchpad/${name}.png`;
 await page.screenshot({ path: out, fullPage: full==='full' });
 const h = await page.evaluate(()=>document.documentElement.scrollHeight); const sw = await page.evaluate(()=>document.documentElement.scrollWidth);

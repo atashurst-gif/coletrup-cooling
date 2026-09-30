@@ -36,14 +36,13 @@ const schema = [
 ];
 ---
 
-<BaseLayout {title} {description} {path} ogImage="livingRoom" {breadcrumbs} {schema}>
+<BaseLayout {title} {description} {path} ogImage="livingRoomBifold" {breadcrumbs} {schema}>
   <PageHero
     breadcrumbs={breadcrumbs}
     eyebrow={`Air conditioning in ${area.name}`}
     title={`Air conditioning specialists in ${area.name}.`}
     lead={area.intro}
-    image="livingRoom"
-    imagePosition="60% 50%"
+    map
     chips={['Residential', 'Commercial', 'Refrigeration repairs']}
     cta={{ label: 'Get a quote', href: '#quote', track: 'quote' }}
     whatsappMessage={`Hi Coletrup Cooling, I'm in ${area.name} and I'd like a quote.`}
@@ -67,9 +66,9 @@ const schema = [
     eyebrow={`Services in ${area.name}`}
     title="How we can help."
     items={[
-      { icon: 'home', title: 'Residential Air Conditioning', text: 'Installation, servicing and repairs for homes.', href: '/residential-air-conditioning/', image: 'engineerHome', cta: 'Residential', track: 'residential' },
-      { icon: 'building', title: 'Commercial Air Conditioning', text: 'Installation, servicing, maintenance and repairs for businesses.', href: '/commercial-air-conditioning/', image: 'engineerRooftop', cta: 'Commercial', track: 'commercial' },
-      { icon: 'fridge', title: 'Refrigeration Repairs & Maintenance', text: 'Specialist servicing, maintenance, fault finding and repairs.', href: '/refrigeration-repairs-maintenance/', image: 'displayFridges', cta: 'Refrigeration', track: 'refrigeration' },
+      { icon: 'home', title: 'Residential Air Conditioning', text: 'Installation, servicing and repairs for homes.', href: '/residential-air-conditioning/', cta: 'Residential', track: 'residential' },
+      { icon: 'building', title: 'Commercial Air Conditioning', text: 'Installation, servicing, maintenance and repairs for businesses.', href: '/commercial-air-conditioning/', cta: 'Commercial', track: 'commercial' },
+      { icon: 'fridge', title: 'Refrigeration Repairs & Maintenance', text: 'Specialist servicing, maintenance, fault finding and repairs.', href: '/refrigeration-repairs-maintenance/', cta: 'Refrigeration', track: 'refrigeration' },
     ]}
   />
 
