@@ -1,0 +1,96 @@
+---
+/**
+ * Section 4 — Why Coletrup. Four benefits, premium line icons, navy feature band.
+ */
+import Icon from './Icon.astro';
+import Airflow from './Airflow.astro';
+
+const benefits = [
+  { icon: 'ac-unit', title: 'Expert Installation', text: 'Systems suited to your property, installed professionally and with care.' },
+  { icon: 'wrench', title: 'Reliable Repairs', text: 'Methodical fault finding, clear explanations and repairs done properly.' },
+  { icon: 'calendar', title: 'Ongoing Maintenance', text: 'Servicing and planned maintenance to keep systems performing at their best.' },
+  { icon: 'shield', title: 'Professional Service', text: 'A specialist, easy-to-deal-with team from first enquiry to finished work.' },
+];
+---
+
+<section class="section why tone-navy" id="why" aria-labelledby="why-title">
+  <Airflow tone="dark" lines={6} seed={5} intensity={0.8} mask="linear-gradient(180deg, transparent 0%, #000 45%, #000 100%)" />
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">Why Coletrup</p>
+        <h2 id="why-title">Cooling expertise you can rely on.</h2>
+      </div>
+      <p>
+        Specialist knowledge, a professional approach and a service that's easy to deal with — for homes and businesses alike.
+      </p>
+    </div>
+    <ul class="why__grid">
+      {
+        benefits.map((b, i) => (
+          <li class="why__item" data-reveal style={`--reveal-delay:${i * 80}ms`}>
+            <span class="why__icon"><Icon name={b.icon} size={26} /></span>
+            <h3 class="why__title">{b.title}</h3>
+            <p class="why__text">{b.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .why {
+    overflow: hidden;
+  }
+  .why :global(.container) {
+    position: relative;
+  }
+  .why__grid {
+    position: relative;
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .why__item {
+    padding: 1.75rem;
+    border: 1px solid var(--line-on-navy);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.035);
+    transition:
+      background-color 0.3s ease,
+      transform 0.35s var(--ease);
+  }
+  .why__item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-3px);
+  }
+  .why__icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin-bottom: 1.25rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(0, 154, 224, 0.28), rgba(0, 154, 224, 0.08));
+    border: 1px solid rgba(91, 196, 242, 0.3);
+    color: var(--blue-on-navy);
+  }
+  .why__title {
+    margin-bottom: 0.5rem;
+    font-size: 1.1875rem;
+  }
+  .why__text {
+    font-size: var(--fs-sm);
+  }
+  @media (min-width: 640px) {
+    .why__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .why__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

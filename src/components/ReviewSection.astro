@@ -1,0 +1,193 @@
+---
+/**
+ * Section 10 — Trust. Genuine reviews and accreditations from site.config only.
+ * With nothing supplied, renders clearly marked CMS placeholders.
+ */
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import Placeholder from './Placeholder.astro';
+import { images } from '../lib/images';
+import { site } from '../lib/site';
+
+const reviews = site.reviews;
+const accreditations = site.accreditations;
+const van = images.van;
+---
+
+<section class="section trust tone-white" id="trust" aria-labelledby="trust-title">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">Trusted by homes and businesses</p>
+      <h2 id="trust-title">Real homes. Real businesses. Professional service.</h2>
+    </div>
+
+    <div class="trust__grid">
+      <div class="trust__reviews">
+        {
+          reviews.length > 0 ? (
+            <ul class="trust__list">
+              {reviews.slice(0, 3).map((r, i) => (
+                <li class="card trust__card" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+                  <Icon name="quote" size={28} class="trust__quote" />
+                  <blockquote class="trust__text">
+                    <p>{r.quote}</p>
+                  </blockquote>
+                  <p class="trust__by">
+                    <strong>{r.name}</strong>
+                    {r.location && <span> · {r.location}</span>}
+                    {r.service && <span class="trust__svc">{r.service}</span>}
+                    {r.source && (
+                      <span class="trust__src">
+                        via {r.sourceUrl ? <a href={r.sourceUrl} target="_blank" rel="noopener">{r.source}</a> : r.source}
+                      </span>
+                    )}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul class="trust__list">
+              {[0, 1, 2].map((i) => (
+                <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
+                  <Placeholder block label="GENUINE CUSTOMER REVIEW TO BE ADDED">
+                    <p>Customer name, location and the review source (e.g. Google) to be inserted from verified feedback only. Edit <code>reviews</code> in <code>site.config.mjs</code>.</p>
+                  </Placeholder>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {
+          site.reviewProfile && (
+            <p class="trust__more">
+              <a href={site.reviewProfile.url} class="link-arrow" target="_blank" rel="noopener">
+                <span>Read our reviews on {site.reviewProfile.label}</span>
+                <Icon name="external" />
+              </a>
+            </p>
+          )
+        }
+      </div>
+
+      <aside class="trust__aside" data-reveal style="--reveal-delay:200ms">
+        <div class="frame trust__van">
+          <Picture src={van.src} alt={van.alt} title={van.title} widths={[480, 800, 1200]} sizes="(min-width: 1080px) 34vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={80} />
+        </div>
+        <div class="trust__acc">
+          <h3 class="trust__acc-title">Accreditations &amp; memberships</h3>
+          {
+            accreditations.length > 0 ? (
+              <ul class="trust__acc-list">
+                {accreditations.map((a) => (
+                  <li>
+                    {a.logo ? <img src={a.logo} alt={a.name} loading="lazy" height="44" /> : <Icon name="award" />}
+                    <span>
+                      {a.name}
+                      {a.number && <small> · {a.number}</small>}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Placeholder block label="VERIFIED ACCREDITATIONS TO BE ADDED">
+                <p>Only accreditations currently held (with certificate numbers where relevant) should be listed here. Edit <code>accreditations</code> in <code>site.config.mjs</code>.</p>
+              </Placeholder>
+            )
+          }
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .trust__list {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .trust__card {
+    padding: 1.6rem;
+    border-radius: var(--radius);
+  }
+  .trust__quote {
+    color: var(--blue);
+    margin-bottom: 0.75rem;
+  }
+  .trust__text {
+    margin: 0 0 1rem;
+    font-size: 1.0625rem;
+    color: var(--charcoal);
+  }
+  .trust__by {
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  .trust__by strong {
+    color: var(--navy);
+  }
+  .trust__svc,
+  .trust__src {
+    display: block;
+    font-size: 0.8125rem;
+  }
+  .trust__more {
+    margin-top: 1.25rem;
+  }
+  .trust__van {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+  }
+  .trust__van :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .trust__acc {
+    margin-top: 1.25rem;
+  }
+  .trust__acc-title {
+    margin-bottom: 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .trust__acc-list {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .trust__acc-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 1rem;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .trust__acc-list small {
+    color: var(--muted);
+    font-weight: 400;
+  }
+  code {
+    font-size: 0.85em;
+    background: rgba(7, 45, 82, 0.06);
+    padding: 0.05em 0.35em;
+    border-radius: 4px;
+  }
+  @media (min-width: 1080px) {
+    .trust__grid {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 3.5rem;
+      align-items: start;
+    }
+  }
+</style>

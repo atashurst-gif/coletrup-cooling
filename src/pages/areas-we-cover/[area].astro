@@ -1,0 +1,99 @@
+---
+/**
+ * LOCATION PAGES — generated ONLY for areas in site.config that are
+ * confirmed: true AND have unique content (intro + ≥3 details).
+ * With none confirmed (current state) no location pages are built.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import Icon from '../../components/Icon.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import MidCTA from '../../components/MidCTA.astro';
+import { site, areaPages, absoluteUrl, SITE_URL } from '../../lib/site';
+
+export function getStaticPaths() {
+  return areaPages.map((a) => ({ params: { area: a.slug }, props: { area: a } }));
+}
+const { area } = Astro.props;
+const path = `/areas-we-cover/${area.slug}/`;
+const title = `Air Conditioning ${area.name} | Installation, Servicing & Repairs | Coletrup Cooling`;
+const description = `Air conditioning installation, servicing and repairs for homes and businesses in ${area.name}, plus refrigeration servicing, maintenance and repairs from Coletrup Cooling.`;
+const breadcrumbs = [
+  { label: 'Areas We Cover', href: '/areas-we-cover/' },
+  { label: area.name, href: path },
+];
+const schema = [
+  {
+    '@type': 'Service',
+    name: `Air conditioning in ${area.name}`,
+    serviceType: 'Air conditioning installation, servicing and repairs',
+    areaServed: { '@type': 'Place', name: area.name },
+    provider: { '@id': `${SITE_URL || ''}/#organization` },
+    url: absoluteUrl(path),
+  },
+];
+---
+
+<BaseLayout {title} {description} {path} ogImage="livingRoom" {breadcrumbs} {schema}>
+  <PageHero
+    breadcrumbs={breadcrumbs}
+    eyebrow={`Air conditioning in ${area.name}`}
+    title={`Air conditioning specialists in ${area.name}.`}
+    lead={area.intro}
+    image="livingRoom"
+    imagePosition="60% 50%"
+    chips={['Residential', 'Commercial', 'Refrigeration repairs']}
+    cta={{ label: 'Get a quote', href: '#quote', track: 'quote' }}
+    whatsappMessage={`Hi Coletrup Cooling, I'm in ${area.name} and I'd like a quote.`}
+  />
+
+  <section class="section tone-white" aria-labelledby="local-title">
+    <div class="container local">
+      <div class="section-head">
+        <p class="eyebrow">Local knowledge</p>
+        <h2 id="local-title">Working in {area.name}.</h2>
+      </div>
+      <ul class="local__list">
+        {area.details.map((d) => <li><Icon name="check" size={20} strokeWidth={2.4} /><span>{d}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <ServiceCards
+    id="local-services"
+    tone="cream"
+    eyebrow={`Services in ${area.name}`}
+    title="How we can help."
+    items={[
+      { icon: 'home', title: 'Residential Air Conditioning', text: 'Installation, servicing and repairs for homes.', href: '/residential-air-conditioning/', image: 'engineerHome', cta: 'Residential', track: 'residential' },
+      { icon: 'building', title: 'Commercial Air Conditioning', text: 'Installation, servicing, maintenance and repairs for businesses.', href: '/commercial-air-conditioning/', image: 'engineerRooftop', cta: 'Commercial', track: 'commercial' },
+      { icon: 'fridge', title: 'Refrigeration Repairs & Maintenance', text: 'Specialist servicing, maintenance, fault finding and repairs.', href: '/refrigeration-repairs-maintenance/', image: 'displayFridges', cta: 'Refrigeration', track: 'refrigeration' },
+    ]}
+  />
+
+  <MidCTA id="area-mid-cta" tone="white" quoteHref="#quote" title={`Air conditioning in ${area.name}?`} />
+
+  <QuoteForm id="quote" title={`Request a quote in ${area.name}.`} />
+  <FinalCTA />
+</BaseLayout>
+
+<style>
+  .local__list {
+    list-style: none;
+    display: grid;
+    gap: 0.9rem;
+    max-width: 70ch;
+  }
+  .local__list li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .local__list svg {
+    flex: none;
+    color: var(--blue-ink);
+    margin-top: 0.2rem;
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+/**
+ * MidCTA — compact mid-page conversion band: GET A QUOTE + WHATSAPP NOW.
+ * Placed around the middle of every marketing page (the FinalCTA band closes each page).
+ * Marked data-hide-lead-bar so the sticky bottom bar stays out of the way while it is in view.
+ */
+import Button from './Button.astro';
+import Airflow from './Airflow.astro';
+import { whatsappHref } from '../lib/site';
+
+export interface Props {
+  id?: string;
+  tone?: 'cream' | 'white' | 'sand';
+  title?: string;
+  text?: string;
+  quoteHref?: string;
+  quoteLabel?: string;
+  whatsappMessage?: string;
+}
+const {
+  id = 'mid-cta',
+  tone = 'cream',
+  title = 'Ready when you are.',
+  text = "Request a quote in a few quick steps, or message us on WhatsApp — whichever suits you.",
+  quoteHref = '/contact/#quote',
+  quoteLabel = 'Get a quote',
+  whatsappMessage,
+} = Astro.props;
+---
+
+<section class:list={['section', 'section--tight', 'mcta', `tone-${tone}`]} id={id} aria-labelledby={`${id}-title`} data-hide-lead-bar>
+  <div class="container">
+    <div class="mcta__card on-dark" data-reveal>
+      <Airflow tone="dark" lines={4} seed={21} intensity={0.45} />
+      <div class="mcta__copy">
+        <h2 id={`${id}-title`} class="mcta__title">{title}</h2>
+        <p class="mcta__text">{text}</p>
+      </div>
+      <div class="mcta__actions">
+        <Button href={quoteHref} size="lg" icon={null} track="quote" data-location={id}>{quoteLabel}</Button>
+        <Button href={whatsappHref(whatsappMessage)} variant="light" size="lg" icon="chat" whatsapp track="whatsapp" data-location={id}>
+          WhatsApp now
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* No padding of its own: the card sits between the neighbouring sections' padding, and
+     the band takes the tone of the section before it so it reads as part of that section. */
+  .mcta {
+    padding-block: 0;
+  }
+  .mcta__card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1.5rem;
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(0, 154, 224, 0.28), transparent 60%),
+      radial-gradient(60% 100% at 0% 100%, rgba(245, 117, 0, 0.18), transparent 60%),
+      linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+  }
+  .mcta__copy,
+  .mcta__actions {
+    position: relative;
+  }
+  .mcta__title {
+    color: #fff;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    letter-spacing: -0.01em;
+  }
+  .mcta__text {
+    margin-top: 0.5rem;
+    max-width: 48ch;
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .mcta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  @media (min-width: 900px) {
+    .mcta__card {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .mcta__actions {
+      flex-wrap: nowrap;
+    }
+  }
+</style>

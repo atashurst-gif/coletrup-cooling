@@ -1,0 +1,96 @@
+---
+/**
+ * SEOHead — title, description, canonical, Open Graph, Twitter, robots and
+ * JSON-LD. Robots are NOINDEX until a site URL is configured (safe previews).
+ */
+import { site, SITE_URL, IS_INDEXABLE, absoluteUrl, confirmedAreas } from '../lib/site';
+import { getImage } from 'astro:assets';
+import { images, type ImageKey } from '../lib/images';
+
+export interface Props {
+  title: string;
+  description: string;
+  path: string; // e.g. '/about/'
+  ogImage?: ImageKey;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+  breadcrumbs?: { label: string; href: string }[];
+}
+const { title, description, path, ogImage = 'livingRoom', noindex = false, schema = [], breadcrumbs = [] } = Astro.props;
+
+const canonical = absoluteUrl(path);
+const og = await getImage({ src: images[ogImage].src, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
+const ogUrl = absoluteUrl(og.src);
+const robots = IS_INDEXABLE && !noindex ? 'index, follow, max-image-preview:large' : 'noindex, nofollow';
+
+const sameAs = Object.values(site.socials).filter(Boolean);
+const orgId = `${SITE_URL || ''}/#organization`;
+
+const organization: Record<string, unknown> = {
+  '@type': ['HVACBusiness', 'LocalBusiness'],
+  '@id': orgId,
+  name: site.name,
+  slogan: site.strapline,
+  url: SITE_URL || undefined,
+  description:
+    'Air conditioning installation, servicing and repairs for homes and businesses, plus specialist refrigeration servicing, maintenance and repairs.',
+  ...(site.brand.logoFull || site.brand.logoOnLight ? { logo: absoluteUrl(site.brand.logoFull || site.brand.logoOnLight) } : {}),
+  image: ogUrl,
+  ...(site.contact.phoneE164 ? { telephone: site.contact.phoneE164 } : {}),
+  ...(site.contact.email ? { email: site.contact.email } : {}),
+  ...(site.contact.address
+    ? { address: { '@type': 'PostalAddress', addressCountry: 'GB', ...site.contact.address } }
+    : {}),
+  ...(confirmedAreas.length
+    ? { areaServed: confirmedAreas.map((a) => ({ '@type': 'Place', name: a.name })) }
+    : site.region.confirmed
+      ? { areaServed: { '@type': 'Place', name: `${site.region.name}, England` } }
+      : {}),
+  ...(sameAs.length ? { sameAs } : {}),
+  ...(site.company.vatNumber ? { vatID: site.company.vatNumber } : {}),
+  knowsAbout: ['Air conditioning installation', 'Air conditioning repairs', 'Air conditioning servicing', 'Refrigeration repairs and maintenance'],
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${SITE_URL || ''}/#website`,
+  url: SITE_URL || undefined,
+  name: site.name,
+  publisher: { '@id': orgId },
+};
+
+const breadcrumbList =
+  breadcrumbs.length > 0
+    ? {
+        '@type': 'BreadcrumbList',
+        itemListElement: [{ label: 'Home', href: '/' }, ...breadcrumbs].map((b, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: b.label,
+          item: absoluteUrl(b.href),
+        })),
+      }
+    : null;
+
+const graph = [organization, website, breadcrumbList, ...schema].filter(Boolean);
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }, (_k, v) => (v === undefined ? undefined : v));
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+{IS_INDEXABLE && <link rel="canonical" href={canonical} />}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{IS_INDEXABLE && <meta property="og:url" content={canonical} />}
+<meta property="og:image" content={ogUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_GB" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogUrl} />
+<script type="application/ld+json" set:html={jsonLd} />

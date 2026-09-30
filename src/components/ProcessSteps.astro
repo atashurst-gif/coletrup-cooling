@@ -1,0 +1,123 @@
+---
+/**
+ * Process section — four numbered steps, visual, no long paragraphs.
+ */
+export interface Props {
+  id?: string;
+  tone?: 'cream' | 'white' | 'sand' | 'navy';
+  eyebrow?: string;
+  title?: string;
+  steps?: { title: string; text: string }[];
+}
+const {
+  id = 'process',
+  tone = 'cream',
+  eyebrow = 'How it works',
+  title = 'From enquiry to a cooler space.',
+  steps = [
+    { title: 'Get in touch', text: 'Request a quote online, send a WhatsApp or give us a call.' },
+    { title: 'We understand your requirements', text: 'We ask the right questions about your space and what you need.' },
+    { title: 'We recommend the right service', text: 'Clear advice on the right approach, explained simply.' },
+    { title: 'We complete the work', text: 'Carried out professionally, with care, from start to finish.' },
+  ],
+} = Astro.props;
+---
+
+<section class:list={['section', 'process', `tone-${tone}`]} id={id} aria-labelledby={`${id}-title`}>
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2 id={`${id}-title`}>{title}</h2>
+    </div>
+    <ol class:list={['process__list', `process__list--${steps.length}`]}>
+      {
+        steps.map((s, i) => (
+          <li class="process__step" data-reveal style={`--reveal-delay:${i * 100}ms`}>
+            <span class="process__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="process__title">{s.title}</h3>
+            <p class="process__text">{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process__list {
+    list-style: none;
+    counter-reset: step;
+    display: grid;
+    gap: 1rem;
+    position: relative;
+  }
+  .process__step {
+    position: relative;
+    padding: 1.75rem 1.5rem 1.6rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+  .tone-white .process__step {
+    background: var(--cream);
+  }
+  .tone-navy .process__step {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--line-on-navy);
+    box-shadow: none;
+  }
+  .process__num {
+    display: inline-block;
+    margin-bottom: 1.1rem;
+    font-family: var(--font-head);
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--blue-ink);
+  }
+  .process__step:first-child .process__num {
+    color: var(--orange-ink);
+  }
+  .tone-navy .process__num {
+    color: var(--blue-on-navy);
+  }
+  .tone-navy .process__step:first-child .process__num {
+    color: var(--orange-on-navy);
+  }
+  .process__title {
+    margin-bottom: 0.45rem;
+    font-size: 1.125rem;
+  }
+  .process__text {
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  @media (min-width: 640px) {
+    .process__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .process__list--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .process__list--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .process__list::before {
+      content: '';
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      top: 44px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--blue) 40%, rgba(0, 154, 224, 0.2));
+      z-index: 0;
+    }
+    .process__step {
+      z-index: 1;
+    }
+  }
+</style>

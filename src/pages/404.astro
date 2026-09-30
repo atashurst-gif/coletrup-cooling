@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import Airflow from '../components/Airflow.astro';
+---
+
+<BaseLayout title="Page not found | Coletrup Cooling" description="The page you were looking for could not be found." path="/404/" noindex>
+  <section class="nf">
+    <Airflow tone="light" lines={7} seed={19} intensity={0.9} mask="linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.3) 35%, #000 60%, #000 100%)" />
+    <div class="container nf__inner">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="nf__title">That page has cooled off.</h1>
+      <p class="nf__text">We couldn't find the page you were looking for. It may have moved, or the link may be out of date.</p>
+      <div class="nf__actions">
+        <Button href="/" icon={null} variant="navy">Back to home</Button>
+        <Button href="/contact/#quote" icon={null}>Get a quote</Button>
+      </div>
+      <ul class="nf__links">
+        <li><a href="/residential-air-conditioning/" class="link-arrow"><span>Residential air conditioning</span><Icon name="arrow" strokeWidth={2} /></a></li>
+        <li><a href="/commercial-air-conditioning/" class="link-arrow"><span>Commercial air conditioning</span><Icon name="arrow" strokeWidth={2} /></a></li>
+        <li><a href="/refrigeration-repairs-maintenance/" class="link-arrow"><span>Refrigeration repairs & maintenance</span><Icon name="arrow" strokeWidth={2} /></a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 10vw, 140px) 0;
+  }
+  .nf__inner {
+    position: relative;
+    max-width: 640px;
+  }
+  .nf__title {
+    font-size: var(--fs-h1);
+  }
+  .nf__text {
+    margin-top: 1rem;
+    font-size: var(--fs-lead);
+    color: var(--muted);
+  }
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .nf__links {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+</style>

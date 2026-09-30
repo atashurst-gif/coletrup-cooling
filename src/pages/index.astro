@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceSelector from '../components/ServiceSelector.astro';
+import ImageTextSection from '../components/ImageTextSection.astro';
+import BenefitsGrid from '../components/BenefitsGrid.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import ReviewSection from '../components/ReviewSection.astro';
+import AreasSection from '../components/AreasSection.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+import MidCTA from '../components/MidCTA.astro';
+import { site } from '../lib/site';
+
+const title = 'Air Conditioning Specialists | Coletrup Cooling';
+const description = `Professional air conditioning installation, servicing and repairs for homes ${site.region.phrase}, plus commercial air conditioning and specialist refrigeration repairs and maintenance.`;
+---
+
+<BaseLayout {title} {description} path="/" ogImage="livingRoomBifold">
+  <Hero />
+
+  <ServiceSelector />
+
+  <ImageTextSection
+    id="residential"
+    tone="white"
+    image="openPlanLiving"
+    imagePosition="50% 55%"
+    imageSide="left"
+    secondaryImage="bedroom"
+    eyebrow="Residential air conditioning"
+    title="Comfortable cooling for your home."
+    body={[
+      'Air conditioning designed around your home, your lifestyle and the cooling you need — installed, serviced and repaired by a specialist team.',
+      "From a single bedroom to open-plan living and multiple rooms, we'll recommend the right approach for your property and look after it for years to come.",
+    ]}
+    bullets={['Installation', 'Repairs', 'Servicing', 'Maintenance']}
+    chipsLabel="Rooms we help with"
+    chips={['Bedrooms', 'Living rooms', 'Home offices', 'Extensions', 'Open-plan spaces', 'Multiple rooms']}
+    cta={{ label: 'Get a residential quote', href: '/contact/?service=air-conditioning&type=residential#quote', track: 'residential' }}
+    links={[{ label: 'Residential air conditioning', href: '/residential-air-conditioning/', track: 'residential' }]}
+    emphasis
+  />
+
+  <BenefitsGrid />
+
+  <ServiceCards
+    id="ac-services"
+    tone="cream"
+    eyebrow="Air conditioning services"
+    title="Installation, repairs and servicing — done properly."
+    intro="Whatever stage your system is at, from planning a new installation to keeping an existing one healthy, you'll get clear advice and professional work."
+    items={[
+      { icon: 'ac-unit', title: 'Air Conditioning Installation', text: 'The right system for your home or business, professionally installed.', href: '/air-conditioning-installation/', image: 'engineerInstallDining', cta: 'Installation', track: 'installation', position: '50% 40%' },
+      { icon: 'wrench', title: 'Air Conditioning Repairs', text: "Not cooling, poor airflow, leaks or unusual noises? We'll find the fault and fix it.", href: '/air-conditioning-repairs/', image: 'engineerOutdoorGauges', cta: 'Request a repair', track: 'repair', position: '50% 40%' },
+      { icon: 'gauge', title: 'Servicing & Maintenance', text: 'Regular checks and cleaning to keep your system performing at its best.', href: '/air-conditioning-servicing-maintenance/', image: 'engineerFilterClean', cta: 'Book a service', track: 'maintenance', position: '50% 45%' },
+    ]}
+  />
+
+  <ImageTextSection
+    id="commercial"
+    tone="white"
+    image="engineerRooftop"
+    imagePosition="60% 40%"
+    imageSide="right"
+    secondaryImage="restaurantCassette"
+    eyebrow="Commercial air conditioning"
+    title="Keeping your business comfortable."
+    body={[
+      'Installation, servicing, maintenance and repairs for businesses — planned around your premises and the people who use them.',
+    ]}
+    bullets={['Installation', 'Servicing', 'Maintenance', 'Repairs']}
+    chipsLabel="Where we work"
+    chips={['Offices', 'Retail', 'Hospitality', 'Warehouses', 'Commercial premises', 'Workspaces']}
+    cta={{ label: 'Get a commercial quote', href: '/contact/?service=air-conditioning&type=commercial#quote', track: 'commercial' }}
+    links={[{ label: 'Commercial air conditioning', href: '/commercial-air-conditioning/', track: 'commercial' }]}
+  />
+
+  <MidCTA id="home-mid-cta" tone="white" quoteHref="#quote" />
+
+  <ImageTextSection
+    id="refrigeration"
+    tone="cream"
+    image="coldRoomEngineer"
+    imagePosition="55% 40%"
+    imageSide="left"
+    secondaryImage="displayFridges"
+    eyebrow="Refrigeration"
+    title="Keeping your refrigeration running."
+    body={[
+      'Specialist servicing, maintenance, fault finding and repairs for the refrigeration equipment your business relies on.',
+    ]}
+    bullets={['Servicing', 'Maintenance', 'Fault finding', 'Repairs']}
+    chipsLabel="Equipment we look after"
+    chips={['Fridges', 'Freezers', 'Display fridges', 'Cold rooms', 'Commercial refrigeration equipment']}
+    cta={{ label: 'Request refrigeration support', href: '/contact/?service=refrigeration#quote', track: 'refrigeration' }}
+    links={[{ label: 'Refrigeration repairs & maintenance', href: '/refrigeration-repairs-maintenance/', track: 'refrigeration' }]}
+  />
+
+  <ImageTextSection
+    id="maintenance"
+    tone="navy"
+    image="thermostat"
+    imagePosition="50% 50%"
+    imageSide="right"
+    eyebrow="Planned maintenance"
+    title="Prevention is better than a breakdown."
+    body={[
+      'Planned maintenance and service contracts give businesses greater visibility over equipment condition and performance, with servicing scheduled in advance rather than arranged only when something goes wrong.',
+    ]}
+    bullets={['Planned servicing', 'Early fault identification', 'Equipment management', 'Reduced unexpected problems', 'Tailored maintenance arrangements']}
+    bulletsColumns={1}
+    cta={{ label: 'Discuss maintenance', href: '/contact/?service=servicing-maintenance&type=commercial#quote', track: 'maintenance' }}
+    links={[{ label: 'Planned maintenance & service contracts', href: '/planned-maintenance-service-contracts/', track: 'maintenance' }]}
+  />
+
+  <ProcessSteps />
+
+  <ReviewSection />
+
+  <AreasSection />
+
+  <QuoteForm />
+
+  <FinalCTA />
+</BaseLayout>

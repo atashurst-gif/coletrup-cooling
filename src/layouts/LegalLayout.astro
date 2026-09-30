@@ -1,0 +1,58 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+export interface Props {
+  title: string;
+  pageTitle: string;
+  description: string;
+  path: string;
+  updated?: string;
+}
+const { title, pageTitle, description, path, updated } = Astro.props;
+const breadcrumbs = [{ label: pageTitle, href: path }];
+---
+
+<BaseLayout {title} {description} {path} noindex {breadcrumbs}>
+  <section class="legal">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbs} />
+      <h1 class="legal__title">{pageTitle}</h1>
+      <p class="legal__meta">
+        {updated ? `Last updated: ${updated}` : <Placeholder label="LAST UPDATED DATE" />}
+      </p>
+      <Placeholder block label="LEGAL TEXT TO BE REVIEWED AND APPROVED" class="legal__notice">
+        <p>
+          The text below is a structural draft to show what this page needs to cover. It must be completed with the company's verified details and reviewed before the site goes live. It is not legal advice.
+        </p>
+      </Placeholder>
+      <div class="prose legal__prose">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: clamp(20px, 3vw, 36px) 0 var(--section-y);
+  }
+  .legal__title {
+    margin-top: 1.5rem;
+    font-size: var(--fs-h1);
+  }
+  .legal__meta {
+    margin: 0.75rem 0 1.5rem;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  .legal__notice {
+    margin-bottom: 2rem;
+    max-width: 72ch;
+  }
+  .legal__prose :global(p),
+  .legal__prose :global(li) {
+    color: var(--charcoal);
+  }
+</style>

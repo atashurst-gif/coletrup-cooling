@@ -1,0 +1,90 @@
+---
+/**
+ * Logo — renders the approved Logo 1 artwork as a vector (see site.config brand.*).
+ *  kind: 'full' (the complete lockup — the default everywhere) | 'mark' (triangle-and-airflow mark)
+ *  on:   'light' (cream/white) | 'dark' (navy) — on dark the full-colour lockup sits on a cream
+ *        tile so it appears exactly as supplied; pass reversed to use the white-lettered version.
+ * If no logo file is configured, an INTERIM TEXT WORDMARK is shown (the logo is
+ * never redrawn) and the content audit flags it.
+ */
+import { site, hasLogo } from '../lib/site';
+
+export interface Props {
+  kind?: 'full' | 'mark' | 'horizontal';
+  on?: 'light' | 'dark';
+  reversed?: boolean;
+  class?: string;
+  priority?: boolean;
+  height?: number; // rendered height in px (defaults per kind)
+}
+const { kind = 'full', on = 'light', reversed = false, class: className, priority = false, height } = Astro.props;
+const b = site.brand;
+
+const isMark = kind === 'mark';
+const renderH = height ?? (isMark ? 48 : 150);
+const useReversed = on === 'dark' && reversed && b.logoSvgReversed;
+const src = isMark ? b.logoMarkSvg || b.logoMark : useReversed ? b.logoSvgReversed : b.logoSvg || b.logoFull || b.logoOnLight;
+const w = isMark ? 512 : b.logoSvgWidth;
+const h = isMark ? 512 : b.logoSvgHeight;
+const renderW = Math.round((renderH * w) / h);
+const needsTile = on === 'dark' && !useReversed;
+const alt = `${site.name} — ${site.strapline}`;
+---
+
+{
+  hasLogo ? (
+    needsTile ? (
+      <span class:list={['logo-tile', className]}>
+        <img src={src} alt={alt} width={renderW} height={renderH} loading={priority ? 'eager' : 'lazy'} decoding="async" class="logo-img" style={`height:${renderH}px`} />
+      </span>
+    ) : (
+      <img src={src} alt={alt} width={renderW} height={renderH} loading={priority ? 'eager' : 'lazy'} decoding="async" fetchpriority={priority ? 'high' : undefined} class:list={['logo-img', `logo-img--${kind}`, className]} style={`height:${renderH}px`} />
+    )
+  ) : (
+    <span class:list={['wordmark', `wordmark--${on}`, className]} title="Interim wordmark — approved Logo 1 file to be supplied">
+      <span class="wordmark__name">Coletrup</span>
+      <span class="wordmark__sub">Cooling</span>
+    </span>
+  )
+}
+
+<style>
+  .logo-img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+  }
+  .logo-tile {
+    display: inline-flex;
+    padding: 14px 18px;
+    background: var(--cream);
+    border-radius: 14px;
+  }
+  .wordmark {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .wordmark__name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--navy);
+  }
+  .wordmark__sub {
+    margin-top: 3px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.34em;
+    color: var(--orange-ink);
+  }
+  .wordmark--dark .wordmark__name {
+    color: #fff;
+  }
+  .wordmark--dark .wordmark__sub {
+    color: var(--orange-on-navy);
+  }
+</style>

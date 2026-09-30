@@ -1,0 +1,34 @@
+{
+  "name": "coletrup-cooling-website",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Coletrup Cooling — Keeping It Cool. Static Astro website.",
+  "scripts": {
+    "dev": "astro dev",
+    "audit:content": "node tools/content-audit.mjs",
+    "build": "node tools/content-audit.mjs && astro build && node tools/netlify-redirects.mjs && node tools/check-build.mjs",
+    "build:strict": "STRICT_CONTENT=1 npm run build",
+    "preview": "astro preview"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/montserrat": "^5.3.0",
+    "@fontsource-variable/open-sans": "^5.3.0",
+    "astro": "^7.3.5",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0",
+    "chrome-launcher": "^1.2.1",
+    "d3-geo": "^3.1.1",
+    "lighthouse": "^13.5.0",
+    "playwright": "^1.63.0",
+    "topojson-client": "^3.1.0",
+    "topojson-simplify": "^3.0.3",
+    "world-atlas": "^2.0.2"
+  }
+}

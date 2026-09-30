@@ -1,0 +1,146 @@
+---
+/**
+ * Section 5 — Main service cards (Installation / Repairs / Servicing & Maintenance)
+ * Also reused on inner pages as a "links" section.
+ */
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { images, type ImageKey } from '../lib/images';
+
+export interface Props {
+  id?: string;
+  tone?: 'cream' | 'white' | 'sand';
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  items: { icon: string; title: string; text: string; href: string; image?: ImageKey; cta?: string; track?: string; position?: string }[];
+}
+const { id = 'service-cards', tone = 'white', eyebrow, title, intro, items } = Astro.props;
+---
+
+<section class:list={['section', 'svc', `tone-${tone}`]} id={id} aria-labelledby={`${id}-title`}>
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">{eyebrow}</p>
+        <h2 id={`${id}-title`}>{title}</h2>
+      </div>
+      {intro && <p>{intro}</p>}
+    </div>
+    <div class:list={['svc__grid', items.length === 4 && 'svc__grid--4']}>
+      {
+        items.map((it, i) => {
+          const img = it.image ? images[it.image] : null;
+          return (
+            <article class="card card--lift svc__card zoom" data-reveal style={`--reveal-delay:${i * 80}ms`}>
+              {img && (
+                <div class="frame svc__media">
+                  <Picture
+                    src={img.src}
+                    alt={img.alt}
+                    title={img.title}
+                    widths={[480, 800]}
+                    sizes="(min-width: 1080px) 30vw, (min-width: 640px) 50vw, 100vw"
+                    formats={['avif', 'webp']} fallbackFormat="webp"
+                    loading="lazy"
+                    decoding="async"
+                    quality={78}
+                    style={it.position ? `object-position:${it.position}` : undefined}
+                  />
+                </div>
+              )}
+              <div class="svc__body">
+                <span class="icon-badge svc__icon"><Icon name={it.icon} /></span>
+                <h3 class="svc__title">
+                  <a href={it.href} class="stretched" data-track={it.track ? 'cta' : undefined} data-cta={it.track} data-location={id}>
+                    {it.title}
+                  </a>
+                </h3>
+                <p class="svc__text">{it.text}</p>
+                <span class="link-arrow svc__cta" aria-hidden="true">
+                  <span>{it.cta ?? 'Find out more'}</span>
+                  <Icon name="arrow" strokeWidth={2} />
+                </span>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .svc__grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .svc__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+  .svc__media {
+    border-radius: 0;
+    aspect-ratio: 16 / 10;
+  }
+  .svc__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .svc__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+    padding: 1.5rem;
+  }
+  .svc__icon {
+    position: relative;
+    z-index: 2; /* sits over the photo frame (which is positioned + isolated) */
+    margin-top: -3rem;
+    margin-bottom: 0.4rem;
+    box-shadow: 0 0 0 5px #fff;
+    background: var(--navy);
+    color: var(--blue-on-navy);
+  }
+  .svc__card:not(:has(.svc__media)) .svc__icon {
+    margin-top: 0;
+    z-index: auto;
+    box-shadow: none;
+    background: var(--blue-soft);
+    color: var(--navy);
+  }
+  .svc__title {
+    font-size: 1.3rem;
+  }
+  .svc__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .svc__text {
+    color: var(--muted);
+  }
+  .svc__cta {
+    margin-top: auto;
+    padding-top: 0.6rem;
+  }
+  @media (min-width: 640px) {
+    .svc__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .svc__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .svc__grid--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .svc__grid--4 .svc__title {
+      font-size: 1.15rem;
+    }
+  }
+</style>

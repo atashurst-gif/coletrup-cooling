@@ -1,0 +1,366 @@
+---
+/**
+ * NorthWestMap — a stylised map of the whole UK that, when scrolled into view,
+ * zooms into the North West service region and lights it up in brand blue with
+ * an orange glow. The region is strictly Lancashire, Greater Manchester,
+ * Merseyside and Cheshire (Cumbria is drawn as ordinary land).
+ * Geometry: src/data/uk-map.json (built by tools/map/build-uk.py from ONS boundaries).
+ * Confirmed service areas with coordinates (site.config → areas) appear as pins.
+ * Pure CSS animation; static (already zoomed and lit) under prefers-reduced-motion.
+ */
+import uk from '../data/uk-map.json';
+import { site, confirmedAreas } from '../lib/site';
+
+const m = uk as any;
+const { proj, counties, nwBox, labels } = m;
+const project = (lat: number, lon: number) => ({
+  x: (lon - proj.lon0) * proj.k * proj.cos,
+  y: (proj.lat0 - lat) * proj.k,
+});
+const pins = confirmedAreas
+  .filter((a: any) => typeof a.lat === 'number' && typeof a.lon === 'number')
+  .map((a: any) => ({ name: a.name, ...project(a.lat, a.lon) }));
+
+// viewBox: crop to lon -8.2..2.0, lat 59.1..49.8 (Orkney/Shetland left out)
+const VX = 23, VY = 90, VW = 600, VH = 930;
+const order = ['lancashire', 'greater-manchester', 'merseyside', 'cheshire'];
+// label lines + nudges (map units, pre-zoom) so names sit comfortably in/next to each county
+const names: Record<string, { lines: string[]; dx: number; dy: number }> = {
+  lancashire: { lines: ['LANCASHIRE'], dx: 2, dy: 1.5 },
+  'greater-manchester': { lines: ['GREATER', 'MANCHESTER'], dx: 2.5, dy: -0.5 },
+  merseyside: { lines: ['MERSEYSIDE'], dx: -9, dy: 2 },
+  cheshire: { lines: ['CHESHIRE'], dx: 4, dy: 1 },
+};
+// zoom: scale about the region's centre, then bring that centre to the middle of the view
+const cx = (nwBox[0] + nwBox[2]) / 2;
+const cy = (nwBox[1] + nwBox[3]) / 2;
+const scale = 5.3;
+const tx = VX + VW / 2 - cx + 9;
+const ty = VY + VH * 0.49 - cy;
+
+// context labels for the whole-UK view (fade out on zoom)
+const ctx = [
+  { t: 'SCOTLAND', x: 330, y: 335 },
+  { t: 'ENGLAND', x: 470, y: 800 },
+  { t: 'WALES', x: 262, y: 780 },
+  { t: 'NORTHERN', x: 112, y: 522 },
+  { t: 'IRELAND', x: 112, y: 542 },
+  { t: 'IRELAND', x: 78, y: 690 },
+  { t: 'NORTH SEA', x: 538, y: 560, sea: true },
+  { t: 'IRISH SEA', x: 232, y: 660, sea: true },
+];
+---
+
+<div class="ukmap" data-ukmap aria-hidden="true">
+  <svg class="ukmap__svg" viewBox={`${VX} ${VY} ${VW} ${VH}`} focusable="false">
+    <defs>
+      <filter id="ukGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="2.4" />
+      </filter>
+      <filter id="ukShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="1.2" stdDeviation="1.6" flood-color="#072D52" flood-opacity=".28" />
+      </filter>
+      <pattern id="ukDots" width="6" height="6" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r=".55" fill="#072D52" opacity=".16" />
+      </pattern>
+    </defs>
+    <rect x={VX} y={VY} width={VW} height={VH} class="ukmap__sea" />
+    <g class="ukmap__zoom" style={`transform-origin:${cx}px ${cy}px;--tx:${tx.toFixed(1)}px;--ty:${ty.toFixed(1)}px;--s:${scale}`}>
+      <path d={m.ireland} class="ukmap__abroad" />
+      <path d={m.land} class="ukmap__land" />
+      <path d={m.land} fill="url(#ukDots)" class="ukmap__dots" />
+      <path d={m.iom} class="ukmap__land" />
+      <path d={m.borders} class="ukmap__border" />
+      {ctx.map((c) => <text x={c.x} y={c.y} class:list={['ukmap__ctx', c.sea && 'ukmap__ctx--sea']} text-anchor="middle">{c.t}</text>)}
+
+      <!-- glow behind the region (lights up after the zoom) -->
+      <path d={m.nw} class="ukmap__glow" filter="url(#ukGlow)" />
+      <g filter="url(#ukShadow)">
+        {order.map((k, i) => <path d={counties[k]} class:list={['ukmap__county', `ukmap__county--${k}`]} style={`--i:${i}`} />)}
+      </g>
+      {order.map((k) => <path d={counties[k]} class="ukmap__county-line" />)}
+      <path d={m.nw} class="ukmap__region" />
+
+      {order.map((k) => (
+        <text x={labels[k][0] + names[k].dx} y={labels[k][1] + names[k].dy} class="ukmap__label" text-anchor="middle">
+          {names[k].lines.map((line, i) => (
+            <tspan x={labels[k][0] + names[k].dx} dy={i === 0 ? 0 : 3.9}>{line}</tspan>
+          ))}
+        </text>
+      ))}
+
+      {pins.map((p) => (
+        <g class="ukmap__pin">
+          <circle cx={p.x} cy={p.y} r="4" class="ukmap__pin-halo" />
+          <circle cx={p.x} cy={p.y} r="1.6" class="ukmap__pin-dot" />
+          <text x={p.x + 3.2} y={p.y + 1.4} class="ukmap__pin-label">{p.name}</text>
+        </g>
+      ))}
+    </g>
+    <g class="ukmap__title">
+      <rect x={VX + 22} y={VY + 22} width="372" height="54" rx="14" class="ukmap__title-bg" />
+      <text x={VX + 44} y={VY + 57} class="ukmap__title-text">{`${site.region.name} England`.toUpperCase()}</text>
+    </g>
+    <g class="ukmap__key">
+      <rect x={VX + VW - 226} y={VY + VH - 62} width="204" height="40" rx="12" class="ukmap__key-bg" />
+      <circle cx={VX + VW - 202} cy={VY + VH - 42} r="7" class="ukmap__key-dot" />
+      <text x={VX + VW - 186} y={VY + VH - 36} class="ukmap__key-text">Areas we cover</text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .ukmap {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+    background: var(--blue-soft);
+  }
+  .ukmap__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .ukmap__sea {
+    fill: #e4f2f9;
+  }
+  .ukmap__abroad {
+    fill: #f0ebe1;
+    stroke: #072d52;
+    stroke-opacity: 0.12;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .ukmap__land {
+    fill: #ebe4d6;
+    stroke: #072d52;
+    stroke-opacity: 0.35;
+    stroke-width: 1;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .ukmap__dots {
+    opacity: 1;
+    transition: opacity 1s ease;
+  }
+  .ukmap__border {
+    fill: none;
+    stroke: #072d52;
+    stroke-opacity: 0.35;
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+    vector-effect: non-scaling-stroke;
+  }
+  .ukmap__ctx {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    fill: rgba(7, 45, 82, 0.42);
+    transition: opacity 0.6s ease;
+  }
+  .ukmap__ctx--sea {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: 4px;
+    fill: rgba(0, 111, 163, 0.55);
+  }
+  .ukmap__county {
+    fill: #d6ebf7;
+    transition: fill 0.9s var(--ease);
+    transition-delay: calc(2.3s + var(--i) * 0.22s);
+  }
+  .ukmap__county-line {
+    fill: none;
+    stroke: #072d52;
+    stroke-width: 1;
+    stroke-opacity: 0.35;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .ukmap__region {
+    fill: none;
+    stroke: #072d52;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    transition: stroke-width 0.8s ease 1.8s;
+  }
+  .ukmap__glow {
+    fill: none;
+    stroke: #f57500;
+    stroke-width: 5;
+    stroke-linejoin: round;
+    opacity: 0;
+  }
+  .ukmap__label {
+    font-family: var(--font-head);
+    font-size: 3.2px;
+    font-weight: 800;
+    letter-spacing: 0.55px;
+    fill: #072d52;
+    opacity: 0;
+    transition: opacity 0.8s ease 3s;
+    paint-order: stroke;
+    stroke: rgba(255, 255, 255, 0.7);
+    stroke-width: 1.2px;
+    stroke-linejoin: round;
+  }
+  .ukmap__title-bg {
+    fill: #072d52;
+  }
+  .ukmap__title-text {
+    font-family: var(--font-head);
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 3.5px;
+    fill: #faf7f0;
+  }
+  .ukmap__key-bg {
+    fill: rgba(250, 247, 240, 0.92);
+    stroke: rgba(7, 45, 82, 0.12);
+  }
+  .ukmap__key-dot {
+    fill: #9fd3f0;
+    stroke: #072d52;
+    stroke-width: 1.5;
+  }
+  .ukmap__key-text {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+    fill: #072d52;
+  }
+  .ukmap__pin {
+    opacity: 0;
+    transition: opacity 0.6s ease 3.2s;
+  }
+  .ukmap__pin-halo {
+    fill: #f57500;
+    opacity: 0.25;
+  }
+  .ukmap__pin-dot {
+    fill: #f57500;
+    stroke: #fff;
+    stroke-width: 0.5;
+  }
+  .ukmap__pin-label {
+    font-family: var(--font-head);
+    font-size: 4.6px;
+    font-weight: 700;
+    fill: #072d52;
+    paint-order: stroke;
+    stroke: #faf7f0;
+    stroke-width: 1.4px;
+    stroke-linejoin: round;
+  }
+  /* ---- animation: whole UK → zoom into the North West → light up county by county ---- */
+  .ukmap__zoom {
+    transform: none;
+    transition: transform 2.4s cubic-bezier(0.3, 0.6, 0.15, 1) 0.35s;
+  }
+  .ukmap.is-live .ukmap__zoom {
+    transform: translate(var(--tx), var(--ty)) scale(var(--s));
+  }
+  .ukmap.is-live .ukmap__ctx {
+    opacity: 0;
+  }
+  .ukmap.is-live .ukmap__dots {
+    opacity: 0.45;
+  }
+  .ukmap.is-live .ukmap__county--lancashire {
+    fill: #b7dff4;
+  }
+  .ukmap.is-live .ukmap__county--greater-manchester {
+    fill: #9fd3f0;
+  }
+  .ukmap.is-live .ukmap__county--merseyside {
+    fill: #c3e5f6;
+  }
+  .ukmap.is-live .ukmap__county--cheshire {
+    fill: #b0dbf3;
+  }
+  .ukmap.is-live .ukmap__region {
+    stroke-width: 2.4;
+  }
+  .ukmap.is-live .ukmap__label,
+  .ukmap.is-live .ukmap__pin {
+    opacity: 1;
+  }
+  .ukmap.is-live .ukmap__glow {
+    animation: uk-glow 5s ease-in-out 2.6s infinite;
+  }
+  @keyframes uk-glow {
+    0% {
+      opacity: 0;
+    }
+    30% {
+      opacity: 0.8;
+    }
+    60% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 0.6;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ukmap__zoom {
+      transform: translate(var(--tx), var(--ty)) scale(var(--s)) !important;
+      transition: none;
+    }
+    .ukmap__county,
+    .ukmap__label,
+    .ukmap__pin,
+    .ukmap__ctx,
+    .ukmap__region {
+      transition: none;
+    }
+    .ukmap__ctx {
+      opacity: 0;
+    }
+    .ukmap__county--lancashire {
+      fill: #b7dff4;
+    }
+    .ukmap__county--greater-manchester {
+      fill: #9fd3f0;
+    }
+    .ukmap__county--merseyside {
+      fill: #c3e5f6;
+    }
+    .ukmap__county--cheshire {
+      fill: #b0dbf3;
+    }
+    .ukmap__label,
+    .ukmap__pin {
+      opacity: 1;
+    }
+    .ukmap__glow {
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+</style>
+
+<script>
+  // Start the zoom + light-up when the map scrolls into view (once).
+  const maps = document.querySelectorAll<HTMLElement>('[data-ukmap]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-live');
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.4 },
+    );
+    maps.forEach((m) => io.observe(m));
+  } else {
+    maps.forEach((m) => m.classList.add('is-live'));
+  }
+</script>

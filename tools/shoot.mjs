@@ -1,0 +1,20 @@
+// Screenshot helper: node tools/shoot.mjs <path> <name> [width] [full]
+import { chromium } from 'playwright';
+import { createServer } from 'node:http';
+import { readFileSync, existsSync, statSync } from 'node:fs';
+import { join, extname } from 'node:path';
+const dist = new URL('../dist/', import.meta.url).pathname;
+const types = { '.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.mjs':'text/javascript', '.avif':'image/avif', '.webp':'image/webp', '.jpg':'image/jpeg', '.png':'image/png', '.svg':'image/svg+xml', '.woff2':'font/woff2', '.xml':'application/xml', '.txt':'text/plain' };
+const srv = createServer((req,res)=>{ let p=decodeURIComponent(req.url.split('?')[0]); let f=join(dist,p); if(existsSync(f)&&statSync(f).isDirectory()) f=join(f,'index.html'); if(!existsSync(f)){f=join(dist,'404.html'); if(!existsSync(f)){res.writeHead(404);res.end('nf');return;}} res.writeHead(200,{'Content-Type':types[extname(f)]||'application/octet-stream'}); res.end(readFileSync(f)); });
+await new Promise(r=>srv.listen(4321,r));
+const [,, path='/', name='shot', width='1440', full='full'] = process.argv;
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell' });
+const page = await browser.newPage({ viewport:{ width:+width, height: +width<600?844:900 }, deviceScaleFactor: +width<600?2:1 });
+page.on('pageerror', e=>console.log('PAGEERROR', e.message)); page.on('console', m=> m.type()==='error' && console.log('CONSOLE', m.text()));
+await page.goto('http://localhost:4321'+path, { waitUntil:'networkidle' });
+await page.evaluate(async()=>{ document.querySelectorAll('[data-reveal]').forEach(e=>e.classList.add('is-visible')); window.scrollTo(0,document.body.scrollHeight); await new Promise(r=>setTimeout(r,300)); window.scrollTo(0,0); await new Promise(r=>setTimeout(r,300)); });
+const out = `/tmp/claude-0/-home-claude/1f819917-8096-5d4e-8eb3-6271fb89cd98/scratchpad/${name}.png`;
+await page.screenshot({ path: out, fullPage: full==='full' });
+const h = await page.evaluate(()=>document.documentElement.scrollHeight); const sw = await page.evaluate(()=>document.documentElement.scrollWidth);
+console.log('saved', out, 'height', h, 'scrollWidth', sw, 'viewport', width);
+await browser.close(); srv.close();

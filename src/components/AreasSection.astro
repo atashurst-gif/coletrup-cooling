@@ -1,0 +1,121 @@
+---
+/**
+ * Section 11 — Areas We Cover. Regional graphic + confirmed areas only.
+ */
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import Placeholder from './Placeholder.astro';
+import NorthWestMap from './NorthWestMap.astro';
+import { site, confirmedAreas, areaPages } from '../lib/site';
+
+export interface Props {
+  id?: string;
+  compact?: boolean;
+}
+const { id = 'areas', compact = false } = Astro.props;
+---
+
+<section class:list={['section', 'areas', 'tone-sand', compact && 'section--tight']} id={id} aria-labelledby={`${id}-title`}>
+  <div class="container areas__grid">
+    <div class="areas__copy" data-reveal>
+      <p class="eyebrow">Areas we cover</p>
+      <h2 id={`${id}-title`}>Air conditioning {site.region.phrase}.</h2>
+      <p class="areas__lead">
+        We provide air conditioning installation, servicing and repairs for homes and businesses {site.region.phrase}, alongside specialist refrigeration servicing, maintenance and repairs.
+      </p>
+      {
+        confirmedAreas.length > 0 ? (
+          <ul class="areas__list">
+            {confirmedAreas.map((a) => (
+              <li>
+                <Icon name="pin" size={18} strokeWidth={2} />
+                {areaPages.some((p) => p.slug === a.slug) ? <a href={`/areas-we-cover/${a.slug}/`}>{a.name}</a> : <span>{a.name}</span>}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Placeholder block label="CONFIRMED SERVICE AREAS TO BE ADDED">
+            <p>Only verified towns and areas will be listed here. Mark each area <code>confirmed: true</code> in <code>site.config.mjs</code> to display it.</p>
+          </Placeholder>
+        )
+      }
+      <p class="areas__note">Not sure if we cover your area? Get in touch with your postcode and we'll let you know.</p>
+      <div class="areas__actions">
+        <Button href="/contact/#quote" icon={null} track="quote" data-location={id}>Check your area</Button>
+        {!compact && (
+          <a href="/areas-we-cover/" class="link-arrow"><span>All areas we cover</span><Icon name="arrow" strokeWidth={2} /></a>
+        )}
+      </div>
+    </div>
+    <div class="areas__map" data-reveal style="--reveal-delay:120ms">
+      <NorthWestMap />
+    </div>
+  </div>
+</section>
+
+<style>
+  .areas__grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .areas__lead {
+    max-width: 56ch;
+    font-size: var(--fs-lead);
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+  }
+  .areas__list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.6rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .areas__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .areas__list svg {
+    color: var(--orange-ink);
+    flex: none;
+  }
+  .areas__list a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .areas__list a:hover {
+    text-decoration: underline;
+  }
+  .areas__note {
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .areas__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .areas__map :global(.nwmap) {
+    max-width: 480px;
+    margin-inline: auto;
+  }
+  code {
+    font-size: 0.85em;
+    background: rgba(7, 45, 82, 0.06);
+    padding: 0.05em 0.35em;
+    border-radius: 4px;
+  }
+  @media (min-width: 1080px) {
+    .areas__grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+      gap: 4rem;
+    }
+  }
+</style>

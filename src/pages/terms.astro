@@ -1,0 +1,26 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { site } from '../lib/site';
+const name = site.company.registeredName || site.name;
+---
+
+<LegalLayout title="Website Terms | Coletrup Cooling" pageTitle="Website Terms of Use" description="Terms of use for the Coletrup Cooling website." path="/terms/">
+  <h2>About these terms</h2>
+  <p>These terms apply to your use of this website, operated by {name}. Terms for the supply of services are agreed separately when you accept a quote. <Placeholder label="LINK TO SERVICE TERMS & CONDITIONS, IF ANY" /></p>
+
+  <h2>Information on this site</h2>
+  <p>We take care to keep the information on this site accurate and up to date, but it is provided for general information only. A quote or recommendation is only made after we have understood your specific requirements.</p>
+
+  <h2>Quotes and enquiries</h2>
+  <p>Submitting a quote request does not create a contract. Any quote we provide will set out what it covers and how long it is valid.</p>
+
+  <h2>Intellectual property</h2>
+  <p>The content, design, logo and imagery on this site belong to {name} or its licensors and may not be copied or reused without permission.</p>
+
+  <h2>Liability</h2>
+  <p>Nothing in these terms limits liability that cannot be limited by law. We are not responsible for the content of external websites linked from this site.</p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the law of England and Wales.</p>
+</LegalLayout>

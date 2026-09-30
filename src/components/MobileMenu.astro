@@ -1,0 +1,269 @@
+---
+import { mainNav } from '../data/navigation.mjs';
+import { site, hasPhone, telHref, whatsappHref, defaultWhatsAppMessage } from '../lib/site';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+
+export interface Props {
+  current: string;
+}
+const { current } = Astro.props;
+---
+
+<div class="mm" id="mobile-menu" hidden>
+  <div class="mm__backdrop" data-mm-close></div>
+  <div class="mm__panel" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1">
+    <div class="mm__top">
+      <a href="/" class="mm__logo" aria-label={`${site.name} — home`}><Logo kind="full" height={74} /></a>
+      <button type="button" class="mm__close" aria-label="Close menu" data-mm-close>
+        <Icon name="close" strokeWidth={2} />
+      </button>
+    </div>
+
+    <nav class="mm__nav" aria-label="Mobile">
+      <ul>
+        {
+          mainNav.map((item) =>
+            item.children ? (
+              <li class="mm__group">
+                <button type="button" class="mm__acc" aria-expanded={item.children.some((c) => c.href === current) ? 'true' : 'false'}>
+                  <span>{item.label}</span>
+                  <Icon name="chevron" size={20} strokeWidth={2.2} />
+                </button>
+                <ul class="mm__sub">
+                  {item.children.map((c) => (
+                    <li>
+                      <a href={c.href} aria-current={c.href === current ? 'page' : undefined}>
+                        {c.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li>
+                <a href={item.href} class="mm__link" aria-current={item.href === current ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="mm__actions">
+      <Button href="/contact/#quote" icon={null} block track="quote" data-location="mobile-menu">Get a quote</Button>
+      <Button href={whatsappHref(defaultWhatsAppMessage)} variant="outline" icon="chat" whatsapp block track="whatsapp" data-location="mobile-menu">
+        WhatsApp now
+      </Button>
+      <a href={telHref} class="mm__phone" data-track="cta" data-cta="phone" data-location="mobile-menu">
+        <Icon name="phone" size={18} strokeWidth={2} />
+        {hasPhone ? site.contact.phoneDisplay : 'Call us'}
+      </a>
+    </div>
+    <p class="mm__strap">{site.strapline}</p>
+  </div>
+</div>
+
+<style>
+  .mm {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+  }
+  .mm[hidden] {
+    display: none;
+  }
+  .mm__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 33, 61, 0.55);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .mm__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(100%, 420px);
+    display: flex;
+    flex-direction: column;
+    background: var(--cream);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform 0.38s var(--ease);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .mm.is-open .mm__backdrop {
+    opacity: 1;
+  }
+  .mm.is-open .mm__panel {
+    transform: none;
+  }
+  .mm__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-h);
+    padding: 0 var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+  .mm__logo {
+    text-decoration: none;
+  }
+  .mm__close {
+    display: inline-grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--navy);
+  }
+  .mm__nav {
+    padding: 0.75rem var(--gutter) 0;
+  }
+  .mm__nav ul {
+    list-style: none;
+  }
+  .mm__link,
+  .mm__acc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 54px;
+    padding: 0.6rem 0.25rem;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    text-align: left;
+    text-decoration: none;
+    font-family: var(--font-head);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .mm__link[aria-current='page'] {
+    color: var(--orange-ink);
+  }
+  .mm__acc svg {
+    transition: transform 0.25s var(--ease);
+    flex: none;
+  }
+  .mm__acc[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+  .mm__sub {
+    display: none;
+    padding: 0.25rem 0 0.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .mm__acc[aria-expanded='true'] + .mm__sub {
+    display: block;
+  }
+  .mm__sub a {
+    display: flex;
+    align-items: center;
+    min-height: 46px;
+    padding: 0.4rem 0.9rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9875rem;
+    color: var(--charcoal);
+  }
+  .mm__sub a[aria-current='page'] {
+    background: #fff;
+    color: var(--navy);
+  }
+  .mm__actions {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1.25rem var(--gutter);
+    margin-top: auto;
+  }
+  .mm__phone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .mm__strap {
+    padding: 0 var(--gutter) 1.25rem;
+    text-align: center;
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue-ink);
+  }
+</style>
+
+<script>
+  const menu = document.getElementById('mobile-menu')!;
+  const burger = document.getElementById('burger')!;
+  const panel = menu.querySelector<HTMLElement>('.mm__panel')!;
+  let lastFocus: HTMLElement | null = null;
+
+  const focusables = () =>
+    Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
+      (el) => el.offsetParent !== null,
+    );
+
+  function open() {
+    lastFocus = document.activeElement as HTMLElement;
+    menu.hidden = false;
+    requestAnimationFrame(() => menu.classList.add('is-open'));
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    panel.focus({ preventScroll: true });
+  }
+  function close() {
+    menu.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    const done = () => {
+      menu.hidden = true;
+      lastFocus?.focus({ preventScroll: true });
+    };
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    reduce ? done() : setTimeout(done, 380);
+  }
+
+  burger.addEventListener('click', () => (menu.hidden ? open() : close()));
+  menu.querySelectorAll('[data-mm-close]').forEach((el) => el.addEventListener('click', close));
+  menu.querySelectorAll<HTMLButtonElement>('.mm__acc').forEach((b) =>
+    b.addEventListener('click', () => b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true'))),
+  );
+  document.addEventListener('keydown', (e) => {
+    if (menu.hidden) return;
+    if (e.key === 'Escape') return close();
+    if (e.key === 'Tab') {
+      const f = focusables();
+      if (!f.length) return;
+      const first = f[0],
+        last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+  matchMedia('(min-width: 1080px)').addEventListener('change', (e) => e.matches && !menu.hidden && close());
+</script>

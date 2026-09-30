@@ -1,0 +1,267 @@
+---
+import { footerNav } from '../data/navigation.mjs';
+import { site, hasPhone, hasWhatsApp, hasEmail, telHref, whatsappHref, confirmedAreas, areaPages } from '../lib/site';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Placeholder from './Placeholder.astro';
+
+const year = new Date().getFullYear();
+const socials = Object.entries(site.socials).filter(([, url]) => url);
+const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigeration, footerNav.company];
+---
+
+<footer class="footer tone-navy" data-hide-lead-bar>
+  <div class="container-wide">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="/" class="footer__logo" aria-label={`${site.name} — home`}><Logo kind="full" on="dark" height={150} /></a>
+        <p class="footer__strap">{site.strapline}</p>
+        <p class="footer__blurb">
+          Professional air conditioning installation, servicing and repairs for homes and businesses, with specialist refrigeration servicing, maintenance and repairs.
+        </p>
+        <ul class="footer__contact">
+          <li>
+            <Icon name="phone" size={18} strokeWidth={2} />
+            {hasPhone ? <a href={telHref} data-track="cta" data-cta="phone" data-location="footer">{site.contact.phoneDisplay}</a> : <Placeholder label="PHONE NUMBER" />}
+          </li>
+          <li>
+            <Icon name="chat" size={18} strokeWidth={2} />
+            {hasWhatsApp ? <a href={whatsappHref()} target="_blank" rel="noopener" data-track="cta" data-cta="whatsapp" data-location="footer">WhatsApp us</a> : <Placeholder label="WHATSAPP NUMBER" />}
+          </li>
+          <li>
+            <Icon name="mail" size={18} strokeWidth={2} />
+            {hasEmail ? <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> : <Placeholder label="EMAIL ADDRESS" />}
+          </li>
+          {
+            site.contact.openingHours.length > 0 && (
+              <li>
+                <Icon name="clock" size={18} strokeWidth={2} />
+                <span>{site.contact.openingHours.join(' · ')}</span>
+              </li>
+            )
+          }
+        </ul>
+        {
+          socials.length > 0 && (
+            <ul class="footer__social" aria-label="Social media">
+              {socials.map(([name, url]) => (
+                <li>
+                  <a href={url} target="_blank" rel="noopener" aria-label={name}>
+                    <Icon name="external" size={18} />
+                    <span>{name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      <nav class="footer__cols" aria-label="Footer">
+        {
+          cols.map((col) => (
+            <div class="footer__col">
+              <h2 class="footer__title">{col.title}</h2>
+              <ul>
+                {col.links.map((l) => (
+                  <li>
+                    <a href={l.href}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="footer__areas">
+      <h2 class="footer__title">Areas we cover</h2>
+      {
+        confirmedAreas.length ? (
+          <p>
+            Air conditioning {site.region.phrase}, including{' '}
+            {confirmedAreas.map((a, i) => (
+              <>
+                {areaPages.some((p) => p.slug === a.slug) ? <a href={`/areas-we-cover/${a.slug}/`}>{a.name}</a> : a.name}
+                {i < confirmedAreas.length - 1 ? ', ' : '.'}
+              </>
+            ))}{' '}
+            <a href="/areas-we-cover/">View all areas</a>
+          </p>
+        ) : (
+          <p>
+            Air conditioning {site.region.phrase}. <Placeholder label="CONFIRMED SERVICE AREAS TO BE ADDED" /> <a href="/areas-we-cover/">Areas we cover</a>
+          </p>
+        )
+      }
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__legal">
+        © {year} {site.company.registeredName || site.name}.
+        {site.company.companyNumber ? ` Registered in England & Wales, company no. ${site.company.companyNumber}.` : ''}
+        {site.company.registeredOffice ? ` Registered office: ${site.company.registeredOffice}.` : ''}
+        {site.company.vatNumber ? ` VAT no. ${site.company.vatNumber}.` : ''}
+        {!site.company.registeredName && (
+          <>
+            {' '}
+            <Placeholder label="REGISTERED COMPANY NAME, NUMBER & OFFICE" />
+          </>
+        )}
+      </p>
+      <ul class="footer__links">
+        {footerNav.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li><a href="/cookie-policy/" data-open-cookie-settings>Cookie settings</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    padding: clamp(56px, 7vw, 96px) 0 calc(var(--bar-space) + 24px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .footer__top {
+    display: grid;
+    gap: 3rem;
+  }
+  .footer__logo {
+    display: inline-block;
+    text-decoration: none;
+  }
+  .footer__strap {
+    margin: 0.9rem 0 1rem;
+    font-family: var(--font-head);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue-on-navy) !important;
+  }
+  .footer__blurb {
+    max-width: 40ch;
+    font-size: var(--fs-sm);
+  }
+  .footer__contact {
+    list-style: none;
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+    font-size: var(--fs-sm);
+  }
+  .footer__contact li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--on-navy);
+  }
+  .footer__contact svg {
+    color: var(--blue-on-navy);
+    flex: none;
+  }
+  .footer__contact a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .footer__contact a:hover {
+    text-decoration: underline;
+  }
+  .footer__social {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+  .footer__social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--line-on-navy);
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    text-transform: capitalize;
+    font-size: 0.875rem;
+  }
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 2rem;
+  }
+  .footer__title {
+    margin-bottom: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .footer__col ul {
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .footer__col a {
+    color: var(--on-navy-muted);
+    text-decoration: none;
+    font-size: var(--fs-sm);
+    transition: color 0.2s ease;
+  }
+  .footer__col a:hover {
+    color: #fff;
+  }
+  .footer__areas {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line-on-navy);
+    font-size: var(--fs-sm);
+  }
+  .footer__areas a {
+    color: #fff;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line-on-navy);
+    font-size: 0.8125rem;
+  }
+  .footer__legal {
+    margin: 0;
+    max-width: 70ch;
+  }
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+  }
+  .footer__links a {
+    color: var(--on-navy-muted);
+    text-decoration: none;
+  }
+  .footer__links a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+  @media (min-width: 700px) {
+    .footer__cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .footer__top {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 2.4fr);
+      gap: 5rem;
+    }
+  }
+</style>

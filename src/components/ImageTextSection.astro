@@ -1,0 +1,256 @@
+---
+/**
+ * Editorial split section: image on one side, copy on the other.
+ * Used for Residential, Commercial, Refrigeration, Planned Maintenance and
+ * the equivalent inner-page sections.
+ */
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import Airflow from './Airflow.astro';
+import { images, type ImageKey } from '../lib/images';
+
+export interface Props {
+  id?: string;
+  tone?: 'cream' | 'white' | 'sand' | 'navy';
+  image: ImageKey;
+  imagePosition?: string;
+  imageSide?: 'left' | 'right';
+  secondaryImage?: ImageKey;
+  eyebrow: string;
+  title: string;
+  titleTag?: 'h2' | 'h3';
+  body?: string[];
+  bullets?: string[];
+  bulletsColumns?: 1 | 2;
+  chips?: string[];
+  chipsLabel?: string;
+  cta?: { label: string; href: string; track?: string; variant?: 'primary' | 'navy' | 'outline' };
+  links?: { label: string; href: string; track?: string }[];
+  emphasis?: boolean;
+  loading?: 'eager' | 'lazy';
+}
+const {
+  id,
+  tone = 'cream',
+  image,
+  imagePosition = '50% 50%',
+  imageSide = 'right',
+  secondaryImage,
+  eyebrow,
+  title,
+  titleTag = 'h2',
+  body = [],
+  bullets = [],
+  bulletsColumns = 2,
+  chips = [],
+  chipsLabel,
+  cta,
+  links = [],
+  emphasis = false,
+  loading = 'lazy',
+} = Astro.props;
+const img = images[image];
+const img2 = secondaryImage ? images[secondaryImage] : null;
+const Title = titleTag;
+---
+
+<section class:list={['section', 'its', `tone-${tone}`, emphasis && 'its--emphasis']} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+  {tone === 'navy' && <Airflow tone="dark" lines={6} seed={9} intensity={0.7} mask="linear-gradient(180deg, transparent 0%, #000 40%, #000 100%)" />}
+  <div class:list={['container', 'its__grid', `its__grid--${imageSide}`, 'its__grid--layered']}>
+    <div class="its__media" data-reveal>
+      <div class="frame its__frame zoom">
+        <Picture
+          src={img.src}
+          alt={img.alt}
+          title={img.title}
+          widths={[480, 800, 1300]}
+          sizes="(min-width: 1080px) 46vw, 100vw"
+          formats={['avif', 'webp']} fallbackFormat="webp"
+          loading={loading}
+          decoding="async"
+          quality={80}
+          style={`object-position:${imagePosition}`}
+        />
+      </div>
+      {
+        img2 && (
+          <div class="frame its__frame-2">
+            <Picture src={img2.src} alt={img2.alt} title={img2.title} widths={[360, 640]} sizes="(min-width: 1080px) 18vw, 40vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={78} />
+          </div>
+        )
+      }
+    </div>
+    <div class="its__copy" data-reveal style="--reveal-delay:120ms">
+      <p class="eyebrow">{eyebrow}</p>
+      <Title id={id ? `${id}-title` : undefined} class="its__title">{title}</Title>
+      {body.map((p) => <p class="its__body">{p}</p>)}
+      {
+        bullets.length > 0 && (
+          <ul class:list={['ticks', 'its__ticks', bulletsColumns === 2 && 'its__ticks--2']}>
+            {bullets.map((b) => <li>{b}</li>)}
+          </ul>
+        )
+      }
+      {
+        chips.length > 0 && (
+          <div class="its__chips">
+            {chipsLabel && <p class="its__chips-label">{chipsLabel}</p>}
+            <ul class="chips">
+              {chips.map((c) => <li class="chip">{c}</li>)}
+            </ul>
+          </div>
+        )
+      }
+      {
+        (cta || links.length > 0) && (
+          <div class="its__actions">
+            {cta && (
+              <Button href={cta.href} variant={cta.variant ?? (tone === 'navy' ? 'primary' : 'primary')} icon={null} track={cta.track} data-location={id}>
+                {cta.label}
+              </Button>
+            )}
+            {links.map((l) => (
+              <a href={l.href} class="link-arrow" data-track={l.track ? 'cta' : undefined} data-cta={l.track} data-location={id}>
+                <span>{l.label}</span>
+                <Icon name="arrow" strokeWidth={2} />
+              </a>
+            ))}
+          </div>
+        )
+      }
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .its {
+    overflow: hidden;
+  }
+  .its__grid--layered {
+    position: relative;
+  }
+  .its__grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .its__media {
+    position: relative;
+  }
+  .its__frame {
+    aspect-ratio: 4 / 3;
+  }
+  .its__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .its__frame-2 {
+    position: absolute;
+    right: -8px;
+    bottom: -24px;
+    width: 38%;
+    aspect-ratio: 5 / 4;
+    border: 6px solid var(--cream);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+  }
+  .tone-white .its__frame-2 {
+    border-color: #fff;
+  }
+  .tone-navy .its__frame-2 {
+    border-color: var(--navy);
+  }
+  .its__frame-2 :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .its__title {
+    font-size: var(--fs-h2);
+    margin-bottom: 1.1rem;
+  }
+  .its__body {
+    color: var(--muted);
+    max-width: 58ch;
+  }
+  .its__body:first-of-type {
+    font-size: var(--fs-lead);
+    color: var(--charcoal);
+  }
+  .tone-navy .its__body {
+    color: var(--on-navy-muted);
+  }
+  .tone-navy .its__body:first-of-type {
+    color: var(--on-navy);
+  }
+  .its__ticks {
+    margin-top: 1.5rem;
+  }
+  .its__ticks--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem 1rem;
+  }
+  .its__chips {
+    margin-top: 1.5rem;
+  }
+  .its__chips-label {
+    margin-bottom: 0.6rem;
+    font-family: var(--font-head);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  .tone-navy .its__chips-label {
+    color: #fff;
+  }
+  .its__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 1.9rem;
+  }
+  .its--emphasis .its__frame {
+    aspect-ratio: 5 / 4;
+    box-shadow: var(--shadow-lg);
+  }
+  @media (max-width: 479px) {
+    .its__ticks--2 {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (min-width: 1080px) {
+    .its__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .its__grid--left .its__media {
+      order: 1;
+    }
+    .its__grid--left .its__copy {
+      order: 2;
+    }
+    .its__grid--right .its__media {
+      order: 2;
+    }
+    .its__grid--right .its__copy {
+      order: 1;
+    }
+    .its--emphasis .its__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+    .its__frame-2 {
+      right: -32px;
+      bottom: -32px;
+    }
+    .its__grid--left .its__frame-2 {
+      right: auto;
+      left: -32px;
+    }
+  }
+</style>

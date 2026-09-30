@@ -1,0 +1,149 @@
+---
+/**
+ * Inner-page hero: breadcrumb, eyebrow, H1, lead, chips, CTAs + editorial image.
+ */
+import { Picture } from 'astro:assets';
+import Breadcrumbs from './Breadcrumbs.astro';
+import Button from './Button.astro';
+import Airflow from './Airflow.astro';
+import { images, type ImageKey } from '../lib/images';
+import { whatsappHref } from '../lib/site';
+
+export interface Props {
+  breadcrumbs: { label: string; href: string }[];
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  image?: ImageKey;
+  imagePosition?: string;
+  chips?: string[];
+  cta?: { label: string; href: string; track?: string };
+  whatsappMessage?: string;
+  compact?: boolean;
+}
+const { breadcrumbs, eyebrow, title, lead, image, imagePosition = '50% 50%', chips = [], cta, whatsappMessage, compact = false } = Astro.props;
+const img = image ? images[image] : null;
+---
+
+<section class:list={['phero', !img && 'phero--text', compact && 'phero--compact']} data-hide-lead-bar>
+  <div class="phero__bg" aria-hidden="true"></div>
+  <Airflow tone="light" lines={6} seed={13} intensity={0.8} mask="linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.3) 35%, #000 60%, #000 100%)" />
+  <div class:list={['container', img ? 'phero__grid' : 'phero__single']}>
+    <div class="phero__copy">
+      <Breadcrumbs items={breadcrumbs} />
+      {eyebrow && <p class="eyebrow phero__eyebrow">{eyebrow}</p>}
+      <h1 class="phero__title">{title}</h1>
+      {lead && <p class="phero__lead">{lead}</p>}
+      {
+        chips.length > 0 && (
+          <ul class="chips phero__chips">
+            {chips.map((c) => <li class="chip">{c}</li>)}
+          </ul>
+        )
+      }
+      {
+        (cta || whatsappMessage) && (
+          <div class="phero__actions">
+            {cta && <Button href={cta.href} icon={null} track={cta.track} data-location="page-hero">{cta.label}</Button>}
+            <Button href={whatsappHref(whatsappMessage)} variant="outline" icon="chat" whatsapp track="whatsapp" data-location="page-hero">
+              WhatsApp now
+            </Button>
+          </div>
+        )
+      }
+    </div>
+    {
+      img && (
+        <div class="phero__media">
+          <div class="frame phero__frame">
+            <Picture
+              src={img.src}
+              alt={img.alt}
+              title={img.title}
+              widths={[480, 800, 1300]}
+              sizes="(min-width: 1080px) 46vw, 100vw"
+              formats={['avif', 'webp']} fallbackFormat="webp"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              quality={80}
+              style={`object-position:${imagePosition}`}
+            />
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(20px, 3vw, 36px) 0 clamp(48px, 6vw, 80px);
+  }
+  .phero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(50% 50% at 90% 0%, rgba(0, 154, 224, 0.1), transparent 70%),
+      radial-gradient(35% 40% at 5% 100%, rgba(245, 117, 0, 0.06), transparent 70%),
+      var(--cream);
+  }
+  .phero > :global(.container) {
+    position: relative;
+  }
+  .phero__grid {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .phero__single {
+    max-width: 820px;
+  }
+  .phero__eyebrow {
+    margin-top: 1.5rem;
+  }
+  .phero__title {
+    font-size: var(--fs-h1);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .phero__lead {
+    margin-top: 1.25rem;
+    max-width: 56ch;
+    font-size: var(--fs-lead);
+    color: var(--charcoal);
+  }
+  .phero__chips {
+    margin-top: 1.25rem;
+  }
+  .phero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .phero__frame {
+    aspect-ratio: 5 / 4;
+    box-shadow: var(--shadow-lg);
+  }
+  .phero__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .phero--compact {
+    padding-bottom: clamp(32px, 4vw, 48px);
+  }
+  @media (min-width: 1080px) {
+    .phero__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(3rem, 6vw, 5rem);
+    }
+    .phero__frame {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

@@ -1,0 +1,203 @@
+---
+/**
+ * Airflow — subtle animated "breeze" background inspired by the brand icon.
+ * Thin flow lines drift slowly across the section while short streaks travel
+ * along them. Pure CSS/SVG animation (transform + stroke-dashoffset), no
+ * per-frame JavaScript. Paused while off-screen, static under
+ * prefers-reduced-motion, thinned out on small screens.
+ *
+ * tone: 'dark' (navy sections) | 'light' (cream/white sections)
+ * mask: optional CSS mask-image to fade the field (e.g. behind copy)
+ */
+export interface Props {
+  tone?: 'dark' | 'light';
+  lines?: number;
+  seed?: number;
+  intensity?: number; // 0.4–1.4, multiplies opacity
+  mask?: string;
+  class?: string;
+}
+const { tone = 'dark', lines = 7, seed = 1, intensity = 1, mask, class: className } = Astro.props;
+
+// Deterministic pseudo-random so every build renders the same lines
+let s = (seed * 9301 + 49297) % 233280;
+const rnd = () => ((s = (s * 9301 + 49297) % 233280), s / 233280);
+
+const W = 1600;
+const H = 600;
+const P = 480; // wave period (user units) — the drift loop translates by exactly one period
+const GAP = 900;
+
+const flow = Array.from({ length: lines }, (_, i) => {
+  const t = lines === 1 ? 0.5 : i / (lines - 1);
+  const y = 40 + (H - 80) * t + (rnd() - 0.5) * 36;
+  const A = 16 + rnd() * 28;
+  const startX = -P * 2 + rnd() * P;
+  let d = `M${startX.toFixed(1)},${y.toFixed(1)}`;
+  for (let x = startX; x < W + P; x += P) {
+    d += ` q${P / 4},${(2 * A).toFixed(1)} ${P / 2},0 q${P / 4},${(-2 * A).toFixed(1)} ${P / 2},0`;
+  }
+  const dash = Math.round(50 + rnd() * 90);
+  return {
+    d,
+    color: i % 3 === 1 ? 'orange' : 'blue',
+    dash,
+    len: dash + GAP,
+    drift: (26 + rnd() * 22).toFixed(1), // s per period
+    flowDur: (9 + rnd() * 9).toFixed(1), // s per streak cycle
+    delay: (-rnd() * 20).toFixed(1),
+    sway: (3 + rnd() * 5).toFixed(1),
+    swayDur: (7 + rnd() * 6).toFixed(1),
+    baseOpacity: (0.5 + rnd() * 0.5).toFixed(2),
+  };
+});
+---
+
+<div class:list={['af', `af--${tone}`, className]} style={`--af-intensity:${intensity};${mask ? `--af-mask:${mask};` : ''}`} aria-hidden="true" data-airflow>
+  <svg class="af__svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" focusable="false">
+    {
+      flow.map((l) => (
+        <g class="af__drift" style={`--drift:${l.drift}s;--delay:${l.delay}s`}>
+          <g class="af__sway" style={`--sway:${l.sway}px;--sway-dur:${l.swayDur}s;--delay:${l.delay}s`}>
+            <path class:list={['af__base', `af__base--${l.color}`]} d={l.d} style={`--o:${l.baseOpacity}`} />
+            <path
+              class:list={['af__streak', `af__streak--${l.color}`]}
+              d={l.d}
+              style={`--dash:${l.dash};--len:${l.len};--flow:${l.flowDur}s;--delay:${l.delay}s`}
+              stroke-dasharray={`${l.dash} ${GAP}`}
+            />
+          </g>
+        </g>
+      ))
+    }
+  </svg>
+</div>
+
+<style>
+  .af {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: var(--af-mask, none);
+    mask-image: var(--af-mask, none);
+  }
+  .af__svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .af path {
+    fill: none;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .af__base {
+    stroke-width: 1.2;
+    opacity: calc(0.22 * var(--o) * var(--af-intensity));
+  }
+  .af__streak {
+    stroke-width: 1.6;
+    opacity: calc(0.75 * var(--af-intensity));
+    stroke-dashoffset: 0;
+    animation: af-flow var(--flow) linear infinite;
+    animation-delay: var(--delay);
+  }
+  /* colours */
+  .af--dark .af__base--blue,
+  .af--dark .af__streak--blue {
+    stroke: #5bc4f2;
+  }
+  .af--dark .af__base--orange {
+    stroke: #ffa24f;
+  }
+  .af--dark .af__streak--orange {
+    stroke: #ffb067;
+  }
+  .af--light .af__base--blue,
+  .af--light .af__streak--blue {
+    stroke: #009ae0;
+  }
+  .af--light .af__base--orange,
+  .af--light .af__streak--orange {
+    stroke: #f57500;
+  }
+  .af--light .af__base {
+    opacity: calc(0.16 * var(--o) * var(--af-intensity));
+  }
+  .af--light .af__streak {
+    opacity: calc(0.5 * var(--af-intensity));
+  }
+  /* motion */
+  .af__drift {
+    animation: af-drift var(--drift) linear infinite;
+    animation-delay: var(--delay);
+  }
+  .af__sway {
+    animation: af-sway var(--sway-dur) ease-in-out infinite alternate;
+    animation-delay: var(--delay);
+  }
+  @keyframes af-drift {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-480px);
+    }
+  }
+  @keyframes af-sway {
+    from {
+      transform: translateY(calc(-1 * var(--sway)));
+    }
+    to {
+      transform: translateY(var(--sway));
+    }
+  }
+  @keyframes af-flow {
+    to {
+      stroke-dashoffset: calc(-1px * var(--len));
+    }
+  }
+  /* pause when scrolled out of view (JS toggles .is-running) */
+  :global(.js) .af:not(.is-running) .af__drift,
+  :global(.js) .af:not(.is-running) .af__sway,
+  :global(.js) .af:not(.is-running) .af__streak {
+    animation-play-state: paused;
+  }
+  /* fewer lines on small screens */
+  @media (max-width: 640px) {
+    .af__drift:nth-child(even) {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .af__drift,
+    .af__sway,
+    .af__streak {
+      animation: none !important;
+    }
+    .af__streak {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Run the breeze only while its section is on screen.
+  // Starts only once the page has finished loading, so it never competes with
+  // the first paint or the hero image.
+  const fields = document.querySelectorAll<HTMLElement>('[data-airflow]');
+  const start = () => {
+    if (fields.length && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.target.classList.toggle('is-running', e.isIntersecting)),
+        { rootMargin: '80px 0px' },
+      );
+      fields.forEach((f) => io.observe(f));
+    } else {
+      fields.forEach((f) => f.classList.add('is-running'));
+    }
+  };
+  const idle = () => ('requestIdleCallback' in window ? (window as any).requestIdleCallback(start, { timeout: 2000 }) : setTimeout(start, 400));
+  document.readyState === 'complete' ? idle() : window.addEventListener('load', idle, { once: true });
+</script>

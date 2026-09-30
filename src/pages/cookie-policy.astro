@@ -1,0 +1,36 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { site } from '../lib/site';
+const a = site.analytics;
+---
+
+<LegalLayout title="Cookie Policy | Coletrup Cooling" pageTitle="Cookie Policy" description="Which cookies this website uses, what they do and how to change your choices." path="/cookie-policy/">
+  <h2>How we use cookies</h2>
+  <p>
+    This site uses a small number of cookies and similar technologies. Analytics and advertising measurement only run if you choose <strong>Accept</strong> on the cookie banner. You can change your choice at any time:
+    <a href="/cookie-policy/" data-open-cookie-settings>open cookie settings</a>.
+  </p>
+
+  <h2>Cookies we set</h2>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Cookie table">
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Type</th><th>Purpose</th><th>Duration</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>cc_consent_v1</td><td>Necessary</td><td>Remembers whether you accepted or rejected analytics cookies.</td><td>Until cleared</td></tr>
+        <tr><td>cc_attribution_v1</td><td>Necessary (session)</td><td>Remembers which campaign or page brought you to the site so we can attribute your enquiry. Stored only after you accept cookies.</td><td>Browser session</td></tr>
+        <tr><td>Google Tag Manager / Google Analytics (_ga, _ga_*)</td><td>Analytics — consent required</td><td>Helps us understand how the site is used and which pages lead to enquiries.</td><td>Up to 2 years</td></tr>
+        <tr><td>Meta Pixel (_fbp)</td><td>Marketing — consent required</td><td>Measures the effectiveness of our advertising.</td><td>Up to 3 months</td></tr>
+        <tr><td>Google Ads (_gcl_*)</td><td>Marketing — consent required</td><td>Measures conversions from Google Ads.</td><td>Up to 3 months</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Services currently configured: {a.gtmId || a.ga4Id || a.metaPixelId || a.googleAdsId ? [a.gtmId && 'Google Tag Manager', a.ga4Id && 'Google Analytics 4', a.metaPixelId && 'Meta Pixel', a.googleAdsId && 'Google Ads'].filter(Boolean).join(', ') : <Placeholder label="NO ANALYTICS IDS CONFIGURED YET — update this table when tags are added" />}.
+  </p>
+
+  <h2>Managing cookies in your browser</h2>
+  <p>You can also block or delete cookies through your browser settings. Blocking necessary cookies may affect how the quote form works.</p>
+</LegalLayout>

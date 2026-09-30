@@ -1,0 +1,62 @@
+---
+export interface Props {
+  items: { label: string; href: string }[]; // excluding Home; last item is current page
+  onDark?: boolean;
+}
+const { items, onDark = false } = Astro.props;
+const all = [{ label: 'Home', href: '/' }, ...items];
+---
+
+<nav class:list={['crumbs', onDark && 'crumbs--dark']} aria-label="Breadcrumb">
+  <ol>
+    {
+      all.map((c, i) => (
+        <li>
+          {i < all.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .crumbs ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .crumbs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .crumbs li + li::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+  .crumbs a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    text-decoration: underline;
+  }
+  .crumbs [aria-current] {
+    color: var(--muted);
+  }
+  .crumbs--dark ol,
+  .crumbs--dark [aria-current] {
+    color: var(--on-navy-muted);
+  }
+  .crumbs--dark a {
+    color: #fff;
+  }
+</style>

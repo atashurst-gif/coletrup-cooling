@@ -1,0 +1,76 @@
+---
+import Icon from './Icon.astro';
+import { serviceBySlug } from '../data/services.mjs';
+
+export interface Props {
+  slugs: string[];
+  tone?: 'cream' | 'white' | 'sand';
+}
+const { slugs, tone = 'cream' } = Astro.props;
+const items = slugs.map((s) => serviceBySlug[s]).filter(Boolean);
+const iconFor = (group: string) => ({ residential: 'home', commercial: 'building', refrigeration: 'fridge', maintenance: 'calendar' })[group] ?? 'info';
+---
+
+<section class:list={['section', 'section--tight', 'rel', `tone-${tone}`]} aria-labelledby="related-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">Related services</p>
+        <h2 id="related-title">You might also need.</h2>
+      </div>
+    </div>
+    <ul class="rel__grid">
+      {
+        items.map((s) => (
+          <li class="card card--lift rel__item">
+            <span class="icon-badge"><Icon name={iconFor(s.group)} /></span>
+            <h3 class="rel__title">
+              <a href={`/${s.slug}/`} class="stretched">{s.navLabel}</a>
+            </h3>
+            <p class="rel__text">{s.seo.description.split('.')[0]}.</p>
+            <span class="link-arrow" aria-hidden="true"><span>Find out more</span><Icon name="arrow" strokeWidth={2} /></span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rel__grid {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .rel__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1.4rem;
+  }
+  .rel__title {
+    font-size: 1.0625rem;
+  }
+  .rel__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .rel__text {
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  .rel__item .link-arrow {
+    margin-top: auto;
+    font-size: 0.875rem;
+  }
+  @media (min-width: 640px) {
+    .rel__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .rel__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

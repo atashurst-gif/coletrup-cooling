@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-*/
+.astro/
+out/
+.DS_Store
+# large local-only tool data (not needed to build the site)
+tools/models/
+tools/map/src/

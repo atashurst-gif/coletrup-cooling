@@ -1,0 +1,88 @@
+---
+/**
+ * Cookie consent. Analytics/marketing tags only load after "Accept".
+ * Sits ABOVE the sticky lead bar so neither covers the other.
+ */
+import Button from './Button.astro';
+---
+
+<div class="cookie" id="cookie-banner" role="region" aria-label="Cookie consent" hidden>
+  <div class="cookie__inner">
+    <p class="cookie__text">
+      We use cookies to understand how the site is used and to measure enquiries. Analytics run only if you accept.
+      <a href="/cookie-policy/">Cookie policy</a>
+    </p>
+    <div class="cookie__actions">
+      <Button variant="outline" size="sm" icon={null} data-consent="reject">Reject</Button>
+      <Button size="sm" icon={null} data-consent="accept">Accept</Button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookie {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(var(--bar-space) + 8px);
+    z-index: 70;
+  }
+  .cookie[hidden] {
+    display: none;
+  }
+  .cookie__inner {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 640px;
+    margin-inline: auto;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+  }
+  .cookie__text {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--charcoal);
+  }
+  .cookie__text a {
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .cookie__actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+  @media (min-width: 900px) {
+    .cookie {
+      left: auto;
+      right: 24px;
+      bottom: 116px;
+      width: 460px;
+    }
+  }
+</style>
+
+<script>
+  import { getConsent, setConsent } from '../lib/consent';
+  const banner = document.getElementById('cookie-banner')!;
+  if (getConsent() === null) {
+    banner.hidden = false;
+  }
+  banner.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) =>
+    b.addEventListener('click', () => {
+      setConsent(b.dataset.consent === 'accept');
+      banner.hidden = true;
+    }),
+  );
+  // Allow the cookie policy page to reopen the banner
+  document.querySelectorAll('[data-open-cookie-settings]').forEach((el) =>
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      banner.hidden = false;
+      banner.querySelector<HTMLButtonElement>('[data-consent="accept"]')?.focus();
+    }),
+  );
+</script>

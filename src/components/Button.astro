@@ -1,0 +1,69 @@
+---
+/**
+ * Button — renders a real <a> for navigation or a real <button> for actions.
+ * variant: primary (orange) | navy | outline | light | ghost-light
+ * icon: 'arrow' | 'chat' | 'phone' | null
+ */
+import Icon from './Icon.astro';
+
+export interface Props {
+  href?: string;
+  variant?: 'primary' | 'navy' | 'outline' | 'light' | 'ghost-light';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: 'arrow' | 'chat' | 'phone' | null;
+  iconPosition?: 'left' | 'right';
+  type?: 'button' | 'submit';
+  block?: boolean;
+  class?: string;
+  whatsapp?: boolean;
+  track?: string;
+  [key: string]: unknown;
+}
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon = 'arrow',
+  iconPosition,
+  type = 'button',
+  block = false,
+  class: className,
+  whatsapp = false,
+  track,
+  ...rest
+} = Astro.props;
+
+const pos = iconPosition ?? (icon === 'arrow' ? 'right' : 'left');
+const classes = [
+  'btn',
+  `btn-${variant}`,
+  size !== 'md' && `btn-${size}`,
+  block && 'btn-block',
+  whatsapp && 'btn-wa',
+  className,
+];
+const external = href?.startsWith('http');
+const trackAttrs = track ? { 'data-track': 'cta', 'data-cta': track } : {};
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class:list={classes}
+      {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+      {...trackAttrs}
+      {...rest}
+    >
+      {icon && pos === 'left' && <Icon name={icon} strokeWidth={2} />}
+      <slot />
+      {icon && pos === 'right' && <Icon name={icon} strokeWidth={2} />}
+    </a>
+  ) : (
+    <button type={type} class:list={classes} {...trackAttrs} {...rest}>
+      {icon && pos === 'left' && <Icon name={icon} strokeWidth={2} />}
+      <slot />
+      {icon && pos === 'right' && <Icon name={icon} strokeWidth={2} />}
+    </button>
+  )
+}

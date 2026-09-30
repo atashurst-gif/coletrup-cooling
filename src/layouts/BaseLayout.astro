@@ -1,0 +1,97 @@
+---
+import '@fontsource-variable/montserrat';
+import '@fontsource-variable/open-sans';
+import montserratUrl from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
+import openSansUrl from '@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2?url';
+import '../styles/global.css';
+import SEOHead from '../components/SEOHead.astro';
+import Header from '../components/Header.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import Footer from '../components/Footer.astro';
+import StickyLeadBar from '../components/StickyLeadBar.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import { site } from '../lib/site';
+import type { ImageKey } from '../lib/images';
+
+export interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: ImageKey;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+  breadcrumbs?: { label: string; href: string }[];
+  stickyPrompt?: string;
+  whatsappMessage?: string;
+  bodyClass?: string;
+}
+const { title, description, path, ogImage, noindex, schema, breadcrumbs, stickyPrompt, whatsappMessage, bodyClass } = Astro.props;
+const analytics = JSON.stringify(site.analytics);
+const storeBeforeConsent = site.attribution.storeBeforeConsent;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#072D52" />
+    <link rel="preload" href={montserratUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={openSansUrl} as="font" type="font/woff2" crossorigin />
+    {site.brand.logoSvg && <link rel="preload" href={site.brand.logoSvg} as="image" type="image/svg+xml" />}
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <SEOHead {title} {description} {path} {ogImage} {noindex} {schema} {breadcrumbs} />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body class={bodyClass}>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header />
+    {/* Rendered outside the sticky header: its backdrop-filter would otherwise become the containing block for the menu's position: fixed */}
+    <MobileMenu current={Astro.url.pathname.replace(/\/?$/, '/')} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <StickyLeadBar prompt={stickyPrompt} {whatsappMessage} />
+    <CookieBanner />
+    <script define:vars={{ analytics, storeBeforeConsent }}>
+      window.__CC_ANALYTICS__ = JSON.parse(analytics);
+      window.__CC_STORE_BEFORE_CONSENT__ = storeBeforeConsent;
+    </script>
+    <script>
+      import { initTracking } from '../lib/tracking';
+      initTracking((window as any).__CC_ANALYTICS__, (window as any).__CC_STORE_BEFORE_CONSENT__);
+
+      // Reveal-on-scroll (subtle fades only)
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  main {
+    outline: none;
+  }
+</style>

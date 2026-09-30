@@ -1,0 +1,190 @@
+---
+/**
+ * Flexible feature section used by service pages.
+ * variant: 'cards' (icon cards) | 'tiles' (compact icon tiles) | 'list' (two-column list)
+ *          | 'columns' (3 columns, navy-friendly)
+ */
+import Icon from './Icon.astro';
+import { Picture } from 'astro:assets';
+import { images, type ImageKey } from '../lib/images';
+
+export interface Props {
+  id?: string;
+  tone?: 'cream' | 'white' | 'sand' | 'navy';
+  variant?: 'cards' | 'tiles' | 'list' | 'columns' | 'photos';
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  note?: string;
+  items: { icon: string; title: string; text: string; href?: string; image?: ImageKey; position?: string }[];
+}
+const { id, tone = 'cream', variant = 'cards', eyebrow, title, intro, note, items } = Astro.props;
+---
+
+<section class:list={['section', 'feat', `feat--${variant}`, `tone-${tone}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+  <div class="container">
+    <div class:list={['section-head', intro ? 'section-head--split' : '']}>
+      <div>
+        <p class="eyebrow">{eyebrow}</p>
+        <h2 id={id ? `${id}-title` : undefined}>{title}</h2>
+      </div>
+      {intro && <p>{intro}</p>}
+    </div>
+    <ul class:list={['feat__grid', `feat__grid--${variant}`, items.length % 3 === 0 && variant === 'cards' && 'feat__grid--3']}>
+      {
+        items.map((it, i) => (
+          <li class:list={['feat__item', it.href && 'feat__item--link', it.image && 'feat__item--photo', it.image && 'zoom']} data-reveal style={`--reveal-delay:${Math.min(i, 6) * 60}ms`}>
+            {it.image && (
+              <div class="frame feat__media">
+                <Picture src={images[it.image].src} alt={images[it.image].alt} title={images[it.image].title} widths={[480, 800]} sizes="(min-width: 1080px) 30vw, (min-width: 640px) 50vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={78} style={it.position ? `object-position:${it.position}` : undefined} />
+              </div>
+            )}
+            <span class="icon-badge feat__icon"><Icon name={it.icon} /></span>
+            <div class="feat__body">
+              <h3 class="feat__title">{it.href ? <a href={it.href} class="stretched">{it.title}</a> : it.title}</h3>
+              <p class="feat__text">{it.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    {note && <p class="feat__note muted">{note}</p>}
+  </div>
+</section>
+
+<style>
+  .feat__grid {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .feat__item {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding: 1.4rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition:
+      transform 0.35s var(--ease),
+      box-shadow 0.35s var(--ease),
+      border-color 0.3s ease;
+  }
+  .tone-white .feat__item {
+    background: var(--cream);
+  }
+  .tone-navy .feat__item {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--line-on-navy);
+  }
+  .feat__item--link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--line-strong);
+  }
+  .feat__title {
+    margin-bottom: 0.35rem;
+    font-size: 1.0625rem;
+  }
+  .feat__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .feat__text {
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  .feat__note {
+    margin-top: 1.25rem;
+    font-size: var(--fs-sm);
+  }
+  /* cards: icon above */
+  .feat--cards .feat__item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  /* tiles: compact */
+  .feat--tiles .feat__item {
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.25rem;
+  }
+  .feat--tiles .feat__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+  .feat--tiles .feat__icon :global(svg) {
+    width: 22px;
+    height: 22px;
+  }
+  /* list: icon beside, 2 columns */
+  .feat--list .feat__item {
+    align-items: flex-start;
+  }
+  /* photos: image tile with icon + title below */
+  .feat--photos .feat__item {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: #fff;
+  }
+  .feat__media {
+    border-radius: 0;
+    aspect-ratio: 4 / 3;
+  }
+  .feat__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .feat--photos .feat__icon {
+    position: relative;
+    z-index: 2; /* sits over the photo frame */
+    margin: -1.5rem 0 0 1.25rem;
+    background: var(--navy);
+    color: var(--blue-on-navy);
+    box-shadow: 0 0 0 5px #fff;
+  }
+  .feat--photos .feat__body {
+    padding: 0 1.25rem 1.35rem;
+  }
+  /* columns: on navy */
+  .feat--columns .feat__item {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.6rem;
+  }
+  .feat--columns .feat__title {
+    font-size: 1.15rem;
+  }
+  @media (min-width: 640px) {
+    .feat__grid--cards,
+    .feat__grid--list,
+    .feat__grid--tiles,
+    .feat__grid--photos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .feat__grid--cards {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .feat__grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .feat__grid--tiles,
+    .feat__grid--photos {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .feat__grid--columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .feat__grid--list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

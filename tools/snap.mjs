@@ -1,0 +1,20 @@
+// node tools/snap.mjs <path> <selector|top> <name> [width] [wait]
+import { chromium } from 'playwright';
+import { createServer } from 'node:http';
+import { readFileSync, existsSync, statSync } from 'node:fs';
+import { join, extname } from 'node:path';
+const dist = new URL('../dist/', import.meta.url).pathname;
+const types = { '.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.avif':'image/avif', '.webp':'image/webp', '.jpg':'image/jpeg', '.png':'image/png', '.svg':'image/svg+xml', '.woff2':'font/woff2', '.ico':'image/x-icon', '.webmanifest':'application/manifest+json' };
+const srv = createServer((req,res)=>{ let p=decodeURIComponent(req.url.split('?')[0]); let f=join(dist,p); if(existsSync(f)&&statSync(f).isDirectory()) f=join(f,'index.html'); if(!existsSync(f)){res.writeHead(404);res.end();return;} res.writeHead(200,{'Content-Type':types[extname(f)]||'application/octet-stream'}); res.end(readFileSync(f)); });
+await new Promise(r=>srv.listen(4321,r));
+const [,, path='/', sel='top', name='snap', width='1440', wait='1200'] = process.argv;
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell' });
+const page = await browser.newPage({ viewport:{ width:+width, height: +width<600?844:900 }, deviceScaleFactor: +width<600?2:1 });
+const errs=[]; page.on('pageerror',e=>errs.push(e.message)); page.on('console',m=>m.type()==='error'&&errs.push(m.text()));
+await page.goto('http://localhost:4321'+path, { waitUntil:'networkidle' });
+if (sel!=='top') await page.evaluate((s)=>document.querySelector(s).scrollIntoView({block:'start',behavior:'instant'}), sel);
+await page.waitForTimeout(+wait);
+const out=`/tmp/claude-0/-home-claude/1f819917-8096-5d4e-8eb3-6271fb89cd98/scratchpad/${name}.png`;
+await page.screenshot({ path: out });
+console.log('saved', out, errs.length?errs:'');
+await browser.close(); srv.close();

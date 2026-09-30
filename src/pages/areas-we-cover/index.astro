@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import AreasSection from '../../components/AreasSection.astro';
+import Icon from '../../components/Icon.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import MidCTA from '../../components/MidCTA.astro';
+import { site, confirmedAreas, areaPages } from '../../lib/site';
+
+const title = `Areas We Cover | Air Conditioning ${site.region.phrase.replace(/^across /, '').replace(/^the /, 'the ')} | Coletrup Cooling`;
+const description = `Air conditioning installation, servicing and repairs for homes and businesses ${site.region.phrase}, plus refrigeration servicing, maintenance and repairs. Check we cover your area.`;
+const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
+---
+
+<BaseLayout {title} {description} path="/areas-we-cover/" ogImage="gardenRoom" {breadcrumbs}>
+  <PageHero
+    breadcrumbs={breadcrumbs}
+    eyebrow="Areas we cover"
+    title={`Air conditioning ${site.region.phrase}.`}
+    lead={`We provide air conditioning installation, servicing and repairs for homes and businesses ${site.region.phrase}, along with specialist refrigeration servicing, maintenance and repairs.`}
+    image="gardenRoom"
+    imagePosition="45% 50%"
+    cta={{ label: 'Check your area', href: '#quote', track: 'quote' }}
+    whatsappMessage="Hi Coletrup Cooling, do you cover my area? My postcode is "
+  />
+
+  <section class="section tone-white areas-list" aria-labelledby="areas-list-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow">Where we work</p>
+          <h2 id="areas-list-title">Towns and areas we serve.</h2>
+        </div>
+        <p>We only list areas we genuinely cover. If yours isn't shown, send us your postcode and we'll confirm.</p>
+      </div>
+      {
+        confirmedAreas.length > 0 ? (
+          <ul class="areas-list__grid">
+            {confirmedAreas.map((a) => {
+              const hasPage = areaPages.some((p) => p.slug === a.slug);
+              return (
+                <li class:list={['card', hasPage && 'card--lift', 'areas-list__item']}>
+                  <span class="icon-badge"><Icon name="pin" /></span>
+                  <h3>{hasPage ? <a href={`/areas-we-cover/${a.slug}/`} class="stretched">{a.name}</a> : a.name}</h3>
+                  <p>Air conditioning installation, servicing and repairs, plus refrigeration servicing and repairs.</p>
+                  {hasPage && <span class="link-arrow" aria-hidden="true"><span>{a.name} air conditioning</span><Icon name="arrow" strokeWidth={2} /></span>}
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <Placeholder block label="CONFIRMED SERVICE AREAS TO BE ADDED">
+            <p>
+              The strategy documents mention searches around {site.areas.map((a) => a.name).join(', ')}, but none are confirmed as service areas yet.
+              In <code>site.config.mjs</code>, set <code>confirmed: true</code> for each verified area to list it here. Add an <code>intro</code> and at least three <code>details</code> to generate a unique location page for that area.
+            </p>
+          </Placeholder>
+        )
+      }
+    </div>
+  </section>
+
+  <MidCTA id="areas-mid-cta" tone="white" quoteHref="#quote" title="Not sure if we cover you?" text="Send your postcode with a quote request, or ask on WhatsApp — we'll confirm straight away." />
+
+  <AreasSection id="areas-map" compact />
+
+  <QuoteForm id="quote" title="Check we cover your area." intro="Tell us what you need and your postcode, and we'll confirm whether we can help." tone="navy" />
+
+  <FinalCTA />
+</BaseLayout>
+
+<style>
+  .areas-list__grid {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .areas-list__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem;
+  }
+  .areas-list__item h3 {
+    font-size: 1.2rem;
+  }
+  .areas-list__item h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .areas-list__item p {
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  code {
+    font-size: 0.85em;
+    background: rgba(7, 45, 82, 0.06);
+    padding: 0.05em 0.35em;
+    border-radius: 4px;
+  }
+  @media (min-width: 640px) {
+    .areas-list__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .areas-list__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

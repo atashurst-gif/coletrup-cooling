@@ -1,0 +1,628 @@
+---
+/**
+ * QuoteForm — four-step quote journey.
+ *  1 What do you need?  2 Residential or commercial?  3 Postcode  4 Your details
+ * Progressive enhancement: without JS it is a single accessible form that posts
+ * normally. With JS: stepped UI, validation, enquiry ID, attribution, tracking
+ * and an in-place confirmation with WhatsApp / phone options.
+ *
+ * Destination is set in site.config → forms (netlify | webhook | none).
+ */
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import Airflow from './Airflow.astro';
+import { site, hasPhone, hasWhatsApp, telHref, whatsappHref, PREVIEW_MODE } from '../lib/site';
+
+export interface Props {
+  id?: string;
+  title?: string;
+  intro?: string;
+  tone?: 'cream' | 'white' | 'navy';
+  defaultService?: '' | 'air-conditioning' | 'refrigeration' | 'repair' | 'servicing-maintenance';
+  defaultType?: '' | 'residential' | 'commercial';
+  compact?: boolean;
+}
+const {
+  id = 'quote',
+  title = 'Request your free quote.',
+  intro = 'Four quick steps. No long forms, no photo uploads — just what we need to help.',
+  tone = 'navy',
+  defaultService = '',
+  defaultType = '',
+  compact = false,
+} = Astro.props;
+
+const forms = site.forms;
+const isNetlify = forms.provider === 'netlify';
+const isWebhook = forms.provider === 'webhook' && forms.webhookUrl;
+const disabled = forms.provider === 'none' || (forms.provider === 'webhook' && !forms.webhookUrl);
+const action = isNetlify ? forms.netlifyPostPath : isWebhook ? forms.webhookUrl : '/contact/';
+const formName = forms.netlifyFormName;
+const uid = id;
+
+const services = [
+  { value: 'air-conditioning', label: 'Air Conditioning', icon: 'ac-unit', hint: 'Installation or a new system' },
+  { value: 'refrigeration', label: 'Refrigeration', icon: 'fridge', hint: 'Servicing, maintenance or repairs' },
+  { value: 'repair', label: 'Repair', icon: 'wrench', hint: 'Something isn’t working properly' },
+  { value: 'servicing-maintenance', label: 'Servicing / Maintenance', icon: 'calendar', hint: 'A service or planned maintenance' },
+];
+const types = [
+  { value: 'residential', label: 'Residential', icon: 'home', hint: 'A home' },
+  { value: 'commercial', label: 'Commercial', icon: 'building', hint: 'A business or premises' },
+];
+---
+
+<section class:list={['section', 'qf', `tone-${tone}`, compact && 'section--tight']} id={id} aria-labelledby={`${uid}-title`} data-hide-lead-bar>
+  <div class="qf__bg" aria-hidden="true"></div>
+  {tone === 'navy' && <Airflow tone="dark" lines={6} seed={7} intensity={0.7} mask="linear-gradient(90deg, #000 0%, #000 40%, rgba(0,0,0,0.25) 70%, transparent 100%)" />}
+  <div class="container qf__grid">
+    <div class="qf__intro" data-reveal>
+      <p class="eyebrow">Get a quote</p>
+      <h2 id={`${uid}-title`}>{title}</h2>
+      <p class="qf__lead">{intro}</p>
+      <ol class="qf__steps-list" aria-label="Steps">
+        <li><span>1</span> What you need</li>
+        <li><span>2</span> Home or business</li>
+        <li><span>3</span> Your postcode</li>
+        <li><span>4</span> Your details</li>
+      </ol>
+      <p class="qf__alt">
+        Prefer to talk?
+        <a href={whatsappHref()} data-track="cta" data-cta="whatsapp" data-location={uid} {...(hasWhatsApp ? { target: '_blank', rel: 'noopener' } : {})}>WhatsApp us</a>
+        or
+        <a href={telHref} data-track="cta" data-cta="phone" data-location={uid}>{hasPhone ? `call ${site.contact.phoneDisplay}` : 'call us'}</a>.
+      </p>
+    </div>
+
+    <div class="qf__panel" data-reveal style="--reveal-delay:120ms">
+      <form
+        class="qf__form"
+        id={`${uid}-form`}
+        method="POST"
+        action={action}
+        novalidate
+        data-quote-form
+        data-provider={forms.provider}
+        data-disabled={disabled ? 'true' : 'false'}
+        data-prefix={forms.referencePrefix}
+        data-preview={PREVIEW_MODE ? 'true' : 'false'}
+        {...(isNetlify ? { name: formName, 'data-netlify': 'true', 'netlify-honeypot': 'company-website' } : {})}
+      >
+        {isNetlify && <input type="hidden" name="form-name" value={formName} />}
+        <p class="qf__hp" aria-hidden="true">
+          <label>Company website <input type="text" name="company-website" tabindex="-1" autocomplete="off" /></label>
+        </p>
+        <input type="hidden" name="enquiry_id" data-field="enquiry_id" />
+        <input type="hidden" name="utm_source" data-field="utm_source" />
+        <input type="hidden" name="utm_medium" data-field="utm_medium" />
+        <input type="hidden" name="utm_campaign" data-field="utm_campaign" />
+        <input type="hidden" name="utm_term" data-field="utm_term" />
+        <input type="hidden" name="utm_content" data-field="utm_content" />
+        <input type="hidden" name="gclid" data-field="gclid" />
+        <input type="hidden" name="fbclid" data-field="fbclid" />
+        <input type="hidden" name="landing_page" data-field="landing_page" />
+        <input type="hidden" name="referrer" data-field="referrer" />
+        <input type="hidden" name="submitted_from" data-field="submitted_from" />
+        <input type="hidden" name="submitted_at" data-field="submitted_at" />
+
+        <div class="qf__progress" data-progress hidden>
+          <div class="qf__bar"><span data-progress-bar style="width:25%"></span></div>
+          <p class="qf__count"><span data-progress-text>Step 1 of 4</span></p>
+        </div>
+
+        <!-- STEP 1 -->
+        <fieldset class="qf__step" data-step="1">
+          <legend class="qf__legend">What do you need?</legend>
+          <div class="qf__options qf__options--4">
+            {
+              services.map((s, i) => (
+                <label class="qf__opt">
+                  <input type="radio" name="service" value={s.value} checked={defaultService === s.value || undefined} required />
+                  <span class="qf__opt-card">
+                    <span class="qf__opt-icon"><Icon name={s.icon} /></span>
+                    <span class="qf__opt-label">{s.label}</span>
+                    <span class="qf__opt-hint">{s.hint}</span>
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+          <p class="qf__error" data-error-for="service" role="alert" hidden>Please choose what you need help with.</p>
+        </fieldset>
+
+        <!-- STEP 2 -->
+        <fieldset class="qf__step" data-step="2">
+          <legend class="qf__legend">Residential or commercial?</legend>
+          <div class="qf__options qf__options--2">
+            {
+              types.map((t) => (
+                <label class="qf__opt">
+                  <input type="radio" name="customer_type" value={t.value} checked={defaultType === t.value || undefined} required />
+                  <span class="qf__opt-card">
+                    <span class="qf__opt-icon"><Icon name={t.icon} /></span>
+                    <span class="qf__opt-label">{t.label}</span>
+                    <span class="qf__opt-hint">{t.hint}</span>
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+          <p class="qf__error" data-error-for="customer_type" role="alert" hidden>Please tell us whether this is for a home or a business.</p>
+        </fieldset>
+
+        <!-- STEP 3 -->
+        <fieldset class="qf__step" data-step="3">
+          <legend class="qf__legend">Where are you located?</legend>
+          <div class="qf__field">
+            <label for={`${uid}-postcode`}>Postcode</label>
+            <input
+              id={`${uid}-postcode`}
+              type="text"
+              name="postcode"
+              inputmode="text"
+              autocomplete="postal-code"
+              autocapitalize="characters"
+              placeholder="e.g. M1 1AA"
+              maxlength="10"
+              required
+              aria-describedby={`${uid}-postcode-hint`}
+            />
+            <p class="qf__hint" id={`${uid}-postcode-hint`}>We use this to check we cover your area.</p>
+            <p class="qf__error" data-error-for="postcode" role="alert" hidden>Please enter a valid UK postcode.</p>
+          </div>
+        </fieldset>
+
+        <!-- STEP 4 -->
+        <fieldset class="qf__step" data-step="4">
+          <legend class="qf__legend">Your details</legend>
+          <div class="qf__field">
+            <label for={`${uid}-name`}>Name</label>
+            <input id={`${uid}-name`} type="text" name="name" autocomplete="name" required maxlength="80" />
+            <p class="qf__error" data-error-for="name" role="alert" hidden>Please enter your name.</p>
+          </div>
+          <div class="qf__field">
+            <label for={`${uid}-phone`}>Phone</label>
+            <input id={`${uid}-phone`} type="tel" name="phone" autocomplete="tel" inputmode="tel" required maxlength="20" />
+            <p class="qf__error" data-error-for="phone" role="alert" hidden>Please enter a valid phone number.</p>
+          </div>
+          <div class="qf__field">
+            <label for={`${uid}-email`}>Email</label>
+            <input id={`${uid}-email`} type="email" name="email" autocomplete="email" inputmode="email" required maxlength="120" />
+            <p class="qf__error" data-error-for="email" role="alert" hidden>Please enter a valid email address.</p>
+          </div>
+          <p class="qf__privacy">
+            By sending this form you agree to us contacting you about your enquiry. See our <a href="/privacy-policy/">privacy policy</a>.
+          </p>
+        </fieldset>
+
+        <p class="qf__error qf__error--form" data-form-error role="alert" hidden></p>
+
+        <div class="qf__nav">
+          <button type="button" class="btn btn-outline qf__back" data-back hidden>
+            <Icon name="arrow" strokeWidth={2} class="qf__back-icon" /> Back
+          </button>
+          <button type="button" class="btn btn-primary qf__next" data-next hidden>
+            Continue <Icon name="arrow" strokeWidth={2} />
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg qf__submit" data-submit data-track="cta" data-cta="quote-submit" data-location={uid}>
+            <span data-submit-label>Request your quote</span>
+            <Icon name="arrow" strokeWidth={2} />
+          </button>
+        </div>
+        {
+          disabled && (
+            <p class="qf__offline" role="status">
+              Online quote requests aren't switched on yet. Please
+              <a href={whatsappHref()}>WhatsApp us</a> or <a href={telHref}>call us</a> instead.
+            </p>
+          )
+        }
+      </form>
+
+      <!-- CONFIRMATION -->
+      <div class="qf__done" data-confirmation hidden tabindex="-1">
+        <span class="qf__done-icon"><Icon name="check" strokeWidth={2.5} /></span>
+        <h3 class="qf__done-title">Thanks — your quote request has been received.</h3>
+        <p class="qf__done-text">
+          Your enquiry reference is <strong class="qf__ref" data-ref>—</strong>. Keep it handy if you get in touch about this enquiry.
+        </p>
+        <p class="qf__done-text">Want to speed things up? Message or call us now and quote your reference.</p>
+        <div class="qf__done-actions">
+          <Button href={whatsappHref()} variant="primary" icon="chat" whatsapp track="whatsapp" data-location={`${uid}-confirmation`} data-wa-link>
+            WhatsApp us
+          </Button>
+          <Button href={telHref} variant="light" icon="phone" track="phone" data-location={`${uid}-confirmation`}>
+            {hasPhone ? `Call ${site.contact.phoneDisplay}` : 'Call us'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .qf {
+    overflow: hidden;
+  }
+  .qf__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(55% 60% at 100% 0%, rgba(0, 154, 224, 0.22), transparent 70%),
+      radial-gradient(40% 40% at 0% 100%, rgba(245, 117, 0, 0.14), transparent 70%);
+  }
+  .tone-cream .qf__bg,
+  .tone-white .qf__bg {
+    background:
+      radial-gradient(55% 60% at 100% 0%, rgba(0, 154, 224, 0.08), transparent 70%),
+      radial-gradient(40% 40% at 0% 100%, rgba(245, 117, 0, 0.06), transparent 70%);
+  }
+  .qf__grid {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+  }
+  .qf__lead {
+    margin: 1rem 0 1.5rem;
+    max-width: 44ch;
+    font-size: var(--fs-lead);
+  }
+  .qf__steps-list {
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .qf__steps-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .qf__steps-list span {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--line-on-navy);
+    font-size: 0.8rem;
+    color: var(--blue-on-navy);
+  }
+  .tone-cream .qf__steps-list span,
+  .tone-white .qf__steps-list span {
+    background: #fff;
+    border-color: var(--line);
+    color: var(--blue-ink);
+  }
+  .qf__alt {
+    font-size: var(--fs-sm);
+  }
+  .qf__alt a {
+    color: #fff;
+    font-weight: 600;
+  }
+  .tone-cream .qf__alt a,
+  .tone-white .qf__alt a {
+    color: var(--navy);
+  }
+
+  .qf__panel {
+    position: relative;
+    background: #fff;
+    color: var(--charcoal);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+  }
+  .tone-cream .qf__panel,
+  .tone-white .qf__panel {
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+  }
+  .qf__panel h3 {
+    color: var(--navy);
+  }
+  .qf__panel p {
+    color: var(--charcoal);
+  }
+  .qf__hp {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+  }
+  .qf__progress {
+    margin-bottom: 1.5rem;
+  }
+  .qf__progress[hidden] {
+    display: none;
+  }
+  .qf__bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--sand-deep);
+    overflow: hidden;
+  }
+  .qf__bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--blue), var(--orange));
+    transition: width 0.4s var(--ease);
+  }
+  .qf__count {
+    margin: 0.5rem 0 0;
+    font-family: var(--font-head);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted) !important;
+  }
+  .qf__step {
+    border: 0;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    min-width: 0;
+  }
+  :global(.js) .qf__step {
+    display: none;
+  }
+  :global(.js) .qf__step.is-active {
+    display: block;
+    animation: qf-in 0.35s var(--ease);
+  }
+  @keyframes qf-in {
+    from {
+      opacity: 0;
+      transform: translateX(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .qf__legend {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0;
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  .qf__options {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .qf__options--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .qf__opt {
+    position: relative;
+    display: block;
+  }
+  .qf__opt input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    inset: 0;
+  }
+  .qf__opt-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-height: 100%;
+    padding: 1rem 1rem 0.9rem;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    background: var(--cream);
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s var(--ease);
+  }
+  .qf__opt-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-1px);
+  }
+  .qf__opt input:checked + .qf__opt-card {
+    border-color: var(--navy);
+    background: #fff;
+    box-shadow:
+      0 0 0 3px rgba(0, 154, 224, 0.2),
+      var(--shadow-sm);
+  }
+  .qf__opt input:focus-visible + .qf__opt-card {
+    outline: 3px solid var(--navy);
+    outline-offset: 2px;
+  }
+  .qf__opt-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.4rem;
+    border-radius: 11px;
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--navy);
+  }
+  .qf__opt input:checked + .qf__opt-card .qf__opt-icon {
+    background: var(--navy);
+    color: var(--blue-on-navy);
+    border-color: var(--navy);
+  }
+  .qf__opt-label {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.9875rem;
+    color: var(--navy);
+  }
+  .qf__opt-hint {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .qf__field {
+    margin-bottom: 1.1rem;
+  }
+  .qf__field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--navy);
+  }
+  .qf__field input {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 1rem;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1.0625rem;
+    color: var(--charcoal);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .qf__field input::placeholder {
+    color: #8a94a0;
+  }
+  .qf__field input:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(0, 154, 224, 0.22);
+  }
+  .qf__field input[aria-invalid='true'] {
+    border-color: #c8320f;
+  }
+  .qf__hint {
+    margin: 0.45rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted) !important;
+  }
+  .qf__error {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #b02a0c !important;
+  }
+  .qf__error[hidden] {
+    display: none;
+  }
+  .qf__error--form {
+    margin-bottom: 1rem;
+  }
+  .qf__privacy {
+    font-size: 0.8125rem;
+    color: var(--muted) !important;
+  }
+  .qf__privacy a {
+    color: var(--navy);
+  }
+  .qf__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .qf__nav [hidden] {
+    display: none;
+  }
+  .qf__back-icon {
+    transform: rotate(180deg);
+  }
+  .qf__next {
+    margin-left: auto;
+  }
+  .qf__submit {
+    flex: 1 1 auto;
+  }
+  :global(.js) .qf__submit {
+    display: none;
+  }
+  :global(.js) .qf__submit.is-visible {
+    display: inline-flex;
+  }
+  .qf__offline {
+    margin-top: 1rem;
+    font-size: var(--fs-sm);
+  }
+  .qf__offline a {
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .qf__done[hidden] {
+    display: none;
+  }
+  .qf__done {
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .qf__done-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    background: var(--blue-soft);
+    color: var(--navy);
+  }
+  .qf__done-title {
+    margin-bottom: 0.75rem;
+    font-size: 1.4rem;
+  }
+  .qf__done-text {
+    max-width: 44ch;
+    margin-inline: auto;
+  }
+  .qf__ref {
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    border-radius: 6px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    color: var(--navy);
+    letter-spacing: 0.05em;
+  }
+  .qf__done-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .qf__done-actions .btn-light {
+    border-color: var(--line-strong);
+  }
+  @media (min-width: 560px) {
+    .qf__options--4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .qf__grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+</style>
+
+<script>
+  import { initQuoteForms } from '../lib/quote-form';
+  initQuoteForms();
+</script>

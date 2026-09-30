@@ -1,0 +1,82 @@
+---
+/**
+ * Service pages — one route per entry in src/data/services.mjs
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionRenderer from '../components/SectionRenderer.astro';
+import FAQ from '../components/FAQ.astro';
+import RelatedServices from '../components/RelatedServices.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+import { services } from '../data/services.mjs';
+import { site, absoluteUrl, SITE_URL } from '../lib/site';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { service: s } }));
+}
+const { service: s } = Astro.props;
+const path = `/${s.slug}/`;
+const breadcrumbs = [...s.breadcrumb, { label: s.navLabel, href: path }];
+const quoteHref = `/contact/?service=${s.cta.service}${s.cta.type ? `&type=${s.cta.type}` : ''}#quote`;
+
+const schema = [
+  {
+    '@type': 'Service',
+    '@id': `${absoluteUrl(path)}#service`,
+    name: s.navLabel,
+    serviceType: s.schema.serviceType,
+    description: s.seo.description,
+    provider: { '@id': `${SITE_URL || ''}/#organization` },
+    url: absoluteUrl(path),
+    ...(site.region.confirmed ? { areaServed: { '@type': 'Place', name: `${site.region.name}, England` } } : {}),
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+const isCommercialish = s.group === 'commercial' || s.group === 'maintenance' || s.group === 'refrigeration';
+---
+
+<BaseLayout
+  title={s.seo.title}
+  description={s.seo.description}
+  {path}
+  ogImage={s.hero.image}
+  {schema}
+  {breadcrumbs}
+  stickyPrompt={s.stickyPrompt ?? (isCommercialish ? 'Need support for your business?' : 'Need air conditioning support?')}
+  whatsappMessage={s.whatsappMessage}
+>
+  <PageHero
+    breadcrumbs={breadcrumbs}
+    eyebrow={s.hero.eyebrow}
+    title={s.hero.h1}
+    lead={s.hero.lead}
+    image={s.hero.image}
+    imagePosition={s.hero.imagePosition}
+    chips={s.hero.chips}
+    cta={{ label: s.cta.label, href: '#quote', track: s.cta.track }}
+    whatsappMessage={s.whatsappMessage}
+  />
+
+  <SectionRenderer sections={s.sections} slug={s.slug} midCta={{ quoteHref: '#quote', quoteLabel: s.cta.label, whatsappMessage: s.whatsappMessage, title: s.group === 'refrigeration' ? 'Need a hand with refrigeration?' : 'Ready when you are.' }} />
+
+  <FAQ items={s.faqs} tone={s.sections.length % 2 === 0 ? 'white' : 'cream'} />
+
+  <RelatedServices slugs={s.related} tone={s.sections.length % 2 === 0 ? 'cream' : 'white'} />
+
+  <QuoteForm
+    id="quote"
+    title={s.group === 'refrigeration' ? 'Request refrigeration support.' : s.group === 'commercial' ? 'Request a commercial quote.' : 'Request your free quote.'}
+    defaultService={s.cta.service}
+    defaultType={s.cta.type}
+  />
+
+  <FinalCTA
+    title={s.group === 'refrigeration' ? 'Need refrigeration support?' : 'Need air conditioning support?'}
+    whatsappMessage={s.whatsappMessage}
+    quoteHref={quoteHref}
+  />
+</BaseLayout>
