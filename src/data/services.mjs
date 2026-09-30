@@ -77,7 +77,7 @@ export const services = [
         eyebrow: 'Residential services',
         title: 'Everything your home system needs.',
         items: [
-          { icon: 'ac-unit', title: 'Air Conditioning Installation', text: 'The right system, planned around your rooms and professionally installed.', href: '/air-conditioning-installation/', image: 'engineerHome', track: 'installation' },
+          { icon: 'ac-unit', title: 'Air Conditioning Installation', text: 'The right system, planned around your rooms and professionally installed.', href: '/air-conditioning-installation/', image: 'engineerHomeDark', track: 'installation' },
           { icon: 'wrench', title: 'Air Conditioning Repairs', text: "Not cooling, leaking or noisy? We'll find the fault and repair it.", href: '/air-conditioning-repairs/', image: 'engineerGauges', track: 'repair' },
           { icon: 'gauge', title: 'Servicing & Maintenance', text: 'Regular checks and cleaning to keep your system performing well.', href: '/air-conditioning-servicing-maintenance/', image: 'outdoorFan', track: 'maintenance' },
         ],
@@ -143,7 +143,7 @@ export const services = [
         title: 'Installation for every kind of space.',
         items: [
           { icon: 'home', eyebrow: 'For your home', title: 'Residential installation', text: 'Bedrooms, living rooms, home offices, extensions, open-plan spaces and multiple rooms.', href: '/residential-air-conditioning/', linkLabel: 'Residential air conditioning', track: 'residential', image: 'gardenRoom' },
-          { icon: 'building', eyebrow: 'For your business', title: 'Commercial installation', text: 'Offices, retail, hospitality, warehouses, commercial premises and workspaces.', href: '/commercial-air-conditioning/', linkLabel: 'Commercial air conditioning', track: 'commercial', image: 'officeBoardroom' },
+          { icon: 'building', eyebrow: 'For your business', title: 'Commercial installation', text: 'Offices, retail, hospitality, warehouses, commercial premises and workspaces.', href: '/commercial-air-conditioning/', linkLabel: 'Commercial air conditioning', track: 'commercial', image: 'commercialCassetteInstallDark' },
         ],
       },
       {
@@ -237,7 +237,7 @@ export const services = [
       },
       {
         type: 'split',
-        image: 'engineerHome',
+        image: 'engineerHomeDark',
         imageSide: 'left',
         eyebrow: 'Prevent repeat problems',
         title: 'Servicing helps spot issues early.',
@@ -383,7 +383,7 @@ export const services = [
           { icon: 'ac-unit', title: 'Installation', text: 'Systems suited to your premises, professionally installed.', href: '/air-conditioning-installation/', track: 'installation', image: 'officeBoardroom' },
           { icon: 'wrench', title: 'Commercial Repairs', text: 'Fault finding and repairs to keep your business comfortable.', href: '/commercial-air-conditioning-repairs/', track: 'repair', image: 'commercialRooftopGauges' },
           { icon: 'gauge', title: 'Commercial Maintenance', text: 'Planned maintenance for commercial systems.', href: '/commercial-air-conditioning-maintenance/', track: 'maintenance', image: 'commercialOfficeFilter' },
-          { icon: 'calendar', title: 'Service Contracts', text: 'Tailored planned maintenance arrangements.', href: '/planned-maintenance-service-contracts/', track: 'maintenance', image: 'commercialRestaurantCheck' },
+          { icon: 'calendar', title: 'Service Contracts', text: 'Tailored planned maintenance arrangements.', href: '/planned-maintenance-service-contracts/', track: 'maintenance', image: 'commercialRestaurantCheckDark' },
         ],
       },
       {
@@ -926,7 +926,7 @@ export const services = [
         eyebrow: 'What can be covered',
         title: 'Air conditioning and refrigeration.',
         items: [
-          { icon: 'ac-unit', eyebrow: 'Air conditioning', title: 'Commercial air conditioning', text: 'Planned maintenance for air conditioning in offices, retail, hospitality, warehouses and other premises.', href: '/commercial-air-conditioning-maintenance/', linkLabel: 'Commercial maintenance', track: 'maintenance', image: 'officeBoardroom' },
+          { icon: 'ac-unit', eyebrow: 'Air conditioning', title: 'Commercial air conditioning', text: 'Planned maintenance for air conditioning in offices, retail, hospitality, warehouses and other premises.', href: '/commercial-air-conditioning-maintenance/', linkLabel: 'Commercial maintenance', track: 'maintenance', image: 'commercialCassetteInstallDark' },
           { icon: 'fridge', eyebrow: 'Refrigeration', title: 'Refrigeration equipment', text: 'Planned maintenance for fridges, freezers, display fridges, cold rooms and commercial refrigeration equipment.', href: '/refrigeration-repairs-maintenance/', linkLabel: 'Refrigeration support', track: 'refrigeration', image: 'coldRoom' },
         ],
       },

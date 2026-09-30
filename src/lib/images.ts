@@ -31,6 +31,11 @@ import commercialRestaurantCheck from '../assets/images/commercial-air-condition
 import commercialOfficeFilter from '../assets/images/engineer-cleaning-ceiling-cassette-air-conditioning-filter-office.jpg';
 import commercialRooftopGauges from '../assets/images/commercial-rooftop-air-conditioning-unit-repair-gauges.jpg';
 import commercialCassetteInstall from '../assets/images/engineer-installing-ceiling-cassette-air-conditioning-boardroom.jpg';
+import engineerHomeDark from '../assets/images/engineer-inspecting-wall-mounted-air-conditioning-unit.jpg';
+import engineerFilterCleanDark from '../assets/images/engineer-cleaning-wall-mounted-air-conditioning-filter.jpg';
+import engineerInstallDiningDark from '../assets/images/engineer-fitting-wall-mounted-air-conditioning-kitchen-diner.jpg';
+import commercialRestaurantCheckDark from '../assets/images/engineer-inspecting-restaurant-ceiling-cassette-air-conditioning.jpg';
+import commercialCassetteInstallDark from '../assets/images/engineer-fitting-ceiling-cassette-air-conditioning-meeting-room.jpg';
 
 export type ImageKey =
   | 'livingRoom'
@@ -59,7 +64,12 @@ export type ImageKey =
   | 'commercialRestaurantCheck'
   | 'commercialOfficeFilter'
   | 'commercialRooftopGauges'
-  | 'commercialCassetteInstall';
+  | 'commercialCassetteInstall'
+  | 'engineerHomeDark'
+  | 'engineerFilterCleanDark'
+  | 'engineerInstallDiningDark'
+  | 'commercialRestaurantCheckDark'
+  | 'commercialCassetteInstallDark';
 
 export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?: string }> = {
   // ---- Residential
@@ -107,6 +117,32 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
     src: commercialCassetteInstall,
     alt: 'Coletrup Cooling engineer fitting a ceiling cassette air conditioning unit in a boardroom',
     title: 'Commercial air conditioning installation',
+  },
+  // ---- Charcoal-uniform set (supplied 30 Sep) — used so no photo repeats across the site
+  engineerHomeDark: {
+    src: engineerHomeDark,
+    alt: 'Coletrup Cooling engineer inspecting the filters of a wall-mounted air conditioning unit in a bright room',
+    title: 'Air conditioning inspection and repair',
+  },
+  engineerFilterCleanDark: {
+    src: engineerFilterCleanDark,
+    alt: 'Coletrup Cooling engineer lifting the filter out of a wall-mounted air conditioning unit in a living room',
+    title: 'Air conditioning filter cleaning',
+  },
+  engineerInstallDiningDark: {
+    src: engineerInstallDiningDark,
+    alt: 'Coletrup Cooling engineer fitting a wall-mounted air conditioning unit in a kitchen diner',
+    title: 'Wall-mounted air conditioning installation',
+  },
+  commercialRestaurantCheckDark: {
+    src: commercialRestaurantCheckDark,
+    alt: 'Coletrup Cooling engineer recording a ceiling cassette air conditioning check on a tablet in a restaurant',
+    title: 'Restaurant air conditioning maintenance',
+  },
+  commercialCassetteInstallDark: {
+    src: commercialCassetteInstallDark,
+    alt: 'Coletrup Cooling engineer securing a ceiling cassette air conditioning unit in a meeting room',
+    title: 'Ceiling cassette air conditioning installation',
   },
   openPlanLiving: {
     src: openPlanLiving,
