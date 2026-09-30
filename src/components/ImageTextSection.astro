@@ -13,7 +13,12 @@ import { images, type ImageKey } from '../lib/images';
 export interface Props {
   id?: string;
   tone?: 'cream' | 'white' | 'sand' | 'navy';
-  image: ImageKey;
+  /** Photo key. Omit to render a branded icon panel instead (used while a section has no unique photo). */
+  image?: ImageKey;
+  /** Icon shown on the panel when there is no photo. */
+  icon?: string;
+  /** Seed for the panel's airflow lines so no two panels look the same. */
+  panelSeed?: number;
   imagePosition?: string;
   imageSide?: 'left' | 'right';
   secondaryImage?: ImageKey;
@@ -34,6 +39,8 @@ const {
   id,
   tone = 'cream',
   image,
+  icon = 'cool',
+  panelSeed = 31,
   imagePosition = '50% 50%',
   imageSide = 'right',
   secondaryImage,
@@ -50,8 +57,9 @@ const {
   emphasis = false,
   loading = 'lazy',
 } = Astro.props;
-const img = images[image];
+const img = image ? images[image] : null;
 const img2 = secondaryImage ? images[secondaryImage] : null;
+const decorative = img && img.alt === '';
 const Title = titleTag;
 ---
 
@@ -59,20 +67,28 @@ const Title = titleTag;
   {tone === 'navy' && <Airflow tone="dark" lines={6} seed={9} intensity={0.7} mask="linear-gradient(180deg, transparent 0%, #000 40%, #000 100%)" />}
   <div class:list={['container', 'its__grid', `its__grid--${imageSide}`, 'its__grid--layered']}>
     <div class="its__media" data-reveal>
-      <div class="frame its__frame zoom">
-        <Picture
-          src={img.src}
-          alt={img.alt}
-          title={img.title}
-          widths={[480, 800, 1300]}
-          sizes="(min-width: 1080px) 46vw, 100vw"
-          formats={['avif', 'webp']} fallbackFormat="webp"
-          loading={loading}
-          decoding="async"
-          quality={80}
-          style={`object-position:${imagePosition}`}
-        />
-      </div>
+      {
+        img ? (
+          <div class:list={['frame', 'its__frame', !decorative && 'zoom']}>
+            <Picture
+              src={img.src}
+              alt={img.alt}
+              title={img.title}
+              widths={[480, 800, 1300]}
+              sizes="(min-width: 1080px) 46vw, 100vw"
+              formats={['avif', 'webp']} fallbackFormat="webp"
+              loading={loading}
+              decoding="async"
+              quality={80}
+              style={`object-position:${imagePosition}`}
+            />
+          </div>
+        ) : (
+          <div class="frame its__frame its__panel" aria-hidden="true">
+            <Airflow tone="dark" lines={7} seed={panelSeed} intensity={0.85} />
+          </div>
+        )
+      }
       {
         img2 && (
           <div class="frame its__frame-2">
@@ -146,6 +162,16 @@ const Title = titleTag;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  /* Icon panel: stands in for a photo until a unique one is supplied */
+  .its__panel {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(0, 154, 224, 0.3), transparent 60%),
+      radial-gradient(60% 100% at 0% 100%, rgba(245, 117, 0, 0.2), transparent 60%),
+      linear-gradient(135deg, var(--navy-700), var(--navy-900));
   }
   .its__frame-2 {
     position: absolute;
