@@ -48,37 +48,41 @@ export const footerNav = {
   residential: {
     title: 'Residential',
     links: [
-      { label: 'Residential Air Conditioning', href: '/residential-air-conditioning/' },
+      { label: 'Home Air Conditioning', href: '/residential-air-conditioning/' },
       { label: 'Air Conditioning Installation', href: '/air-conditioning-installation/' },
-      { label: 'Air Conditioning Repairs', href: '/air-conditioning-repairs/' },
       { label: 'Service & Maintenance', href: '/air-conditioning-servicing-maintenance/' },
+      { label: 'Fault Finding & Repairs', href: '/air-conditioning-repairs/' },
+      { label: 'Planned Maintenance', href: '/air-conditioning-servicing-maintenance/' },
     ],
   },
   commercial: {
     title: 'Commercial',
     links: [
       { label: 'Commercial Air Conditioning', href: '/commercial-air-conditioning/' },
-      { label: 'Commercial Service & Repairs', href: '/commercial-air-conditioning-repairs/' },
-      { label: 'Commercial Maintenance', href: '/commercial-air-conditioning-maintenance/' },
-      { label: 'Planned Maintenance & Contracts', href: '/planned-maintenance-service-contracts/' },
+      { label: 'Installation & Replacement', href: '/commercial-air-conditioning/' },
+      { label: 'Service & Maintenance', href: '/commercial-air-conditioning-maintenance/' },
+      { label: 'Fault Finding & Repairs', href: '/commercial-air-conditioning-repairs/' },
+      { label: 'Planned Maintenance', href: '/planned-maintenance-service-contracts/' },
     ],
   },
   refrigeration: {
     title: 'Refrigeration',
     links: [
-      { label: 'Refrigeration Repairs & Maintenance', href: '/refrigeration-repairs-maintenance/' },
-      { label: 'Chiller & Freezer Repairs', href: '/commercial-chiller-freezer-repairs/' },
-      { label: 'Cold Room Repairs & Maintenance', href: '/cold-room-repairs-maintenance/' },
-      { label: 'Display Refrigeration', href: '/display-fridge-repairs-maintenance/' },
-      { label: 'Cellar Cooling', href: '/cellar-cooling-repairs-maintenance/' },
+      { label: 'Commercial Refrigeration', href: '/refrigeration-repairs-maintenance/' },
+      { label: 'Service & Maintenance', href: '/refrigeration-repairs-maintenance/' },
+      { label: 'Fault Finding & Repairs', href: '/refrigeration-repairs-maintenance/' },
+      { label: 'Chillers & Freezers Maintenance & Repairs', href: '/commercial-chiller-freezer-repairs/' },
+      { label: 'Display Cases Maintenance & Repairs', href: '/display-fridge-repairs-maintenance/' },
+      { label: 'Cold Rooms Maintenance & Repairs', href: '/cold-room-repairs-maintenance/' },
     ],
   },
   company: {
     title: 'Company',
     links: [
-      { label: 'About', href: '/about/' },
+      { label: 'About Coletrup Cooling', href: '/about/' },
       { label: 'Areas We Cover', href: '/areas-we-cover/' },
-      { label: 'Contact & Get a Quote', href: '/contact/' },
+      { label: 'Contact', href: '/contact/' },
+      { label: 'Get a Quote', href: '/contact/#quote' },
     ],
   },
   legal: [

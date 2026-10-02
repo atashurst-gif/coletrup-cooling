@@ -52,7 +52,9 @@ const banned = [
   { re: /\b(\d+\+?\s*years?['’]?\s*(?:of\s+)?experience|since\s+(?:19|20)\d{2}|established\s+(?:19|20)\d{2}|family[- ]run|\d+\s*(?:happy|satisfied)\s*customers|5[- ]star|five[- ]star|rated\s+\d)\b/i, why: 'years/customers/rating claim' },
   { re: /\b(save (?:up to )?\d+%|reduce(?:s|d)? (?:your )?(?:energy )?bills|extend(?:s)? (?:the )?life(?:span)?|lower(?:s)? running costs)\b/i, why: 'unverified saving/lifespan claim' },
 ];
-const allowlist = [/does\s+not\s+offer\s+refrigeration\s+installation/i, /no\s+refrigeration\s+installation/i, /never\s+add\s+refrigeration\s+installation/i];
+const allowlist = [
+  // Supplied by the client in his own homepage wording (2 Oct):
+  /trusted manufacturers including Daikin/, /comprehensive manufacturer warranties/, /Fully qualified & F-Gas certified/,/does\s+not\s+offer\s+refrigeration\s+installation/i, /no\s+refrigeration\s+installation/i, /never\s+add\s+refrigeration\s+installation/i];
 
 const files = [];
 (function walk(dir) {

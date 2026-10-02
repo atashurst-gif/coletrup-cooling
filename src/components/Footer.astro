@@ -17,8 +17,9 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
         <a href="/" class="footer__logo" aria-label={`${site.name} — home`}><Logo kind="full" on="dark" height={150} /></a>
         <p class="footer__strap">{site.strapline}</p>
         <p class="footer__blurb">
-          Professional air conditioning installation, servicing and repairs for homes and businesses, with specialist refrigeration servicing, maintenance and repairs.
+          Professional air conditioning and refrigeration services for homes and businesses across Manchester and the North West.
         </p>
+        <p class="footer__services">Installation • Servicing • Maintenance • Repairs</p>
         <ul class="footer__contact">
           <li>
             <Icon name="phone" size={18} strokeWidth={2} />
@@ -144,6 +145,14 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
   .footer__blurb {
     max-width: 40ch;
     font-size: var(--fs-sm);
+  }
+  .footer__services {
+    margin-top: 0.75rem;
+    font-family: var(--font-head);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #fff;
   }
   .footer__contact {
     list-style: none;
