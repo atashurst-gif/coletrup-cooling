@@ -47,8 +47,8 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
             <ul class="footer__social" aria-label="Social media">
               {socials.map(([name, url]) => (
                 <li>
-                  <a href={url} target="_blank" rel="noopener" aria-label={name}>
-                    <Icon name="external" size={18} />
+                  <a href={url} target="_blank" rel="noopener" aria-label={`${site.name} on ${name[0].toUpperCase()}${name.slice(1)}`}>
+                    <Icon name={['facebook', 'instagram'].includes(name) ? name : 'external'} size={20} />
                     <span>{name}</span>
                   </a>
                 </li>

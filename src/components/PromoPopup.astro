@@ -1,0 +1,136 @@
+---
+/**
+ * Homepage pop-up — wording supplied by the client. Shown once per browser session,
+ * a moment after the page loads; closes on the X, the backdrop or Escape.
+ */
+import Button from './Button.astro';
+---
+
+<div class="promo" id="promo" hidden>
+  <div class="promo__backdrop" data-promo-close></div>
+  <div class="promo__card" role="dialog" aria-modal="true" aria-labelledby="promo-title">
+    <button class="promo__close" type="button" aria-label="Close" data-promo-close>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+    <p class="promo__big" aria-hidden="true">0% <span>VAT</span></p>
+    <h2 class="promo__title" id="promo-title">0% VAT on all home air conditioning installations until 31st March 2027</h2>
+    <div class="promo__actions">
+      <Button href="/contact/?service=air-conditioning&type=residential#quote" size="lg" icon={null} track="quote" data-location="promo">Get a quote</Button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const el = document.getElementById('promo');
+  const KEY = 'coletrup-promo-vat';
+  const forced = new URLSearchParams(location.search).has('promo');
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem(KEY) === '1';
+  } catch {}
+  if (el && (forced || (!seen && !navigator.webdriver))) {
+    let last: HTMLElement | null = null;
+    const close = () => {
+      el.hidden = true;
+      document.removeEventListener('keydown', onKey);
+      try {
+        sessionStorage.setItem(KEY, '1');
+      } catch {}
+      last?.focus?.();
+    };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
+    const open = () => {
+      last = document.activeElement as HTMLElement | null;
+      el.hidden = false;
+      document.addEventListener('keydown', onKey);
+      el.querySelector<HTMLElement>('.promo__close')?.focus();
+    };
+    el.querySelectorAll('[data-promo-close], a').forEach((n) => n.addEventListener('click', close));
+    setTimeout(open, forced ? 0 : 1500);
+  }
+</script>
+
+<style>
+  .promo {
+    position: fixed;
+    inset: 0;
+    z-index: 66;
+    display: grid;
+    place-items: center;
+    padding: 1.25rem;
+  }
+  .promo[hidden] {
+    display: none;
+  }
+  .promo__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 45, 82, 0.55);
+    backdrop-filter: blur(3px);
+  }
+  .promo__card {
+    position: relative;
+    width: min(100%, 27rem);
+    padding: 3.25rem 1.75rem 2rem;
+    border-radius: var(--radius-xl);
+    background: var(--navy);
+    color: #fff;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    border-top: 5px solid var(--orange, #f57500);
+    animation: promo-in 0.35s var(--ease, ease) both;
+  }
+  .promo__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+  }
+  .promo__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .promo__big {
+    font-family: var(--font-head);
+    font-size: clamp(3.25rem, 16vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin: 0;
+    max-width: none;
+  }
+  .promo__big span {
+    color: var(--blue-on-navy, #5bc4f2);
+  }
+  .promo__title {
+    margin: 0.9rem 0 0;
+    font-size: 1.2rem;
+    line-height: 1.35;
+    color: #fff;
+    text-wrap: balance;
+  }
+  .promo__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  @keyframes promo-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .promo__card {
+      animation: none;
+    }
+  }
+</style>

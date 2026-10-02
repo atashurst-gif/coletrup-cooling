@@ -11,10 +11,26 @@ import AreasSection from '../components/AreasSection.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import FinalCTA from '../components/FinalCTA.astro';
 import MidCTA from '../components/MidCTA.astro';
+import FAQ from '../components/FAQ.astro';
+import ManufacturerStrip from '../components/ManufacturerStrip.astro';
+import PromoPopup from '../components/PromoPopup.astro';
 import { site } from '../lib/site';
 
 const title = 'Air Conditioning & Refrigeration Specialists | Coletrup Cooling';
 const description = `Professional air conditioning installation, servicing and repairs for homes ${site.region.phrase}, plus commercial air conditioning and specialist refrigeration repairs and maintenance.`;
+const faqs = [
+  { q: 'How much does a home AC installation cost?', a: 'The cost depends on the size of the room, the system chosen and the complexity of the installation. We provide a free, no obligation survey to give you an accurate quote for your home.' },
+  { q: 'How much does it cost to run?', a: 'Running costs are generally between 10p – 30p per hour, depending on the size of the unit, usage and energy tariff.' },
+  { q: 'How long does the installation take?', a: "Most single room installations are completed in 1 day. More complex or multi-room systems may take longer, but we'll always let you know the expected timescale before we start." },
+  { q: 'Where can the units be positioned?', a: "Indoor units are wall mounted, usually high on the wall. Outdoor units can be installed on an external wall, ground or roof (depending on your property). We'll advise on the best location during your survey." },
+  { q: 'Will it be noisy?', a: "No. Modern systems are very quiet, both inside and out. Indoor units typically run as low as 19–25 dB (quieter than a whisper), so they won't disturb your home." },
+  { q: 'Do I need planning permission?', a: "In most cases, no. Standard domestic installations don't usually require planning permission. If you live in a listed building, a conservation area or a flat, it's always best to check with your local council." },
+];
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
 ---
 
 <BaseLayout {title} {description} path="/" ogImage="livingRoomBifold">
@@ -41,6 +57,8 @@ const description = `Professional air conditioning installation, servicing and r
     links={[{ label: 'Residential air conditioning', href: '/residential-air-conditioning/', track: 'residential' }]}
     emphasis
   />
+
+  <ManufacturerStrip />
 
   <BenefitsGrid />
 
@@ -116,9 +134,14 @@ const description = `Professional air conditioning installation, servicing and r
 
   <ReviewSection />
 
+  <FAQ id="faqs" tone="white" eyebrow="Frequently asked questions" title="Home air conditioning FAQs." intro="Still have questions? Get in touch for a free, no obligation survey and advice tailored to your home." items={faqs} />
+
   <AreasSection />
 
   <QuoteForm />
+
+  <PromoPopup />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
 
   <FinalCTA title="Need air conditioning or refrigeration support?" />
 </BaseLayout>

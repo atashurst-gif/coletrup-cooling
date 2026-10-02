@@ -131,8 +131,8 @@ const siteConfig = {
 
   /** Social profile URLs — optional */
   socials: {
-    facebook: '',
-    instagram: '',
+    facebook: 'https://www.facebook.com/profile.php?id=61593608505132',
+    instagram: 'https://www.instagram.com/coletrupcooling/',
     linkedin: '',
     google: '',
   },

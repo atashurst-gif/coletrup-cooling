@@ -1,0 +1,67 @@
+---
+/**
+ * Manufacturer logo line (homepage) — the manufacturers named in the client's own
+ * wording. Official logo files live in public/brand/manufacturers/.
+ */
+const items = [
+  { name: 'Daikin', src: '/brand/manufacturers/daikin.svg', w: 300, h: 65, scale: 0.8 },
+  { name: 'Mitsubishi Electric', src: '/brand/manufacturers/mitsubishi-electric.svg', w: 794, h: 242, scale: 1.25 },
+  { name: 'Fujitsu', src: '/brand/manufacturers/fujitsu.svg', w: 200, h: 97, scale: 1.45 },
+  { name: 'Midea', src: '/brand/manufacturers/midea.svg', w: 3228, h: 1242, scale: 1.25 },
+];
+---
+
+<section class="mfr" aria-labelledby="mfr-title">
+  <div class="container">
+    <p class="mfr__label" id="mfr-title">Manufacturers we work with</p>
+    <ul class="mfr__list">
+      {
+        items.map((m) => (
+          <li>
+            <img src={m.src} alt={m.name} width={m.w} height={m.h} style={`--s:${m.scale}`} loading="lazy" decoding="async" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .mfr {
+    background: #f3f4f5;
+    border-block: 1px solid var(--line);
+    padding: 1.75rem 0 2rem;
+  }
+  .mfr__label {
+    margin-bottom: 1.25rem;
+    text-align: center;
+    font-family: var(--font-head);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mfr__list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 1.75rem 1.5rem;
+  }
+  .mfr__list img {
+    display: block;
+    height: calc(26px * var(--s, 1));
+    width: auto;
+    max-width: 100%;
+  }
+  @media (min-width: 760px) {
+    .mfr__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .mfr__list img {
+      height: calc(32px * var(--s, 1));
+    }
+  }
+</style>
