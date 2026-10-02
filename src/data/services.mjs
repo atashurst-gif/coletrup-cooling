@@ -33,7 +33,7 @@ const REL_REPAIRS = rel('air-conditioning-repairs', 'Air Conditioning Repairs', 
 
 // Related-service cards reused across the refrigeration pages
 const REL_REFRIGERATION = rel('refrigeration-repairs-maintenance', 'Commercial Refrigeration', 'Servicing, maintenance, fault finding and repairs for a range of commercial refrigeration systems and equipment.');
-const REL_CHILLER = rel('commercial-chiller-freezer-repairs', 'Commercial Chiller & Freezer Repairs', "Fault finding and repairs for commercial chillers and freezers that aren't cooling, are icing up, leaking or making unusual noises.");
+const REL_CHILLER = rel('commercial-chiller-freezer-repairs', 'Commercial Chiller & Freezer Repairs', "Fault finding and repairs for commercial fridges and freezers that aren't cooling, are icing up, leaking or making unusual noises.");
 const REL_COLD_ROOM = rel('cold-room-repairs-maintenance', 'Cold Room Repairs & Maintenance', 'Servicing, maintenance and repairs to keep cold rooms operating reliably and maintaining the correct temperature.');
 const REL_DISPLAY = rel('display-fridge-repairs-maintenance', 'Display Refrigeration Repairs & Maintenance', 'Servicing, fault finding and repairs for commercial display refrigeration, helping keep products at the correct temperature.');
 const REL_CELLAR = rel('cellar-cooling-repairs-maintenance', 'Cellar Cooling Repairs & Maintenance', 'Servicing, maintenance, fault finding and repairs for cellar cooling systems, helping maintain reliable operation and the correct storage temperature.');
@@ -625,7 +625,7 @@ export const services = [
           'For businesses that rely on both air conditioning and commercial refrigeration, we can provide servicing, maintenance and repairs across both. This makes it easier to keep your essential cooling systems maintained and operating reliably.',
         ],
         links: [
-          { label: 'Planned service & maintenance contracts', href: '/planned-maintenance-service-contracts/', track: 'maintenance' },
+          { label: 'Air conditioning planned service & maintenance contracts', href: '/planned-maintenance-service-contracts/', track: 'maintenance' },
           { label: 'Refrigeration repairs & maintenance', href: '/refrigeration-repairs-maintenance/', track: 'refrigeration' },
         ],
       },
@@ -706,7 +706,7 @@ export const services = [
         eyebrow: 'Refrigeration services',
         title: 'Refrigeration services for your business.',
         items: [
-          { icon: 'fridge', title: 'Commercial Chiller & Freezer Repairs', text: 'Fault finding and repairs for commercial chillers and freezers that are not holding temperature.', href: '/commercial-chiller-freezer-repairs/', track: 'refrigeration' },
+          { icon: 'fridge', title: 'Commercial Refrigeration Repairs & Maintenance', text: 'Servicing, fault finding, maintenance and repairs for a wide range of commercial refrigeration equipment.', href: '/commercial-chiller-freezer-repairs/', track: 'refrigeration' },
           { icon: 'cold-room', title: 'Cold Room & Freezer Room Repairs', text: 'Fault finding, servicing and repairs for chilled and frozen cold room systems.', href: '/cold-room-repairs-maintenance/', track: 'refrigeration' },
           { icon: 'display', title: 'Display Cabinet Repairs & Maintenance', text: 'Servicing, maintenance and repairs for chilled and frozen display cabinets.', href: '/display-fridge-repairs-maintenance/', track: 'refrigeration' },
           { icon: 'ice', title: 'Cellar Cooling Repairs & Maintenance', text: 'Servicing, fault finding and repairs for commercial cellar cooling systems.', href: '/cellar-cooling-repairs-maintenance/', track: 'refrigeration' },
@@ -750,7 +750,7 @@ export const services = [
     midCta: { title: 'Need refrigeration support?', text: "Tell us what you need and we'll take it from there.", after: 2 },
     faqs: [
       { q: 'What types of refrigeration equipment do you work on?', a: 'We work on a range of commercial refrigeration equipment, including fridges, freezers, display cabinets, cold rooms and cellar cooling systems.' },
-      { q: "Can you help if my chiller or freezer isn't holding temperature?", a: "Yes. We can fault-find the system to identify why it isn't maintaining temperature and advise on the repairs required." },
+      { q: "Can you help if my chiller / freezer isn't holding temperature?", a: "Yes. We can fault-find the system to identify why it isn't maintaining temperature and advise on the repairs required." },
       { q: 'Do you offer planned refrigeration maintenance?', a: 'Yes. We offer scheduled maintenance for commercial refrigeration equipment to help maintain reliable operation and identify potential faults early.' },
     ],
     relatedTitle: 'You might also need.',
@@ -912,7 +912,7 @@ export const services = [
     related: [
       REL_REFRIGERATION,
       rel('display-fridge-repairs-maintenance', 'Display Refrigeration Repairs & Maintenance', 'Servicing, maintenance, fault finding and repairs to keep display refrigeration operating reliably and holding the correct temperature.'),
-      rel('commercial-chiller-freezer-repairs', 'Commercial Chiller & Freezer Repairs', "Fault finding and repairs for commercial chillers and freezers that aren't cooling, holding temperature or operating as they should."),
+      rel('commercial-chiller-freezer-repairs', 'Commercial Chiller & Freezer Repairs', "Fault finding and repairs for commercial fridges and freezers that aren't cooling, holding temperature or operating as they should."),
       REL_PLANNED_REFRIG,
     ],
     schema: { serviceType: 'Cold room repairs and maintenance' },
