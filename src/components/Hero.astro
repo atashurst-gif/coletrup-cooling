@@ -27,14 +27,17 @@ const points = [
       <h1 class="hero__seo" id="hero-title">
         <span class="hero__kicker">Air conditioning & refrigeration specialists</span>
         <span class="hero__statement">
-          <span class="hero__line">Cooler homes.</span>
-          <span class="hero__line hero__accent">Heating &amp; cooling.</span>
+          <span class="hero__line">Comfortable cooling.</span>
+          <span class="hero__line hero__accent">Efficient heating.</span>
           <span class="hero__line">All year round.</span>
         </span>
       </h1>
-      <p class="hero__lead">Professional air conditioning installation, servicing and repairs, providing efficient heating and cooling for homes {site.region.phrase}.</p>
+      <p class="hero__lead">Professional air conditioning installation, servicing and repairs for homes {site.region.phrase}.</p>
       <p class="hero__sub">
-        Whether you're looking for a new air conditioning system, routine servicing or a repair, Coletrup Cooling provides a straightforward and professional service from start to finish.
+        From your first installation to ongoing maintenance and repairs, Coletrup Cooling provides reliable, energy-efficient solutions tailored to your home.
+      </p>
+      <p class="hero__sub">
+        Every property has different heating and cooling requirements, which is why we provide tailored air conditioning solutions based on the space, occupancy, usage and individual requirements of each project.
       </p>
       <div class="hero__actions">
         <Button href="/contact/#quote" size="lg" icon={null} track="quote" data-location="hero">Get a quote</Button>
@@ -156,6 +159,9 @@ const points = [
   .hero__sub {
     max-width: 56ch;
     color: var(--muted);
+  }
+  .hero__sub + .hero__sub {
+    margin-top: 0.8rem;
   }
   .hero__actions {
     display: flex;
