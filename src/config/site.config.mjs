@@ -124,7 +124,10 @@ const siteConfig = {
    * Accreditations CURRENTLY HELD and verifiable only.
    * { name, logo?: '/brand/…', number?, verifyUrl? }
    */
-  accreditations: [],
+  accreditations: [
+    { name: 'REFCOM', logo: '/brand/accreditations/refcom.png', width: 440, height: 193 },
+    { name: 'City & Guilds', logo: '/brand/accreditations/city-and-guilds.png', width: 440, height: 265 },
+  ],
 
   /** Social profile URLs — optional */
   socials: {

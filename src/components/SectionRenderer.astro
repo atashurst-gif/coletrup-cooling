@@ -8,6 +8,7 @@ import FeatureSection from './FeatureSection.astro';
 import ServiceCards from './ServiceCards.astro';
 import ImageTextSection from './ImageTextSection.astro';
 import ProcessSteps from './ProcessSteps.astro';
+import JobGallery from './JobGallery.astro';
 import MidCTA from './MidCTA.astro';
 import { Picture } from 'astro:assets';
 import { images } from '../lib/images';
@@ -16,7 +17,7 @@ export interface Props {
   sections: any[];
   slug: string;
   /** Render the mid-page CTA band after this section index (defaults to the middle section). */
-  midCta?: { after?: number; quoteHref?: string; quoteLabel?: string; whatsappMessage?: string; title?: string } | false;
+  midCta?: { after?: number; quoteHref?: string; quoteLabel?: string; whatsappMessage?: string; title?: string; text?: string } | false;
 }
 const { sections, slug, midCta = {} } = Astro.props;
 const toneOf = (s: any): 'cream' | 'white' | 'sand' => (s.tone === 'white' || s.tone === 'sand' ? s.tone : 'cream');
@@ -83,6 +84,8 @@ const midAfter =
             cta={s.cta}
           />
         );
+      case 'gallery':
+        return <JobGallery id={id} tone={s.tone ?? 'cream'} eyebrow={s.eyebrow} title={s.title} intro={s.intro} items={s.items} />;
       case 'steps':
         return <ProcessSteps id={id} tone={s.tone ?? 'cream'} eyebrow={s.eyebrow} title={s.title} steps={s.items} />;
       case 'duo':
@@ -141,7 +144,7 @@ const midAfter =
       <>
         {node}
         {i === midAfter && midCta !== false && (
-          <MidCTA id={`${slug}-mid-cta`} tone={toneOf(s)} quoteHref={midCta.quoteHref} quoteLabel={midCta.quoteLabel} whatsappMessage={midCta.whatsappMessage} title={midCta.title} />
+          <MidCTA id={`${slug}-mid-cta`} tone={toneOf(s)} quoteHref={midCta.quoteHref} quoteLabel={midCta.quoteLabel} whatsappMessage={midCta.whatsappMessage} title={midCta.title} text={midCta.text} />
         )}
       </>
     );

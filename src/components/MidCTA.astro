@@ -28,7 +28,7 @@ const {
 } = Astro.props;
 ---
 
-<section class:list={['section', 'section--tight', 'mcta', `tone-${tone}`]} id={id} aria-labelledby={`${id}-title`} data-hide-lead-bar>
+<div class:list={['section', 'section--tight', 'mcta', `tone-${tone}`]} id={id} data-hide-lead-bar>
   <div class="container">
     <div class="mcta__card on-dark" data-reveal>
       <Airflow tone="dark" lines={4} seed={21} intensity={0.45} />
@@ -44,7 +44,7 @@ const {
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <style>
   /* No padding of its own: the card sits between the neighbouring sections' padding, and

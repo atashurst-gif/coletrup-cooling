@@ -14,6 +14,7 @@ export interface Props {
   text?: string;
   whatsappMessage?: string;
   quoteHref?: string;
+  quoteLabel?: string;
 }
 const {
   id = 'final-cta',
@@ -21,6 +22,7 @@ const {
   text = "Tell us what you need and we'll take it from there.",
   whatsappMessage,
   quoteHref = '/contact/#quote',
+  quoteLabel = 'Get a quote',
 } = Astro.props;
 const bg = images.airflow;
 ---
@@ -34,7 +36,7 @@ const bg = images.airflow;
     <h2 id={`${id}-title`} class="fcta__title">{title}</h2>
     <p class="fcta__text">{text}</p>
     <div class="fcta__actions">
-      <Button href={quoteHref} size="lg" icon={null} track="quote" data-location={id}>Get a quote</Button>
+      <Button href={quoteHref} size="lg" icon={null} track="quote" data-location={id}>{quoteLabel}</Button>
       <Button href={whatsappHref(whatsappMessage)} variant="light" size="lg" icon="chat" whatsapp track="whatsapp" data-location={id}>
         WhatsApp now
       </Button>

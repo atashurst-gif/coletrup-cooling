@@ -12,26 +12,26 @@ import MidCTA from '../components/MidCTA.astro';
 import { images } from '../lib/images';
 import { site } from '../lib/site';
 
-const title = 'About Coletrup Cooling | Air Conditioning Specialists';
+const title = 'About Coletrup Cooling | Air Conditioning & Refrigeration Specialists';
 const description =
-  'Coletrup Cooling is a specialist air conditioning company providing installation, servicing and repairs for homes and businesses, plus refrigeration servicing, maintenance and repairs.';
+  'Coletrup Cooling provides professional air conditioning and refrigeration services across Manchester and the North West, for homes and businesses.';
 const breadcrumbs = [{ label: 'About', href: '/about/' }];
 const values = [
-  { icon: 'shield', title: 'Professional', text: 'Work carried out properly, with care for your home or premises.' },
-  { icon: 'chat', title: 'Responsive', text: 'Easy to reach and clear about what happens next.' },
-  { icon: 'cool', title: 'Specialist', text: 'Focused on air conditioning, with refrigeration expertise alongside.' },
-  { icon: 'gauge', title: 'Technically capable', text: 'Methodical diagnosis and the right solution, not guesswork.' },
-  { icon: 'handshake', title: 'Easy to deal with', text: 'Plain-English advice from first enquiry to finished job.' },
+  { icon: 'shield', title: 'Professional', text: 'Work carried out properly, with care and attention to detail throughout.' },
+  { icon: 'chat', title: 'Responsive', text: 'Clear communication and a straightforward service from first enquiry onwards.' },
+  { icon: 'cool', title: 'Experienced', text: 'Industry experience across air conditioning and commercial refrigeration.' },
+  { icon: 'gauge', title: 'Technical expertise', text: 'Methodical fault finding, accurate diagnosis and the right solution.' },
+  { icon: 'handshake', title: 'Easy to deal with', text: 'Straightforward advice, clear explanations and no unnecessary jargon.' },
 ];
 const story = images.graphicWaves; // decorative until a team/founder photo is supplied
 ---
 
-<BaseLayout {title} {description} path="/about/" ogImage="engineerPortrait" {breadcrumbs}>
+<BaseLayout {title} {description} path="/about/" ogImage="engineerPortrait" {breadcrumbs} stickyPrompt="Need air conditioning or refrigeration support?">
   <PageHero
     breadcrumbs={breadcrumbs}
     eyebrow="About Coletrup Cooling"
-    title="Specialists in keeping homes and businesses cool."
-    lead="Coletrup Cooling provides professional air conditioning installation, servicing and repairs for homes and businesses, alongside specialist refrigeration servicing, maintenance and repairs."
+    title="Air conditioning & refrigeration specialists."
+    lead="Coletrup Cooling provides professional air conditioning and refrigeration services across Manchester and the North West. From air conditioning installation to servicing, fault finding, maintenance and repairs, we provide a reliable service for homes and businesses."
     image="engineerPortrait"
     imagePosition="50% 30%"
     cta={{ label: 'Get a quote', href: '#quote', track: 'quote' }}
@@ -68,7 +68,7 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
           <p class="eyebrow">How we work</p>
           <h2 id="values-title">What you can expect from us.</h2>
         </div>
-        <p>Whether it's a single-room installation at home or planned maintenance across a business, the approach is the same.</p>
+        <p>Whether it's air conditioning for your home or ongoing refrigeration support for your business, you can expect the same professional approach.</p>
       </div>
       <ul class="about-values__grid">
         {
@@ -88,38 +88,46 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
     <div class="container">
       <div class="section-head section-head--center">
         <p class="eyebrow">What we do</p>
-        <h2 id="what-title">Air conditioning first. Refrigeration expertise alongside.</h2>
+        <h2 id="what-title">Air conditioning & refrigeration services for homes and businesses.</h2>
       </div>
       <div class="about-what__grid">
-        <a href="/residential-air-conditioning/" class="card card--lift about-what__card about-what__card--main" data-track="cta" data-cta="residential" data-location="about">
-          <span class="about-what__tag">Our main focus</span>
+        <a href="/residential-air-conditioning/" class="card card--lift about-what__card" data-track="cta" data-cta="residential" data-location="about">
           <h3>Residential air conditioning</h3>
-          <p>Installation, servicing and repairs for homes — bedrooms, living rooms, home offices, extensions, open-plan spaces and multiple rooms.</p>
+          <p>Installation, servicing and repairs for homes — including bedrooms, living spaces, home offices, extensions and multi-room systems.</p>
           <span class="link-arrow"><span>Explore residential</span><Icon name="arrow" strokeWidth={2} /></span>
         </a>
         <a href="/commercial-air-conditioning/" class="card card--lift about-what__card" data-track="cta" data-cta="commercial" data-location="about">
           <h3>Commercial air conditioning</h3>
-          <p>Installation, servicing, maintenance and repairs for offices, retail, hospitality, warehouses and workspaces.</p>
+          <p>Installation, servicing, maintenance and repairs for offices, retail, hospitality, warehouses and other commercial premises.</p>
           <span class="link-arrow"><span>Explore commercial</span><Icon name="arrow" strokeWidth={2} /></span>
         </a>
         <a href="/refrigeration-repairs-maintenance/" class="card card--lift about-what__card" data-track="cta" data-cta="refrigeration" data-location="about">
           <h3>Refrigeration</h3>
-          <p>Specialist servicing, maintenance, fault finding and repairs for fridges, freezers, display fridges and cold rooms.</p>
+          <p>Servicing, maintenance, fault finding and repairs for commercial refrigeration, including fridges, freezers, display refrigeration, cold rooms and cellar cooling.</p>
           <span class="link-arrow"><span>Explore refrigeration</span><Icon name="arrow" strokeWidth={2} /></span>
         </a>
       </div>
     </div>
   </section>
 
-  <MidCTA id="about-mid-cta" tone="cream" quoteHref="#quote" whatsappMessage="Hi Coletrup Cooling, I'd like to find out more about your services." />
+  <MidCTA id="about-mid-cta" tone="cream" quoteHref="#quote" title="Let's get started." text="Tell us what you need and we'll take it from there." whatsappMessage="Hi Coletrup Cooling, I'd like to find out more about your services." />
 
-  <ProcessSteps tone="white" />
+  <ProcessSteps
+    tone="white"
+    title="From enquiry to completion."
+    steps={[
+      { title: 'Get in touch', text: "Tell us what you need, whether it's an installation, service, maintenance or repair." },
+      { title: 'We assess your requirements', text: "We take the time to understand the job and what's required." },
+      { title: 'We provide the right solution', text: 'Clear advice on the work required, with everything explained upfront.' },
+      { title: 'We complete the work', text: 'Work carried out professionally and with care from start to finish.' },
+    ]}
+  />
 
   <ReviewSection image="graphicDeepWave" />
 
   <QuoteForm id="quote" />
 
-  <FinalCTA />
+  <FinalCTA title="Need air conditioning or refrigeration support?" />
 </BaseLayout>
 
 <style>
@@ -230,7 +238,7 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
       grid-template-columns: repeat(5, minmax(0, 1fr));
     }
     .about-what__grid {
-      grid-template-columns: 1.3fr 1fr 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .about-what__card--main {
       grid-column: auto;

@@ -1,0 +1,66 @@
+---
+/**
+ * Accreditation strip — shown above the footer on every page.
+ * Logos come from site.config → accreditations (only ones currently held).
+ */
+import { site } from '../lib/site';
+const items = site.accreditations.filter((a) => a.logo);
+---
+
+{
+  items.length > 0 && (
+    <section class="accr" aria-label="Accreditations and qualifications">
+      <div class="container accr__inner">
+        <p class="accr__label">Accreditations &amp; qualifications</p>
+        <ul class="accr__list">
+          {items.map((a) => (
+            <li>
+              <img src={a.logo} alt={a.name} width={a.width} height={a.height} loading="lazy" decoding="async" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .accr {
+    background: #fff;
+    border-top: 1px solid var(--line);
+    padding: 1.75rem 0;
+  }
+  .accr__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem 2.5rem;
+  }
+  .accr__label {
+    font-family: var(--font-head);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .accr__list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem 2.75rem;
+  }
+  .accr__list img {
+    display: block;
+    height: 56px;
+    width: auto;
+  }
+  @media (min-width: 640px) {
+    .accr__list img {
+      height: 64px;
+    }
+  }
+</style>

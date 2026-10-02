@@ -45,6 +45,17 @@ import fridgeGaugesCoat from '../assets/images/refrigeration-engineer-testing-di
 // ---- Brand & planning
 import van from '../assets/images/coletrup-cooling-service-van.jpg';
 import maintenanceChecklist from '../assets/images/planned-maintenance-service-contract-checklist.jpg';
+// ---- On the job (real photos supplied by Brad, 2 Oct)
+import jobCabinetGauges from '../assets/images/refrigerant-gauges-on-display-cabinet-refrigeration-system.jpg';
+import jobUnitGauges from '../assets/images/manifold-gauges-connected-to-air-conditioning-unit.jpg';
+import jobShopFloorTools from '../assets/images/refrigeration-engineer-tools-and-gauges-on-shop-floor.jpg';
+import jobCompressorSwap from '../assets/images/old-and-new-scroll-compressors-during-repair.jpg';
+import jobCabinetCompressor from '../assets/images/compressor-and-pipework-inside-refrigerated-cabinet.jpg';
+import jobCompressorPack from '../assets/images/new-compressor-beside-commercial-compressor-pack.jpg';
+import jobControlPanel from '../assets/images/control-panel-contactors-and-wiring-fault-finding.jpg';
+import jobClampMeter from '../assets/images/clamp-meter-testing-ceiling-cassette-air-conditioning.jpg';
+import jobOutdoorClean from '../assets/images/outdoor-air-conditioning-unit-being-cleaned.jpg';
+import jobDirtyFilters from '../assets/images/dirty-air-conditioning-filters-removed-for-cleaning.jpg';
 import airflow from '../assets/images/coletrup-airflow-graphic.jpg';
 import graphicWaves from '../assets/images/coletrup-airflow-graphic-blue-orange-waves.jpg';
 import graphicDeepWave from '../assets/images/coletrup-airflow-graphic-deep-blue-wave.jpg';
@@ -82,6 +93,16 @@ export type ImageKey =
   | 'fridgeGaugesCoat'
   | 'van'
   | 'maintenanceChecklist'
+  | 'jobCabinetGauges'
+  | 'jobUnitGauges'
+  | 'jobShopFloorTools'
+  | 'jobCompressorSwap'
+  | 'jobCabinetCompressor'
+  | 'jobCompressorPack'
+  | 'jobControlPanel'
+  | 'jobClampMeter'
+  | 'jobOutdoorClean'
+  | 'jobDirtyFilters'
   | 'airflow'
   | 'graphicWaves'
   | 'graphicDeepWave'
@@ -226,7 +247,7 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   coldRoomEngineer: {
     src: coldRoomEngineer,
-    alt: 'Refrigeration engineer repairing the evaporator unit inside a commercial cold room',
+    alt: 'Coletrup Cooling engineer repairing the evaporator unit inside a commercial cold room',
     title: 'Refrigeration repairs and maintenance',
   },
   fridgeGaugesCoat: {
@@ -245,6 +266,17 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
     alt: 'Coletrup Cooling maintenance checklist on a clipboard beside a tablet showing a service schedule',
     title: 'Planned maintenance and service contracts',
   },
+  // ---- On the job
+  jobCabinetGauges: { src: jobCabinetGauges, alt: 'Manifold gauges connected to the system on top of a display cabinet during fault finding', title: 'Checking system pressures' },
+  jobUnitGauges: { src: jobUnitGauges, alt: 'Manifold gauges connected to the pipework inside an air conditioning unit', title: 'System diagnostics' },
+  jobShopFloorTools: { src: jobShopFloorTools, alt: 'Gas cylinder, manifold gauges, clamp meter and tool bag set out on a shop floor', title: 'On site and ready to work' },
+  jobCompressorSwap: { src: jobCompressorSwap, alt: 'A new scroll compressor beside the worn compressor it is replacing, with tools laid out', title: 'Faulty component changed' },
+  jobCabinetCompressor: { src: jobCabinetCompressor, alt: 'Compressor, valves and insulated pipework inside the top of a chilled cabinet', title: 'Inside the cabinet' },
+  jobCompressorPack: { src: jobCompressorPack, alt: 'New compressor on the floor beside a commercial compressor pack, ready to be fitted', title: 'Compressor pack repair' },
+  jobControlPanel: { src: jobControlPanel, alt: 'Open control panel with contactors, fuses and wiring, with a clamp meter and insulated tools', title: 'Electrical fault finding' },
+  jobClampMeter: { src: jobClampMeter, alt: 'Clamp meter held up to a ceiling cassette air conditioning unit during testing', title: 'Testing a ceiling cassette' },
+  jobOutdoorClean: { src: jobOutdoorClean, alt: 'Outdoor air conditioning unit with its fan guard removed, part-way through a deep clean', title: 'Outdoor unit deep clean' },
+  jobDirtyFilters: { src: jobDirtyFilters, alt: 'Two air conditioning filters clogged with dust, removed for cleaning during a service', title: 'Filters before cleaning' },
   // ---- Decorative graphics (empty alt: purely visual)
   airflow: { src: airflow, alt: '' },
   graphicWaves: { src: graphicWaves, alt: '' },

@@ -2,12 +2,21 @@
 import Icon from './Icon.astro';
 import { serviceBySlug } from '../data/services.mjs';
 
+type Item = string | { slug: string; title?: string; text?: string };
 export interface Props {
-  slugs: string[];
+  /** Service slugs, or { slug, title, text } to override the card wording. */
+  items: Item[];
+  title?: string;
   tone?: 'cream' | 'white' | 'sand';
 }
-const { slugs, tone = 'cream' } = Astro.props;
-const items = slugs.map((s) => serviceBySlug[s]).filter(Boolean);
+const { items: raw, title = 'You might also need.', tone = 'cream' } = Astro.props;
+const items = raw
+  .map((r) => (typeof r === 'string' ? { slug: r } : r))
+  .filter((r) => serviceBySlug[r.slug])
+  .map((r) => {
+    const svc = serviceBySlug[r.slug];
+    return { slug: svc.slug, group: svc.group, title: r.title ?? svc.navLabel, text: r.text ?? `${svc.seo.description.split('.')[0]}.` };
+  });
 const iconFor = (group: string) => ({ residential: 'home', commercial: 'building', refrigeration: 'fridge', maintenance: 'calendar' })[group] ?? 'info';
 ---
 
@@ -16,7 +25,7 @@ const iconFor = (group: string) => ({ residential: 'home', commercial: 'building
     <div class="section-head section-head--split">
       <div>
         <p class="eyebrow">Related services</p>
-        <h2 id="related-title">You might also need.</h2>
+        <h2 id="related-title">{title}</h2>
       </div>
     </div>
     <ul class="rel__grid">
@@ -25,9 +34,9 @@ const iconFor = (group: string) => ({ residential: 'home', commercial: 'building
           <li class="card card--lift rel__item">
             <span class="icon-badge"><Icon name={iconFor(s.group)} /></span>
             <h3 class="rel__title">
-              <a href={`/${s.slug}/`} class="stretched">{s.navLabel}</a>
+              <a href={`/${s.slug}/`} class="stretched">{s.title}</a>
             </h3>
-            <p class="rel__text">{s.seo.description.split('.')[0]}.</p>
+            <p class="rel__text">{s.text}</p>
             <span class="link-arrow" aria-hidden="true"><span>Find out more</span><Icon name="arrow" strokeWidth={2} /></span>
           </li>
         ))

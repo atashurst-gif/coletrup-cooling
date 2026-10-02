@@ -46,7 +46,7 @@ const banned = [
   { re: /\b(?:fridges?|freezers?|cold\s*rooms?|display\s+fridges?|refrigeration)\b[^.]{0,60}\b(?:installed|installation|install|replace|replacement|supply)\b/i, why: 'implies refrigeration installation/replacement' },
   { re: /\b(24\/7|24 hours?|same[- ]day|next[- ]day|within \d+ (hours?|minutes?|days?)|emergency call[- ]?out|rapid response)\b/i, why: 'response-time claim' },
   { re: /\b(guarantee[ds]?|warranty|warranties)\b/i, why: 'guarantee/warranty claim' },
-  { re: /\b(F-?Gas|REFCOM|Gas Safe|NICEIC|Checkatrade|Trustpilot|Which\? Trusted|accredited|certified|approved installer|registered installer)\b/i, why: 'accreditation claim' },
+  { re: /\b(F-?Gas|Gas Safe|NICEIC|Checkatrade|Trustpilot|Which\? Trusted|accredited|certified|approved installer|registered installer)\b/i, why: 'accreditation claim' },
   { re: /\b(Daikin|Mitsubishi|Fujitsu|Panasonic|LG|Toshiba|Samsung|Hitachi|Gree|Midea)\b/, why: 'manufacturer name' },
   { re: /\b(£\s?\d|from \d+ per|finance available|0% finance|interest[- ]free|price match)\b/i, why: 'price/finance claim' },
   { re: /\b(\d+\+?\s*years?['’]?\s*(?:of\s+)?experience|since\s+(?:19|20)\d{2}|established\s+(?:19|20)\d{2}|family[- ]run|\d+\s*(?:happy|satisfied)\s*customers|5[- ]star|five[- ]star|rated\s+\d)\b/i, why: 'years/customers/rating claim' },

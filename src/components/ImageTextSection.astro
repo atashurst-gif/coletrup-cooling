@@ -84,8 +84,9 @@ const Title = titleTag;
             />
           </div>
         ) : (
-          <div class="frame its__frame its__panel" aria-hidden="true">
+          <div class="frame its__frame its__panel" role="img" aria-label="Keeping it cool">
             <Airflow tone="dark" lines={7} seed={panelSeed} intensity={0.85} />
+            <img class="its__panel-mark" src="/brand/keeping-it-cool.webp" alt="" width="900" height="784" loading="lazy" decoding="async" />
           </div>
         )
       }
@@ -172,6 +173,15 @@ const Title = titleTag;
       radial-gradient(70% 120% at 100% 0%, rgba(0, 154, 224, 0.3), transparent 60%),
       radial-gradient(60% 100% at 0% 100%, rgba(245, 117, 0, 0.2), transparent 60%),
       linear-gradient(135deg, var(--navy-700), var(--navy-900));
+  }
+  .its__panel :global(img.its__panel-mark),
+  .its__panel-mark {
+    position: relative;
+    width: min(58%, 340px);
+    height: auto;
+    object-fit: contain;
+    transform: rotate(-2deg);
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25));
   }
   .its__frame-2 {
     position: absolute;

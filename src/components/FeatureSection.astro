@@ -5,6 +5,7 @@
  *          | 'columns' (3 columns, navy-friendly)
  */
 import Icon from './Icon.astro';
+import Airflow from './Airflow.astro';
 import { Picture } from 'astro:assets';
 import { images, type ImageKey } from '../lib/images';
 
@@ -22,6 +23,7 @@ const { id, tone = 'cream', variant = 'cards', eyebrow, title, intro, note, item
 ---
 
 <section class:list={['section', 'feat', `feat--${variant}`, `tone-${tone}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+  {tone === 'navy' && <Airflow tone="dark" lines={6} seed={17} intensity={0.8} mask="linear-gradient(180deg, transparent 0%, #000 45%, #000 100%)" />}
   <div class="container">
     <div class:list={['section-head', intro ? 'section-head--split' : '']}>
       <div>
@@ -53,6 +55,13 @@ const { id, tone = 'cream', variant = 'cards', eyebrow, title, intro, note, item
 </section>
 
 <style>
+  .feat.tone-navy {
+    position: relative;
+    overflow: hidden;
+  }
+  .feat.tone-navy > .container {
+    position: relative;
+  }
   .feat__grid {
     list-style: none;
     display: grid;

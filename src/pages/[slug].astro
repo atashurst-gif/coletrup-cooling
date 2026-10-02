@@ -61,11 +61,22 @@ const isCommercialish = s.group === 'commercial' || s.group === 'maintenance' ||
     whatsappMessage={s.whatsappMessage}
   />
 
-  <SectionRenderer sections={s.sections} slug={s.slug} midCta={{ quoteHref: '#quote', quoteLabel: s.cta.label, whatsappMessage: s.whatsappMessage, title: s.group === 'refrigeration' ? 'Need a hand with refrigeration?' : 'Ready when you are.' }} />
+  <SectionRenderer
+    sections={s.sections}
+    slug={s.slug}
+    midCta={{
+      quoteHref: '#quote',
+      quoteLabel: s.cta.label,
+      whatsappMessage: s.whatsappMessage,
+      title: s.midCta?.title ?? (s.group === 'refrigeration' ? 'Need refrigeration support?' : 'Ready when you are.'),
+      text: s.midCta?.text,
+      after: s.midCta?.after,
+    }}
+  />
 
-  <FAQ items={s.faqs} tone={s.sections.length % 2 === 0 ? 'white' : 'cream'} />
+  <FAQ items={s.faqs} title={s.faq?.title} intro={s.faq?.intro} tone={s.sections.length % 2 === 0 ? 'white' : 'cream'} />
 
-  <RelatedServices slugs={s.related} tone={s.sections.length % 2 === 0 ? 'cream' : 'white'} />
+  <RelatedServices items={s.related} title={s.relatedTitle} tone={s.sections.length % 2 === 0 ? 'cream' : 'white'} />
 
   <QuoteForm
     id="quote"
@@ -75,7 +86,9 @@ const isCommercialish = s.group === 'commercial' || s.group === 'maintenance' ||
   />
 
   <FinalCTA
-    title={s.group === 'refrigeration' ? 'Need refrigeration support?' : 'Need air conditioning support?'}
+    title={s.finalCta?.title ?? (s.group === 'refrigeration' ? 'Need refrigeration support?' : 'Need air conditioning support?')}
+    text={s.finalCta?.text}
+    quoteLabel={s.finalCta?.quoteLabel}
     whatsappMessage={s.whatsappMessage}
     quoteHref={quoteHref}
   />

@@ -85,7 +85,7 @@ const aside = images[image];
               <ul class="trust__acc-list">
                 {accreditations.map((a) => (
                   <li>
-                    {a.logo ? <img src={a.logo} alt={a.name} loading="lazy" height="44" /> : <Icon name="award" />}
+                    {a.logo ? <img src={a.logo} alt="" loading="lazy" height="44" /> : <Icon name="award" />}
                     <span>
                       {a.name}
                       {a.number && <small> · {a.number}</small>}

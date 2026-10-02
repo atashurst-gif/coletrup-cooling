@@ -13,7 +13,7 @@ import FinalCTA from '../components/FinalCTA.astro';
 import MidCTA from '../components/MidCTA.astro';
 import { site } from '../lib/site';
 
-const title = 'Air Conditioning Specialists | Coletrup Cooling';
+const title = 'Air Conditioning & Refrigeration Specialists | Coletrup Cooling';
 const description = `Professional air conditioning installation, servicing and repairs for homes ${site.region.phrase}, plus commercial air conditioning and specialist refrigeration repairs and maintenance.`;
 ---
 
@@ -29,12 +29,12 @@ const description = `Professional air conditioning installation, servicing and r
     imagePosition="50% 55%"
     imageSide="left"
     eyebrow="Residential air conditioning"
-    title="Comfortable cooling for your home."
+    title="Year-round comfort for your home."
     body={[
-      'Air conditioning designed around your home, your lifestyle and the cooling you need — installed, serviced and repaired by a specialist team.',
-      "From a single bedroom to open-plan living and multiple rooms, we'll recommend the right approach for your property and look after it for years to come.",
+      'Professional air conditioning installation, servicing and repairs, providing efficient heating and cooling with solutions tailored to suit your property.',
+      "Every home is different, so we take the time to understand your property and how you use each space, then recommend a system tailored to your requirements and look after it for years to come.",
     ]}
-    bullets={['Installation', 'Repairs', 'Servicing', 'Maintenance']}
+    bullets={['Installation', 'Service & maintenance', 'Repairs']}
     chipsLabel="Rooms we help with"
     chips={['Bedrooms', 'Living rooms', 'Home offices', 'Extensions', 'Open-plan spaces', 'Multiple rooms']}
     cta={{ label: 'Get a residential quote', href: '/contact/?service=air-conditioning&type=residential#quote', track: 'residential' }}
@@ -48,12 +48,12 @@ const description = `Professional air conditioning installation, servicing and r
     id="ac-services"
     tone="cream"
     eyebrow="Air conditioning services"
-    title="Installation, repairs and servicing — done properly."
-    intro="Whatever stage your system is at, from planning a new installation to keeping an existing one healthy, you'll get clear advice and professional work."
+    title="Complete air conditioning services."
+    intro="Whether you're looking for a new air conditioning system, routine servicing or a repair, you can expect clear advice and a professional service."
     items={[
-      { icon: 'ac-unit', title: 'Air Conditioning Installation', text: 'The right system for your home or business, professionally installed.', href: '/air-conditioning-installation/', cta: 'Installation', track: 'installation' },
-      { icon: 'wrench', title: 'Air Conditioning Repairs', text: "Not cooling, poor airflow, leaks or unusual noises? We'll find the fault and fix it.", href: '/air-conditioning-repairs/', cta: 'Request a repair', track: 'repair' },
-      { icon: 'gauge', title: 'Servicing & Maintenance', text: 'Regular checks and cleaning to keep your system performing at its best.', href: '/air-conditioning-servicing-maintenance/', cta: 'Book a service', track: 'maintenance' },
+      { icon: 'ac-unit', title: 'Air Conditioning Installation', text: 'Professionally installed systems, tailored to suit your property and requirements.', href: '/air-conditioning-installation/', cta: 'Installation', track: 'installation' },
+      { icon: 'wrench', title: 'Air Conditioning Repairs', text: "From poor performance to unexpected faults, we'll diagnose the issue and get your system running properly.", href: '/air-conditioning-repairs/', cta: 'Request a repair', track: 'repair' },
+      { icon: 'gauge', title: 'Service & Maintenance', text: 'Thorough servicing and preventative maintenance to keep your system efficient, reliable and performing at its best.', href: '/air-conditioning-servicing-maintenance/', cta: 'Book a service', track: 'maintenance' },
     ]}
   />
 
@@ -64,9 +64,9 @@ const description = `Professional air conditioning installation, servicing and r
     imagePosition="60% 40%"
     imageSide="right"
     eyebrow="Commercial air conditioning"
-    title="Keeping your business comfortable."
+    title="Comfortable conditions for your business, all year round."
     body={[
-      'Installation, servicing, maintenance and repairs for businesses — planned around your premises and the people who use them.',
+      'Professional air conditioning installation, servicing, maintenance and repairs for businesses, with reliable heating and cooling solutions tailored to your requirements.',
     ]}
     bullets={['Installation', 'Servicing', 'Maintenance', 'Repairs']}
     chipsLabel="Where we work"
@@ -84,13 +84,13 @@ const description = `Professional air conditioning installation, servicing and r
     imagePosition="55% 40%"
     imageSide="left"
     eyebrow="Refrigeration"
-    title="Keeping your refrigeration running."
+    title="Keep your refrigeration equipment running reliably."
     body={[
-      'Specialist servicing, maintenance, fault finding and repairs for the refrigeration equipment your business relies on.',
+      'Professional servicing, maintenance, fault finding and repairs for commercial refrigeration systems.',
     ]}
     bullets={['Servicing', 'Maintenance', 'Fault finding', 'Repairs']}
     chipsLabel="Equipment we look after"
-    chips={['Fridges', 'Freezers', 'Display fridges', 'Cold rooms', 'Commercial refrigeration equipment']}
+    chips={['Display cabinets', 'Cold rooms & freezer rooms', 'Cellar cooling', 'Commercial fridges & freezers']}
     cta={{ label: 'Request refrigeration support', href: '/contact/?service=refrigeration#quote', track: 'refrigeration' }}
     links={[{ label: 'Refrigeration repairs & maintenance', href: '/refrigeration-repairs-maintenance/', track: 'refrigeration' }]}
   />
@@ -120,5 +120,5 @@ const description = `Professional air conditioning installation, servicing and r
 
   <QuoteForm />
 
-  <FinalCTA />
+  <FinalCTA title="Need air conditioning or refrigeration support?" />
 </BaseLayout>

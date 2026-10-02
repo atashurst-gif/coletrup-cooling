@@ -13,15 +13,15 @@ const description =
 const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
 ---
 
-<BaseLayout {title} {description} path="/contact/" ogImage="engineerHomeDark" {breadcrumbs}>
+<BaseLayout {title} {description} path="/contact/" ogImage="engineerHomeDark" {breadcrumbs} stickyPrompt="Need air conditioning or refrigeration support?">
   <section class="contact-hero">
     <Airflow tone="light" lines={6} seed={17} intensity={0.8} mask="linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.3) 40%, #000 65%, #000 100%)" />
     <div class="container contact-hero__inner">
       <Breadcrumbs items={breadcrumbs} />
       <p class="eyebrow contact-hero__eyebrow">Contact</p>
-      <h1 class="contact-hero__title">Get in touch. Get a quote.</h1>
+      <h1 class="contact-hero__title">Let's talk about what you need.</h1>
       <p class="contact-hero__lead">
-        The quickest way to get a quote is the short form below. Prefer to talk? WhatsApp, call or email us and we'll take it from there.
+        Whether you need air conditioning installation, or servicing, maintenance or repairs for air conditioning or refrigeration, get in touch and tell us what you need. Complete the short form below, or contact us by WhatsApp, phone or email.
       </p>
       <ul class="contact-hero__cards">
         <li class="card contact-card" id="whatsapp">
@@ -37,7 +37,7 @@ const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
                 <Placeholder label="WHATSAPP NUMBER TO BE ADDED" />
               )
             }
-            <p>Send photos of your system or the fault to help us understand the job.</p>
+            <p>Send us a message, photos or details of your enquiry and we'll take it from there.</p>
           </div>
         </li>
         <li class="card contact-card" id="call">
@@ -72,12 +72,12 @@ const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
     <div class="container contact-info__grid">
       <div>
         <p class="eyebrow">What happens next</p>
-        <h2 id="info-title">Simple, from the first message.</h2>
+        <h2 id="info-title">Straightforward from the start.</h2>
         <ol class="contact-info__steps">
-          <li><strong>We receive your enquiry</strong><span>You'll get a reference number straight away.</span></li>
-          <li><strong>We talk it through</strong><span>We'll get in touch to understand your space and what you need.</span></li>
-          <li><strong>We recommend the right service</strong><span>Clear advice on the right approach for your home or business.</span></li>
-          <li><strong>We complete the work</strong><span>Carried out professionally, with care, from start to finish.</span></li>
+          <li><strong>Send us your enquiry</strong><span>Tell us what you need and provide any useful details or photos.</span></li>
+          <li><strong>We discuss your requirements</strong><span>We'll get in touch to understand the job and what's required.</span></li>
+          <li><strong>We provide the right solution</strong><span>We'll explain the recommended approach and provide a clear quote.</span></li>
+          <li><strong>We carry out the work</strong><span>Once agreed, the work is completed professionally and with care.</span></li>
         </ol>
       </div>
       <div class="contact-info__aside">

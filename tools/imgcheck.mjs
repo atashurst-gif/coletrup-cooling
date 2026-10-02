@@ -9,7 +9,7 @@ const srv = createServer((req,res)=>{ let p=decodeURIComponent(req.url.split('?'
 await new Promise(r=>srv.listen(4322,r));
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell' });
 const page = await browser.newPage({ viewport:{ width:1280, height:900 } });
-const routes = ['/','/about/','/residential-air-conditioning/','/air-conditioning-installation/','/air-conditioning-repairs/','/air-conditioning-servicing-maintenance/','/commercial-air-conditioning/','/commercial-air-conditioning-repairs/','/commercial-air-conditioning-maintenance/','/refrigeration-repairs-maintenance/','/fridge-freezer-repairs/','/cold-room-repairs-maintenance/','/display-fridge-repairs-maintenance/','/planned-maintenance-service-contracts/','/areas-we-cover/','/contact/'];
+const routes = ['/','/about/','/residential-air-conditioning/','/air-conditioning-installation/','/air-conditioning-repairs/','/air-conditioning-servicing-maintenance/','/commercial-air-conditioning/','/commercial-air-conditioning-repairs/','/commercial-air-conditioning-maintenance/','/refrigeration-repairs-maintenance/','/commercial-chiller-freezer-repairs/','/cellar-cooling-repairs-maintenance/','/cold-room-repairs-maintenance/','/display-fridge-repairs-maintenance/','/planned-maintenance-service-contracts/','/areas-we-cover/','/contact/'];
 let bad = 0;
 for (const r of routes) {
   await page.goto('http://localhost:4322'+r, { waitUntil:'networkidle' });

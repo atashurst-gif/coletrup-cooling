@@ -11,7 +11,7 @@ const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromi
 const results = []; const ok=(n,c,d='')=>results.push(`${c?'✔':'✖'} ${n}${d?' — '+d:''}`);
 
 // 1) console errors on every page
-const pages = ['/','/residential-air-conditioning/','/air-conditioning-installation/','/air-conditioning-repairs/','/air-conditioning-servicing-maintenance/','/commercial-air-conditioning/','/commercial-air-conditioning-repairs/','/commercial-air-conditioning-maintenance/','/refrigeration-repairs-maintenance/','/fridge-freezer-repairs/','/cold-room-repairs-maintenance/','/display-fridge-repairs-maintenance/','/planned-maintenance-service-contracts/','/about/','/areas-we-cover/','/contact/','/privacy-policy/','/cookie-policy/','/terms/','/404.html'];
+const pages = ['/','/residential-air-conditioning/','/air-conditioning-installation/','/air-conditioning-repairs/','/air-conditioning-servicing-maintenance/','/commercial-air-conditioning/','/commercial-air-conditioning-repairs/','/commercial-air-conditioning-maintenance/','/refrigeration-repairs-maintenance/','/commercial-chiller-freezer-repairs/','/cellar-cooling-repairs-maintenance/','/cold-room-repairs-maintenance/','/display-fridge-repairs-maintenance/','/planned-maintenance-service-contracts/','/about/','/areas-we-cover/','/contact/','/privacy-policy/','/cookie-policy/','/terms/','/404.html'];
 let errs=[]; const ctx = await browser.newContext({ viewport:{width:1366,height:900} }); const page = await ctx.newPage();
 page.on('pageerror', e=>errs.push(e.message)); page.on('console', m=>{ if(m.type()==='error') errs.push(m.text()); });
 page.on('response', r=>{ if(r.status()>=400 && !r.url().endsWith('404.html')) errs.push(`HTTP ${r.status()} ${r.url()}`); });

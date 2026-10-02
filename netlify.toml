@@ -4,3 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Page renamed 2 Oct: Fridge & Freezer Repairs → Commercial Chiller & Freezer Repairs
+[[redirects]]
+  from = "/fridge-freezer-repairs/*"
+  to = "/commercial-chiller-freezer-repairs/"
+  status = 301
+  force = true
