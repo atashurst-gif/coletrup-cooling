@@ -257,6 +257,26 @@ button {
 .section--tight {
   padding-block: var(--section-y);
 }
+/* Even spacing: when two neighbouring sections share a background there is no colour
+   change to separate them, so the second one drops its top padding (one gap, not two). */
+.tone-cream + .tone-cream:not(.mcta),
+.tone-white + .tone-white:not(.mcta),
+.tone-sand + .tone-sand:not(.mcta),
+.tone-navy + .tone-navy:not(.mcta) {
+  padding-top: 0;
+}
+/* …but a section that follows the mid-page call to action keeps its own top padding */
+.mcta + .section {
+  padding-top: var(--section-y);
+}
+/* The cream page heroes run straight into a cream first section */
+.hero + .section:not([class*='tone-']),
+.hero + .tone-cream,
+.phero + .tone-cream,
+.contact-hero + .tone-cream {
+  padding-top: 0;
+}
+
 .tone-cream {
   background: var(--cream);
 }
@@ -782,4 +802,13 @@ button {
 }
 .table-scroll {
   overflow-x: auto;
+}
+
+/* Phones: the heroes use the same bottom spacing as every other section */
+@media (max-width: 699px) {
+  main .hero.hero,
+  main .phero.phero,
+  main .contact-hero.contact-hero {
+    padding-bottom: var(--section-y);
+  }
 }
