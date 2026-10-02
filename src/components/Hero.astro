@@ -10,6 +10,7 @@ import { images } from '../lib/images';
 import { site, whatsappHref } from '../lib/site';
 
 const hero = images.livingRoomBifold;
+const accr = site.accreditations.filter((a) => a.logo);
 const points = [
   { icon: 'ac-unit', text: 'Expert installation' },
   { icon: 'wrench', text: 'Fault finding & repairs' },
@@ -51,6 +52,18 @@ const points = [
           ))
         }
       </ul>
+      {
+        accr.length > 0 && (
+          <div class="hero__accr">
+            <span class="hero__accr-label">Accreditations</span>
+            <ul class="hero__accr-list">
+              {accr.map((a) => (
+                <li><img src={a.logo} alt={a.name} width={a.width} height={a.height} decoding="async" /></li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
     </div>
 
     <div class="hero__media">
@@ -149,6 +162,37 @@ const points = [
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 1.75rem;
+  }
+  .hero__accr {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1.1rem;
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.1rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(7, 45, 82, 0.06));
+  }
+  .hero__accr-label {
+    font-family: var(--font-head);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero__accr-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .hero__accr-list img {
+    display: block;
+    height: 34px;
+    width: auto;
   }
   .hero__points {
     list-style: none;

@@ -84,12 +84,18 @@ const aside = images[image];
             accreditations.length > 0 ? (
               <ul class="trust__acc-list">
                 {accreditations.map((a) => (
-                  <li>
-                    {a.logo ? <img src={a.logo} alt="" loading="lazy" height="44" /> : <Icon name="award" />}
-                    <span>
-                      {a.name}
-                      {a.number && <small> · {a.number}</small>}
-                    </span>
+                  <li class:list={[a.logo && 'trust__acc-logo']}>
+                    {a.logo ? (
+                      <img src={a.logo} alt={a.name} loading="lazy" width={a.width} height={a.height} />
+                    ) : (
+                      <>
+                        <Icon name="award" />
+                        <span>
+                          {a.name}
+                          {a.number && <small> · {a.number}</small>}
+                        </span>
+                      </>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -177,6 +183,23 @@ const aside = images[image];
     border-radius: var(--radius-sm);
     font-weight: 600;
     color: var(--navy);
+  }
+  .trust__acc-list li {
+    background: #fff;
+  }
+  .trust__acc-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .trust__acc-list li.trust__acc-logo {
+    justify-content: center;
+    flex: 1 1 130px;
+    padding: 0.9rem 1.1rem;
+  }
+  .trust__acc-list :global(img) {
+    display: block;
+    height: 44px;
+    width: auto;
   }
   .trust__acc-list small {
     color: var(--muted);

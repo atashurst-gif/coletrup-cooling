@@ -125,8 +125,8 @@ const siteConfig = {
    * { name, logo?: '/brand/…', number?, verifyUrl? }
    */
   accreditations: [
-    { name: 'REFCOM', logo: '/brand/accreditations/refcom.png', width: 440, height: 193 },
-    { name: 'City & Guilds', logo: '/brand/accreditations/city-and-guilds.png', width: 440, height: 265 },
+    { name: 'REFCOM', logo: '/brand/accreditations/refcom.png', width: 421, height: 168 },
+    { name: 'City & Guilds', logo: '/brand/accreditations/city-and-guilds.png', width: 276, height: 167 },
   ],
 
   /** Social profile URLs — optional */
