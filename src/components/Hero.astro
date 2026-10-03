@@ -8,11 +8,11 @@
 import { Picture } from 'astro:assets';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
+import ManufacturerStrip from './ManufacturerStrip.astro';
 import { images } from '../lib/images';
-import { site, whatsappHref } from '../lib/site';
+import { whatsappHref } from '../lib/site';
 
 const hero = images.livingRoomBifold;
-const accr = site.accreditations.filter((a) => a.logo);
 const features = [
   { icon: 'ac-unit', title: 'Expert installation', text: 'Highest quality units, manufacturer-backed guarantee.' },
   { icon: 'wrench', title: 'Fast & reliable service', text: 'Repairs and servicing carried out properly, with clear advice.' },
@@ -72,18 +72,7 @@ const features = [
         ))
       }
     </ul>
-    {
-      accr.length > 0 && (
-        <div class="hero__accr">
-          <span class="hero__accr-label">Accreditations</span>
-          <ul class="hero__accr-list">
-            {accr.map((a) => (
-              <li><img src={a.logo} alt={a.name} width={a.width} height={a.height} decoding="async" /></li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
+    <ManufacturerStrip inline />
   </div>
 </section>
 
@@ -246,34 +235,6 @@ const features = [
     font-size: 0.95rem;
     line-height: 1.45;
     color: var(--muted);
-  }
-
-  .hero__accr {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem 1.25rem;
-    margin-top: 1.5rem;
-  }
-  .hero__accr-label {
-    font-family: var(--font-head);
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .hero__accr-list {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-  .hero__accr-list img {
-    display: block;
-    height: 34px;
-    width: auto;
   }
 
   @media (min-width: 900px) {

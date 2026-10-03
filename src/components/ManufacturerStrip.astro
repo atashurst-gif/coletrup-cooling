@@ -3,6 +3,11 @@
  * Manufacturer logo line (homepage) — the manufacturers named in the client's own
  * wording. Official logo files live in public/brand/manufacturers/.
  */
+export interface Props {
+  /** inline = no band behind it (used under the homepage hero cards). */
+  inline?: boolean;
+}
+const { inline = false } = Astro.props;
 const items = [
   { name: 'Daikin', src: '/brand/manufacturers/daikin.svg', w: 300, h: 65, scale: 0.8 },
   { name: 'Mitsubishi Electric', src: '/brand/manufacturers/mitsubishi-electric.svg', w: 794, h: 242, scale: 1.25 },
@@ -11,8 +16,8 @@ const items = [
 ];
 ---
 
-<section class="mfr" aria-labelledby="mfr-title">
-  <div class="container">
+<section class:list={['mfr', inline && 'mfr--inline']} aria-labelledby="mfr-title">
+  <div class={inline ? undefined : 'container'}>
     <p class="mfr__label" id="mfr-title">Manufacturers we work with</p>
     <ul class="mfr__list">
       {
@@ -31,6 +36,11 @@ const items = [
     background: #f3f4f5;
     border-block: 1px solid var(--line);
     padding: 1.75rem 0 2rem;
+  }
+  .mfr--inline {
+    background: none;
+    border: 0;
+    padding: 1.75rem 0 0;
   }
   .mfr__label {
     margin-bottom: 1.25rem;

@@ -10,7 +10,6 @@ import AreasSection from '../components/AreasSection.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import MidCTA from '../components/MidCTA.astro';
 import FAQ from '../components/FAQ.astro';
-import ManufacturerStrip from '../components/ManufacturerStrip.astro';
 import PromoPopup from '../components/PromoPopup.astro';
 import { site } from '../lib/site';
 
@@ -55,8 +54,6 @@ const faqSchema = {
     ]}
     emphasis
   />
-
-  <ManufacturerStrip />
 
   <BenefitsGrid />
 
@@ -103,7 +100,7 @@ const faqSchema = {
 
   <ProcessSteps />
 
-  <ReviewSection />
+  <ReviewSection aside={false} />
 
   <FAQ id="faqs" tone="white" eyebrow="Frequently asked questions" title="Home air conditioning FAQs." intro="Still have questions? Get in touch for a free, no obligation survey and advice tailored to your home." items={faqs} />
 

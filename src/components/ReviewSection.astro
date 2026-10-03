@@ -12,8 +12,10 @@ import { site } from '../lib/site';
 export interface Props {
   /** Photo (or decorative graphic) for the aside — each page passes a different one. */
   image?: ImageKey;
+  /** false = reviews only (no photo / accreditations column). */
+  aside?: boolean;
 }
-const { image = 'van' } = Astro.props;
+const { image = 'van', aside: showAside = true } = Astro.props;
 const reviews = site.reviews;
 const accreditations = site.accreditations;
 const aside = images[image];
@@ -26,7 +28,7 @@ const aside = images[image];
       <h2 id="trust-title">Real homes. Real businesses. Professional service.</h2>
     </div>
 
-    <div class="trust__grid">
+    <div class:list={['trust__grid', !showAside && 'trust__grid--solo']}>
       <div class="trust__reviews">
         {
           reviews.length > 0 ? (
@@ -74,6 +76,7 @@ const aside = images[image];
         }
       </div>
 
+      {showAside && (
       <aside class="trust__aside" data-reveal style="--reveal-delay:200ms">
         <div class="frame trust__van">
           <Picture src={aside.src} alt={aside.alt} title={aside.title} widths={[480, 800, 1200]} sizes="(min-width: 1080px) 34vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={80} />
@@ -107,6 +110,7 @@ const aside = images[image];
           }
         </div>
       </aside>
+      )}
     </div>
   </div>
 </section>
@@ -212,7 +216,10 @@ const aside = images[image];
     border-radius: 4px;
   }
   @media (min-width: 1080px) {
-    .trust__grid {
+    .trust__grid--solo .trust__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .trust__grid:not(.trust__grid--solo) {
       grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
       gap: 3.5rem;
       align-items: start;
