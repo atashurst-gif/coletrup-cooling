@@ -98,26 +98,29 @@ const features = [
     isolation: isolate;
     overflow: hidden;
     display: grid;
-    align-items: center;
-    min-height: clamp(520px, 135vw, 600px);
-    padding: 2.25rem 0 6.5rem;
+    align-items: start;
+    padding: 2.25rem 0 11.5rem;
   }
-  .hero__stage :global(.hero__picture),
-  .hero__stage :global(.hero__picture img) {
+  /* Phones: headline on cream, running into the photo — sized so the whole room,
+     including the air conditioning unit, stays in view beside the buttons. */
+  .hero__stage :global(.hero__picture) {
     position: absolute;
-    inset: 0;
+    inset: auto 0 0 0;
     z-index: -2;
+    height: 21rem;
+  }
+  .hero__stage :global(.hero__picture img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 72% 50%;
+    object-position: 25% 0%;
   }
-  /* Phones: cream wash from the top, clearing towards the bottom so the room shows. */
   .hero__wash {
     position: absolute;
-    inset: 0;
+    inset: auto 0 0 0;
+    height: 21rem;
     z-index: -1;
-    background: linear-gradient(180deg, rgba(250, 247, 241, 0.95) 0%, rgba(250, 247, 241, 0.93) 48%, rgba(250, 247, 241, 0.72) 68%, rgba(250, 247, 241, 0.15) 100%);
+    background: linear-gradient(180deg, var(--cream) 0%, rgba(250, 247, 240, 0) 9%);
   }
   .hero__seo {
     display: flex;
@@ -267,17 +270,24 @@ const features = [
     width: auto;
   }
 
-  @media (min-width: 760px) {
+  @media (min-width: 900px) {
     .hero__stage {
+      align-items: center;
       min-height: clamp(520px, 52vw, 680px);
       padding: 3rem 0 7rem;
     }
+    .hero__stage :global(.hero__picture) {
+      inset: 0;
+      height: auto;
+    }
     .hero__stage :global(.hero__picture img) {
-      object-position: 50% 45%;
+      object-position: 50% 12%;
     }
     /* Wider screens: wash from the left, the room clear on the right. */
     .hero__wash {
-      background: linear-gradient(90deg, rgba(250, 247, 241, 0.97) 0%, rgba(250, 247, 241, 0.94) 34%, rgba(250, 247, 241, 0.6) 52%, rgba(250, 247, 241, 0) 72%);
+      inset: 0;
+      height: auto;
+      background: linear-gradient(90deg, rgba(250, 247, 240, 0.97) 0%, rgba(250, 247, 240, 0.94) 34%, rgba(250, 247, 240, 0.6) 50%, rgba(250, 247, 240, 0) 66%);
     }
     .hero__lead {
       max-width: 34ch;
@@ -285,6 +295,13 @@ const features = [
     .hero__below {
       margin-top: -3.75rem;
     }
+  }
+  @media (min-width: 900px) and (max-width: 1199px) {
+    .hero__wash {
+      background: linear-gradient(90deg, rgba(250, 247, 240, 0.97) 0%, rgba(250, 247, 240, 0.94) 48%, rgba(250, 247, 240, 0.55) 62%, rgba(250, 247, 240, 0) 80%);
+    }
+  }
+  @media (min-width: 1000px) {
     .hero__features {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem;
