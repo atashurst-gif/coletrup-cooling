@@ -2,7 +2,6 @@
 /**
  * Section 4 — Why Coletrup. Four benefits, premium line icons, navy feature band.
  */
-import Icon from './Icon.astro';
 import Airflow from './Airflow.astro';
 
 const ticks = [
@@ -15,12 +14,6 @@ const ticks = [
   'Professional, personal service',
   'Ongoing servicing & maintenance',
 ];
-const benefits = [
-  { icon: 'ac-unit', title: 'Expert Installation', text: 'The right system for your space, professionally installed with care.' },
-  { icon: 'wrench', title: 'Reliable Repairs', text: 'Accurate fault finding and dependable repairs to get your system back up and running.' },
-  { icon: 'calendar', title: 'Ongoing Maintenance', text: 'Regular servicing to maintain efficiency, reliability and long-term performance.' },
-  { icon: 'shield', title: 'Professional Service', text: 'Friendly, professional support from your first enquiry through to completion.' },
-];
 ---
 
 <section class="section why tone-navy" id="why" aria-labelledby="why-title">
@@ -28,24 +21,9 @@ const benefits = [
   <div class="container">
     <div class="why__head">
       <h2 id="why-title">Why choose us?</h2>
-      <p class="why__intro">
-        With a decade of industry experience, Coletrup Cooling provides professional air conditioning and refrigeration services for homes and businesses across Manchester and the North West. From installations and maintenance to fault finding and repairs, we're committed to delivering a straightforward, reliable and professional service from start to finish.
-      </p>
     </div>
     <ul class="ticks why__ticks">
       {ticks.map((t) => <li>{t}</li>)}
-    </ul>
-    <h3 class="why__sub">Quality workmanship you can rely on.</h3>
-    <ul class="why__grid">
-      {
-        benefits.map((b, i) => (
-          <li class="why__item" data-reveal style={`--reveal-delay:${i * 80}ms`}>
-            <span class="why__icon"><Icon name={b.icon} size={26} /></span>
-            <h4 class="why__title">{b.title}</h4>
-            <p class="why__text">{b.text}</p>
-          </li>
-        ))
-      }
     </ul>
   </div>
 </section>

@@ -4,12 +4,10 @@ import Hero from '../components/Hero.astro';
 import ServiceSelector from '../components/ServiceSelector.astro';
 import ImageTextSection from '../components/ImageTextSection.astro';
 import BenefitsGrid from '../components/BenefitsGrid.astro';
-import ServiceCards from '../components/ServiceCards.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import ReviewSection from '../components/ReviewSection.astro';
 import AreasSection from '../components/AreasSection.astro';
 import QuoteForm from '../components/QuoteForm.astro';
-import FinalCTA from '../components/FinalCTA.astro';
 import MidCTA from '../components/MidCTA.astro';
 import FAQ from '../components/FAQ.astro';
 import ManufacturerStrip from '../components/ManufacturerStrip.astro';
@@ -48,32 +46,19 @@ const faqSchema = {
     title="Energy efficient year round comfort for your home."
     body={[
       'At Coletrup Cooling, we believe home comfort should be simple, efficient and tailored to you. Every home is different, which is why we take the time to recommend an air conditioning system that suits your space, lifestyle and budget.',
-      "Whether you're looking to keep a bedroom cool through the summer, create the perfect temperature in your living space, or enjoy efficient heating during the colder months, we can provide a solution designed around your home.",
-      'We work with trusted manufacturers including Daikin, Mitsubishi Electric, Fujitsu and Midea, giving you a choice of premium and cost-effective systems to suit different requirements and budgets.',
-      "With energy efficiency, comfort and long-term performance in mind, our systems provide quiet, reliable heating and cooling all year round. Combined with comprehensive manufacturer warranties, you can enjoy complete control over your home's temperature with the added reassurance of long-term performance and peace of mind.",
-      'From initial survey to final installation, we make the process simple and hassle-free, delivering efficient, reliable comfort tailored to your home.',
     ]}
     cta={{ label: 'Get a residential quote', href: '/contact/?service=air-conditioning&type=residential#quote', track: 'residential' }}
-    links={[{ label: 'Residential air conditioning', href: '/residential-air-conditioning/', track: 'residential' }]}
+    links={[
+      { label: 'Air conditioning installation', href: '/air-conditioning-installation/', track: 'installation' },
+      { label: 'Air conditioning repairs', href: '/air-conditioning-repairs/', track: 'repair' },
+      { label: 'Servicing & maintenance', href: '/air-conditioning-servicing-maintenance/', track: 'maintenance' },
+    ]}
     emphasis
   />
 
   <ManufacturerStrip />
 
   <BenefitsGrid />
-
-  <ServiceCards
-    id="ac-services"
-    tone="cream"
-    eyebrow="Air conditioning services"
-    title="Complete air conditioning solutions for your home or business."
-    intro="From a new installation to routine servicing or unexpected breakdowns, Coletrup Cooling provides professional support at every stage."
-    items={[
-      { icon: 'ac-unit', title: 'Air Conditioning Installation', text: 'Efficient, reliable systems selected and professionally installed to suit your space and requirements.', href: '/air-conditioning-installation/', cta: 'Installation', track: 'installation' },
-      { icon: 'wrench', title: 'Air Conditioning Repairs', text: 'Expert fault finding and reliable repairs to get your system back up and running.', href: '/air-conditioning-repairs/', cta: 'Request a repair', track: 'repair' },
-      { icon: 'gauge', title: 'Servicing & Maintenance', text: 'Thorough servicing to maintain efficiency, reliability and long-term performance.', href: '/air-conditioning-servicing-maintenance/', cta: 'Book a service', track: 'maintenance' },
-    ]}
-  />
 
   <ImageTextSection
     id="commercial"
@@ -90,7 +75,10 @@ const faqSchema = {
     chipsLabel="Where we work"
     chips={['Offices', 'Retail', 'Hospitality', 'Warehouses', 'Commercial premises', 'Workspaces']}
     cta={{ label: 'Get a commercial quote', href: '/contact/?service=air-conditioning&type=commercial#quote', track: 'commercial' }}
-    links={[{ label: 'Commercial air conditioning', href: '/commercial-air-conditioning/', track: 'commercial' }]}
+    links={[
+      { label: 'Commercial air conditioning', href: '/commercial-air-conditioning/', track: 'commercial' },
+      { label: 'Planned maintenance & service contracts', href: '/planned-maintenance-service-contracts/', track: 'maintenance' },
+    ]}
   />
 
   <MidCTA id="home-mid-cta" tone="white" title="How can we help?" quoteHref="#quote" />
@@ -113,23 +101,6 @@ const faqSchema = {
     links={[{ label: 'Refrigeration repairs & maintenance', href: '/refrigeration-repairs-maintenance/', track: 'refrigeration' }]}
   />
 
-  <ImageTextSection
-    id="maintenance"
-    tone="navy"
-    image="maintenanceChecklist"
-    imagePosition="50% 50%"
-    imageSide="right"
-    eyebrow="Planned maintenance"
-    title="Prevention is better than cure."
-    body={[
-      'Regular planned maintenance helps keep your air conditioning and refrigeration equipment efficient, reliable and performing at its best. Routine servicing can identify potential faults early, helping to reduce unexpected breakdowns, costly repairs and disruption to your business.',
-    ]}
-    bullets={['Planned servicing', 'Early fault detection', 'Improved efficiency & performance', 'Reduced risk of breakdowns', 'Tailored maintenance plans']}
-    bulletsColumns={1}
-    cta={{ label: 'Discuss maintenance', href: '/contact/?service=servicing-maintenance&type=commercial#quote', track: 'maintenance' }}
-    links={[{ label: 'Planned maintenance & service contracts', href: '/planned-maintenance-service-contracts/', track: 'maintenance' }]}
-  />
-
   <ProcessSteps />
 
   <ReviewSection />
@@ -143,5 +114,4 @@ const faqSchema = {
   <PromoPopup />
   <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
 
-  <FinalCTA title="Need air conditioning or refrigeration support?" />
 </BaseLayout>

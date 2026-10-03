@@ -109,6 +109,19 @@ export const services = [
       {
         type: 'split',
         tone: 'white',
+        icon: 'leaf',
+        imageSide: 'right',
+        eyebrow: 'Efficient heating & cooling',
+        title: 'Energy efficient year round comfort for your home.',
+        body: [
+          "Whether you're looking to keep a bedroom cool through the summer, create the perfect temperature in your living space, or enjoy efficient heating during the colder months, we can provide a solution designed around your home.",
+          'We work with trusted manufacturers including Daikin, Mitsubishi Electric, Fujitsu and Midea, giving you a choice of premium and cost-effective systems to suit different requirements and budgets.',
+          "With energy efficiency, comfort and long-term performance in mind, our systems provide quiet, reliable heating and cooling all year round. Combined with comprehensive manufacturer warranties, you can enjoy complete control over your home's temperature with the added reassurance of long-term performance and peace of mind.",
+          'From initial survey to final installation, we make the process simple and hassle-free, delivering efficient, reliable comfort tailored to your home.',
+        ],
+      },
+      {
+        type: 'split',
         icon: 'handshake',
         imageSide: 'left',
         eyebrow: 'From start to finish',
@@ -1143,9 +1156,10 @@ export const services = [
         icon: 'shield',
         imageSide: 'left',
         eyebrow: 'Why plan maintenance',
-        title: 'Prevention is better than a breakdown.',
+        title: 'Prevention is better than cure.',
+        bullets: ['Planned servicing', 'Early fault detection', 'Improved efficiency & performance', 'Reduced risk of breakdowns', 'Tailored maintenance plans'],
         body: [
-          'Planned maintenance helps you stay ahead of problems rather than reacting to them. Regular servicing gives potential issues the chance to be spotted early, and gives you a clearer picture of your equipment over time.',
+          'Regular planned maintenance helps keep your air conditioning and refrigeration equipment efficient, reliable and performing at its best. Routine servicing can identify potential faults early, helping to reduce unexpected breakdowns, costly repairs and disruption to your business.',
           'Looking for servicing at home? Our air conditioning service and maintenance is designed for homes.',
         ],
         links: [

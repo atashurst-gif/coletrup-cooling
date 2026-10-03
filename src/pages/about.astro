@@ -23,6 +23,12 @@ const values = [
   { icon: 'gauge', title: 'Technical expertise', text: 'Methodical fault finding, accurate diagnosis and the right solution.' },
   { icon: 'handshake', title: 'Easy to deal with', text: 'Straightforward advice, clear explanations and no unnecessary jargon.' },
 ];
+const quality = [
+  { title: 'Expert Installation', text: 'The right system for your space, professionally installed with care.' },
+  { title: 'Reliable Repairs', text: 'Accurate fault finding and dependable repairs to get your system back up and running.' },
+  { title: 'Ongoing Maintenance', text: 'Regular servicing to maintain efficiency, reliability and long-term performance.' },
+  { title: 'Professional Service', text: 'Friendly, professional support from your first enquiry through to completion.' },
+];
 const story = images.graphicWaves; // decorative until a team/founder photo is supplied
 ---
 
@@ -43,12 +49,18 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
       <div data-reveal>
         <p class="eyebrow">Our story</p>
         <h2 id="story-title">Who we are.</h2>
-        <Placeholder block label="COMPANY BACKGROUND TO BE SUPPLIED" class="about-story__ph">
-          <p>
-            Insert verified company information here: who founded Coletrup Cooling, the team, and how the business came to specialise in air conditioning and refrigeration.
-            Do not add years trading, customer numbers, accreditations or manufacturer relationships unless verified.
-          </p>
-        </Placeholder>
+        <p class="about-story__lead">
+          With a decade of industry experience, Coletrup Cooling provides professional air conditioning and refrigeration services for homes and businesses across Manchester and the North West. From installations and maintenance to fault finding and repairs, we're committed to delivering a straightforward, reliable and professional service from start to finish.
+        </p>
+        <h3 class="about-story__sub">Quality workmanship you can rely on.</h3>
+        <dl class="about-story__quality">
+          {quality.map((q) => (
+            <div>
+              <dt>{q.title}</dt>
+              <dd>{q.text}</dd>
+            </div>
+          ))}
+        </dl>
         <Placeholder block label="TEAM / FOUNDER PROFILE TO BE SUPPLIED" class="about-story__ph">
           <p>Name, role and a short verified bio. A photo can be added alongside.</p>
         </Placeholder>
@@ -146,6 +158,36 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .about-story__lead {
+    margin-top: 1rem;
+  }
+  .about-story__sub {
+    margin: 1.75rem 0 1rem;
+  }
+  .about-story__quality {
+    display: grid;
+    gap: 0.9rem 1.5rem;
+    margin: 0 0 1.5rem;
+  }
+  .about-story__quality div {
+    padding-left: 1rem;
+    border-left: 3px solid var(--blue);
+  }
+  .about-story__quality dt {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .about-story__quality dd {
+    margin: 0.15rem 0 0;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  @media (min-width: 640px) {
+    .about-story__quality {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
   .about-values__grid {
     list-style: none;
