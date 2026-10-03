@@ -54,7 +54,7 @@ const banned = [
 ];
 const allowlist = [
   // Supplied by the client in his own homepage wording (2 Oct):
-  /trusted manufacturers including Daikin/, /comprehensive manufacturer warranties/, /Fully qualified & F-Gas certified/, /brand\/manufacturers\//,/does\s+not\s+offer\s+refrigeration\s+installation/i, /no\s+refrigeration\s+installation/i, /never\s+add\s+refrigeration\s+installation/i];
+  /trusted manufacturers including Daikin/, /comprehensive manufacturer warranties/, /Fully qualified & F-Gas certified/, /brand\/manufacturers\//, /manufacturer-backed guarantee/,/does\s+not\s+offer\s+refrigeration\s+installation/i, /no\s+refrigeration\s+installation/i, /never\s+add\s+refrigeration\s+installation/i];
 
 const files = [];
 (function walk(dir) {
