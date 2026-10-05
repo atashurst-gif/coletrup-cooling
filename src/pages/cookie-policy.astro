@@ -1,6 +1,5 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
 import { site } from '../lib/site';
 const a = site.analytics;
 ---
@@ -21,14 +20,16 @@ const a = site.analytics;
       <tbody>
         <tr><td>cc_consent_v1</td><td>Necessary</td><td>Remembers whether you accepted or rejected analytics cookies.</td><td>Until cleared</td></tr>
         <tr><td>cc_attribution_v1</td><td>Necessary (session)</td><td>Remembers which campaign or page brought you to the site so we can attribute your enquiry. Stored only after you accept cookies.</td><td>Browser session</td></tr>
-        <tr><td>Google Tag Manager / Google Analytics (_ga, _ga_*)</td><td>Analytics — consent required</td><td>Helps us understand how the site is used and which pages lead to enquiries.</td><td>Up to 2 years</td></tr>
-        <tr><td>Meta Pixel (_fbp)</td><td>Marketing — consent required</td><td>Measures the effectiveness of our advertising.</td><td>Up to 3 months</td></tr>
-        <tr><td>Google Ads (_gcl_*)</td><td>Marketing — consent required</td><td>Measures conversions from Google Ads.</td><td>Up to 3 months</td></tr>
+        {(a.gtmId || a.ga4Id) && <tr><td>Google Tag Manager / Google Analytics (_ga, _ga_*)</td><td>Analytics — consent required</td><td>Helps us understand how the site is used and which pages lead to enquiries.</td><td>Up to 2 years</td></tr>}
+        {a.metaPixelId && <tr><td>Meta Pixel (_fbp)</td><td>Marketing — consent required</td><td>Measures the effectiveness of our advertising.</td><td>Up to 3 months</td></tr>}
+        {a.googleAdsId && <tr><td>Google Ads (_gcl_*)</td><td>Marketing — consent required</td><td>Measures conversions from Google Ads.</td><td>Up to 3 months</td></tr>}
       </tbody>
     </table>
   </div>
   <p>
-    Services currently configured: {a.gtmId || a.ga4Id || a.metaPixelId || a.googleAdsId ? [a.gtmId && 'Google Tag Manager', a.ga4Id && 'Google Analytics 4', a.metaPixelId && 'Meta Pixel', a.googleAdsId && 'Google Ads'].filter(Boolean).join(', ') : <Placeholder label="NO ANALYTICS IDS CONFIGURED YET — update this table when tags are added" />}.
+    {a.gtmId || a.ga4Id || a.metaPixelId || a.googleAdsId
+      ? `Services currently in use: ${[a.gtmId && 'Google Tag Manager', a.ga4Id && 'Google Analytics 4', a.metaPixelId && 'Meta Pixel', a.googleAdsId && 'Google Ads'].filter(Boolean).join(', ')}.`
+      : 'No analytics or advertising services are switched on at the moment.'}
   </p>
 
   <h2>Managing cookies in your browser</h2>

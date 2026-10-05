@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import Placeholder from '../components/Placeholder.astro';
 
 export interface Props {
   title: string;
@@ -10,6 +9,8 @@ export interface Props {
   path: string;
   updated?: string;
 }
+// NOTE (5 Oct 2026): the legal pages are still drafts. Company details, retention periods and
+// any ICO number are left out until supplied — complete and review them before launch.
 const { title, pageTitle, description, path, updated } = Astro.props;
 const breadcrumbs = [{ label: pageTitle, href: path }];
 ---
@@ -19,14 +20,7 @@ const breadcrumbs = [{ label: pageTitle, href: path }];
     <div class="container">
       <Breadcrumbs items={breadcrumbs} />
       <h1 class="legal__title">{pageTitle}</h1>
-      <p class="legal__meta">
-        {updated ? `Last updated: ${updated}` : <Placeholder label="LAST UPDATED DATE" />}
-      </p>
-      <Placeholder block label="LEGAL TEXT TO BE REVIEWED AND APPROVED" class="legal__notice">
-        <p>
-          The text below is a structural draft to show what this page needs to cover. It must be completed with the company's verified details and reviewed before the site goes live. It is not legal advice.
-        </p>
-      </Placeholder>
+      {updated && <p class="legal__meta">Last updated: {updated}</p>}
       <div class="prose legal__prose">
         <slot />
       </div>

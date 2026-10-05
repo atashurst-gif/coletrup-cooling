@@ -3,13 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Icon from '../components/Icon.astro';
 import Airflow from '../components/Airflow.astro';
-import Placeholder from '../components/Placeholder.astro';
 import QuoteForm from '../components/QuoteForm.astro';
-import { site, hasPhone, hasWhatsApp, hasEmail, telHref, whatsappHref } from '../lib/site';
+import { site, hasPhone, hasWhatsApp, hasEmail, hasCompanyDetails, telHref, whatsappHref } from '../lib/site';
 
+// Only the contact routes that have been supplied are shown (nothing is left as a placeholder).
+const routes = [hasWhatsApp && 'WhatsApp', hasPhone && 'phone', hasEmail && 'email'].filter(Boolean) as string[];
+const routesText = routes.length > 1 ? `${routes.slice(0, -1).join(', ')} or ${routes[routes.length - 1]}` : routes[0];
 const title = 'Contact & Get a Quote | Coletrup Cooling';
-const description =
-  'Request a free air conditioning or refrigeration quote from Coletrup Cooling in four quick steps, or get in touch by WhatsApp, phone or email.';
+const description = `Request a free air conditioning or refrigeration quote from Coletrup Cooling in four quick steps${routesText ? `, or get in touch by ${routesText}` : ''}.`;
 const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
 ---
 
@@ -21,48 +22,44 @@ const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
       <p class="eyebrow contact-hero__eyebrow">Contact</p>
       <h1 class="contact-hero__title">Let's talk about what you need.</h1>
       <p class="contact-hero__lead">
-        Whether you need air conditioning installation, or servicing, maintenance or repairs for air conditioning or refrigeration, get in touch and tell us what you need. Complete the short form below, or contact us by WhatsApp, phone or email.
+        Whether you need air conditioning installation, or servicing, maintenance or repairs for air conditioning or refrigeration, get in touch and tell us what you need. Complete the short form below{routesText ? `, or contact us by ${routesText}` : ''}.
       </p>
-      <ul class="contact-hero__cards">
+      {routes.length > 0 && (
+      <ul class:list={['contact-hero__cards', `contact-hero__cards--${routes.length}`]}>
+        {hasWhatsApp && (
         <li class="card contact-card" id="whatsapp">
           <span class="icon-badge"><Icon name="chat" /></span>
           <div>
             <h2>WhatsApp</h2>
-            {
-              hasWhatsApp ? (
-                <a href={whatsappHref()} target="_blank" rel="noopener" class="contact-card__link" data-track="cta" data-cta="whatsapp" data-location="contact-page">
-                  Message us on WhatsApp
-                </a>
-              ) : (
-                <Placeholder label="WHATSAPP NUMBER TO BE ADDED" />
-              )
-            }
+            <a href={whatsappHref()} target="_blank" rel="noopener" class="contact-card__link" data-track="cta" data-cta="whatsapp" data-location="contact-page">
+              Message us on WhatsApp
+            </a>
             <p>Send us a message, photos or details of your enquiry and we'll take it from there.</p>
           </div>
         </li>
+        )}
+        {hasPhone && (
         <li class="card contact-card" id="call">
           <span class="icon-badge"><Icon name="phone" /></span>
           <div>
             <h2>Phone</h2>
-            {
-              hasPhone ? (
-                <a href={telHref} class="contact-card__link" data-track="cta" data-cta="phone" data-location="contact-page">{site.contact.phoneDisplay}</a>
-              ) : (
-                <Placeholder label="PHONE NUMBER TO BE ADDED" />
-              )
-            }
-            <p>{site.contact.openingHours.length ? site.contact.openingHours.join(' · ') : <Placeholder label="OPENING HOURS TO BE ADDED" />}</p>
+            <a href={telHref} class="contact-card__link" data-track="cta" data-cta="phone" data-location="contact-page">{site.contact.phoneDisplay}</a>
+            {site.contact.openingHours.length > 0 && <p>{site.contact.openingHours.join(' · ')}</p>}
           </div>
         </li>
+        )}
+        {hasEmail && (
         <li class="card contact-card" id="email">
           <span class="icon-badge"><Icon name="mail" /></span>
           <div>
             <h2>Email</h2>
-            {hasEmail ? <a href={`mailto:${site.contact.email}`} class="contact-card__link">{site.contact.email}</a> : <Placeholder label="EMAIL ADDRESS TO BE ADDED" />}
+            <a href={`mailto:${site.contact.email}`} class="contact-card__link">{site.contact.email}</a>
             <p>For quotes, maintenance enquiries and anything else.</p>
           </div>
         </li>
+        )}
       </ul>
+      )}
     </div>
   </section>
 
@@ -81,14 +78,12 @@ const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
         </ol>
       </div>
       <div class="contact-info__aside">
-        <h3>Company details</h3>
+        <h3>{hasCompanyDetails ? 'Company details' : 'Contact details'}</h3>
         <dl class="contact-info__dl">
-          <dt>Company</dt>
-          <dd>{site.company.registeredName || <Placeholder label="REGISTERED NAME" />}</dd>
-          <dt>Company no.</dt>
-          <dd>{site.company.companyNumber || <Placeholder label="COMPANY NUMBER" />}</dd>
-          <dt>Registered office</dt>
-          <dd>{site.company.registeredOffice || <Placeholder label="REGISTERED OFFICE" />}</dd>
+          {site.company.registeredName && (<><dt>Company</dt><dd>{site.company.registeredName}</dd></>)}
+          {site.company.companyNumber && (<><dt>Company no.</dt><dd>{site.company.companyNumber}</dd></>)}
+          {site.company.registeredOffice && (<><dt>Registered office</dt><dd>{site.company.registeredOffice}</dd></>)}
+          {hasEmail && (<><dt>Email</dt><dd><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></dd></>)}
           <dt>Service area</dt>
           <dd>{site.region.name} <a href="/areas-we-cover/">(areas we cover)</a></dd>
         </dl>
@@ -222,6 +217,15 @@ const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
   @media (min-width: 760px) {
     .contact-hero__cards {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    /* Fewer contact routes: cards keep a sensible width rather than stretching */
+    .contact-hero__cards--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 820px;
+    }
+    .contact-hero__cards--1 {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 440px;
     }
   }
   @media (min-width: 1080px) {

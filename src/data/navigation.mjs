@@ -5,6 +5,7 @@
  */
 export const mainNav = [
   { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/about/' },
   {
     label: 'Residential Air Conditioning',
     short: 'Residential',
@@ -39,7 +40,6 @@ export const mainNav = [
       { label: 'Planned Maintenance & Service Contracts', href: '/planned-maintenance-service-contracts/', desc: 'Scheduled refrigeration maintenance' },
     ],
   },
-  { label: 'About', href: '/about/' },
   { label: 'Areas We Cover', href: '/areas-we-cover/' },
   { label: 'Contact', href: '/contact/' },
 ];

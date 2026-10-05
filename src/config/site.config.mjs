@@ -5,8 +5,8 @@
  * (header, footer, schema, WhatsApp/phone links, analytics, forms, areas,
  * reviews, accreditations) reads from here.
  *
- * RULE: only enter VERIFIED information. Anything left blank renders as a
- * clearly marked placeholder on the site and is listed by
+ * RULE: only enter VERIFIED information. Anything left blank is simply left OFF the
+ * site (no placeholder is shown — owner decision, 5 Oct 2026) and is listed by
  * `npm run audit:content`. `npm run build:strict` fails until every
  * required item is filled in.
  * =====================================================================
@@ -61,8 +61,8 @@ const siteConfig = {
     phoneE164: '',
     /** WhatsApp number, digits only with country code, e.g. '447700900000' — TO BE SUPPLIED */
     whatsapp: '',
-    /** Enquiries email — TO BE SUPPLIED */
-    email: '',
+    /** Enquiries email */
+    email: 'info@coletrupcooling.co.uk',
     /** Opening hours as display lines, e.g. ['Mon–Fri 8:00–17:30'] — TO BE SUPPLIED (optional) */
     openingHours: [],
     /**

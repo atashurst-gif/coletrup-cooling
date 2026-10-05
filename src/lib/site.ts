@@ -28,11 +28,13 @@ export const hasPhone = Boolean(siteConfig.contact.phoneE164 && siteConfig.conta
 export const hasWhatsApp = Boolean(siteConfig.contact.whatsapp);
 export const hasEmail = Boolean(siteConfig.contact.email);
 export const hasLogo = Boolean(siteConfig.brand.logoOnLight);
+export const hasCompanyDetails = Boolean(siteConfig.company.registeredName || siteConfig.company.companyNumber || siteConfig.company.registeredOffice);
 
-export const telHref = hasPhone ? `tel:${siteConfig.contact.phoneE164}` : '/contact/#call';
+/** Until a phone number is supplied, "Call us" goes to the contact page. */
+export const telHref = hasPhone ? `tel:${siteConfig.contact.phoneE164}` : '/contact/';
 
 export function whatsappHref(message?: string): string {
-  if (!hasWhatsApp) return '/contact/#whatsapp';
+  if (!hasWhatsApp) return '/contact/'; // until a WhatsApp number is supplied
   const base = `https://wa.me/${siteConfig.contact.whatsapp.replace(/\D/g, '')}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }

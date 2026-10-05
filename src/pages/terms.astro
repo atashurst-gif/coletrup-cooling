@@ -1,13 +1,12 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
 import { site } from '../lib/site';
 const name = site.company.registeredName || site.name;
 ---
 
 <LegalLayout title="Website Terms | Coletrup Cooling" pageTitle="Website Terms of Use" description="Terms of use for the Coletrup Cooling website." path="/terms/">
   <h2>About these terms</h2>
-  <p>These terms apply to your use of this website, operated by {name}. Terms for the supply of services are agreed separately when you accept a quote. <Placeholder label="LINK TO SERVICE TERMS & CONDITIONS, IF ANY" /></p>
+  <p>These terms apply to your use of this website, operated by {name}. Terms for the supply of services are agreed separately when you accept a quote.</p>
 
   <h2>Information on this site</h2>
   <p>We take care to keep the information on this site accurate and up to date, but it is provided for general information only. A quote or recommendation is only made after we have understood your specific requirements.</p>

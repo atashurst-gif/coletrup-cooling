@@ -1,9 +1,8 @@
 ---
 import { footerNav } from '../data/navigation.mjs';
-import { site, hasPhone, hasWhatsApp, hasEmail, telHref, whatsappHref, confirmedAreas, areaPages } from '../lib/site';
+import { site, hasPhone, hasWhatsApp, hasEmail, telHref, whatsappHref } from '../lib/site';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-import Placeholder from './Placeholder.astro';
 
 const year = new Date().getFullYear();
 const socials = Object.entries(site.socials).filter(([, url]) => url);
@@ -21,18 +20,30 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
         </p>
         <p class="footer__services">Installation • Servicing • Maintenance • Repairs</p>
         <ul class="footer__contact">
-          <li>
-            <Icon name="phone" size={18} strokeWidth={2} />
-            {hasPhone ? <a href={telHref} data-track="cta" data-cta="phone" data-location="footer">{site.contact.phoneDisplay}</a> : <Placeholder label="PHONE NUMBER" />}
-          </li>
-          <li>
-            <Icon name="chat" size={18} strokeWidth={2} />
-            {hasWhatsApp ? <a href={whatsappHref()} target="_blank" rel="noopener" data-track="cta" data-cta="whatsapp" data-location="footer">WhatsApp us</a> : <Placeholder label="WHATSAPP NUMBER" />}
-          </li>
-          <li>
-            <Icon name="mail" size={18} strokeWidth={2} />
-            {hasEmail ? <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> : <Placeholder label="EMAIL ADDRESS" />}
-          </li>
+          {
+            hasPhone && (
+              <li>
+                <Icon name="phone" size={18} strokeWidth={2} />
+                <a href={telHref} data-track="cta" data-cta="phone" data-location="footer">{site.contact.phoneDisplay}</a>
+              </li>
+            )
+          }
+          {
+            hasWhatsApp && (
+              <li>
+                <Icon name="chat" size={18} strokeWidth={2} />
+                <a href={whatsappHref()} target="_blank" rel="noopener" data-track="cta" data-cta="whatsapp" data-location="footer">WhatsApp us</a>
+              </li>
+            )
+          }
+          {
+            hasEmail && (
+              <li>
+                <Icon name="mail" size={18} strokeWidth={2} />
+                <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+              </li>
+            )
+          }
           {
             site.contact.openingHours.length > 0 && (
               <li>
@@ -47,8 +58,8 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
             <ul class="footer__social" aria-label="Social media">
               {socials.map(([name, url]) => (
                 <li>
-                  <a href={url} target="_blank" rel="noopener" aria-label={`${site.name} on ${name[0].toUpperCase()}${name.slice(1)}`}>
-                    <Icon name={['facebook', 'instagram'].includes(name) ? name : 'external'} size={20} />
+                  <a href={url} target="_blank" rel="noopener" data-net={name} aria-label={`${site.name} on ${name[0].toUpperCase()}${name.slice(1)}`}>
+                    <span class="footer__social-ic"><Icon name={['facebook', 'instagram'].includes(name) ? name : 'external'} size={16} /></span>
                     <span>{name}</span>
                   </a>
                 </li>
@@ -76,40 +87,12 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
       </nav>
     </div>
 
-    <div class="footer__areas">
-      <h2 class="footer__title">Areas we cover</h2>
-      {
-        confirmedAreas.length ? (
-          <p>
-            Air conditioning {site.region.phrase}, including{' '}
-            {confirmedAreas.map((a, i) => (
-              <>
-                {areaPages.some((p) => p.slug === a.slug) ? <a href={`/areas-we-cover/${a.slug}/`}>{a.name}</a> : a.name}
-                {i < confirmedAreas.length - 1 ? ', ' : '.'}
-              </>
-            ))}{' '}
-            <a href="/areas-we-cover/">View all areas</a>
-          </p>
-        ) : (
-          <p>
-            Air conditioning {site.region.phrase}. <a href="/areas-we-cover/">Areas we cover</a>
-          </p>
-        )
-      }
-    </div>
-
     <div class="footer__bottom">
       <p class="footer__legal">
         © {year} {site.company.registeredName || site.name}.
         {site.company.companyNumber ? ` Registered in England & Wales, company no. ${site.company.companyNumber}.` : ''}
         {site.company.registeredOffice ? ` Registered office: ${site.company.registeredOffice}.` : ''}
         {site.company.vatNumber ? ` VAT no. ${site.company.vatNumber}.` : ''}
-        {!site.company.registeredName && (
-          <>
-            {' '}
-            <Placeholder label="REGISTERED COMPANY NAME, NUMBER & OFFICE" />
-          </>
-        )}
       </p>
       <ul class="footer__links">
         {footerNav.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
@@ -189,14 +172,32 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
   .footer__social a {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.8rem;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem 0.35rem 0.4rem;
     border: 1px solid var(--line-on-navy);
     border-radius: 999px;
     color: #fff;
     text-decoration: none;
     text-transform: capitalize;
     font-size: 0.875rem;
+  }
+  /* Social icons in each network's own colours */
+  .footer__social-ic {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+  .footer__social a[data-net='facebook'] .footer__social-ic {
+    background: #1877f2;
+  }
+  .footer__social a[data-net='instagram'] .footer__social-ic {
+    border-radius: 9px;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
   }
   .footer__cols {
     display: grid;
@@ -225,21 +226,12 @@ const cols = [footerNav.residential, footerNav.commercial, footerNav.refrigerati
   .footer__col a:hover {
     color: #fff;
   }
-  .footer__areas {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--line-on-navy);
-    font-size: var(--fs-sm);
-  }
-  .footer__areas a {
-    color: #fff;
-  }
   .footer__bottom {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem 2rem;
     justify-content: space-between;
-    margin-top: 2rem;
+    margin-top: 3rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--line-on-navy);
     font-size: 0.8125rem;

@@ -1,21 +1,19 @@
 ---
-import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import Placeholder from '../components/Placeholder.astro';
+import Airflow from '../components/Airflow.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import ReviewSection from '../components/ReviewSection.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import FinalCTA from '../components/FinalCTA.astro';
 import MidCTA from '../components/MidCTA.astro';
-import { images } from '../lib/images';
 import { site } from '../lib/site';
 
 const title = 'About Coletrup Cooling | Air Conditioning & Refrigeration Specialists';
 const description =
   'Coletrup Cooling provides professional air conditioning and refrigeration services across Manchester and the North West, for homes and businesses.';
-const breadcrumbs = [{ label: 'About', href: '/about/' }];
+const breadcrumbs = [{ label: 'About Us', href: '/about/' }];
 const values = [
   { icon: 'shield', title: 'Professional', text: 'Work carried out properly, with care and attention to detail throughout.' },
   { icon: 'chat', title: 'Responsive', text: 'Clear communication and a straightforward service from first enquiry onwards.' },
@@ -29,7 +27,6 @@ const quality = [
   { title: 'Ongoing Maintenance', text: 'Regular servicing to maintain efficiency, reliability and long-term performance.' },
   { title: 'Professional Service', text: 'Friendly, professional support from your first enquiry through to completion.' },
 ];
-const story = images.graphicWaves; // decorative until a team/founder photo is supplied
 ---
 
 <BaseLayout {title} {description} path="/about/" ogImage="engineerPortrait" {breadcrumbs} stickyPrompt="Need air conditioning or refrigeration support?">
@@ -61,13 +58,11 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
             </div>
           ))}
         </dl>
-        <Placeholder block label="TEAM / FOUNDER PROFILE TO BE SUPPLIED" class="about-story__ph">
-          <p>Name, role and a short verified bio. A photo can be added alongside.</p>
-        </Placeholder>
       </div>
       <div class="about-story__media" data-reveal style="--reveal-delay:120ms">
-        <div class="frame about-story__frame">
-          <Picture src={story.src} alt="" widths={[480, 800, 1200]} sizes="(min-width: 1080px) 40vw, 100vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={80} style="object-position:50% 50%" />
+        <div class="frame about-story__frame about-story__panel" role="img" aria-label="Keeping it cool">
+          <Airflow tone="dark" lines={7} seed={57} intensity={0.85} />
+          <img class="about-story__mark" src="/brand/keeping-it-cool.webp" alt="" width="900" height="784" loading="lazy" decoding="async" />
         </div>
       </div>
     </div>
@@ -148,16 +143,26 @@ const story = images.graphicWaves; // decorative until a team/founder photo is s
     gap: 2.5rem;
     align-items: center;
   }
-  .about-story__ph {
-    margin-top: 1.25rem;
-  }
   .about-story__frame {
     aspect-ratio: 4 / 3;
   }
-  .about-story__frame :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  /* Animated "Keeping It Cool" panel (same as the service pages) */
+  .about-story__panel {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(0, 154, 224, 0.3), transparent 60%),
+      radial-gradient(60% 100% at 0% 100%, rgba(245, 117, 0, 0.2), transparent 60%),
+      linear-gradient(135deg, var(--navy-700), var(--navy-900));
+  }
+  .about-story__panel img.about-story__mark {
+    position: relative;
+    width: min(58%, 340px);
+    height: auto;
+    object-fit: contain;
+    transform: rotate(-2deg);
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25));
   }
   .about-story__lead {
     margin-top: 1rem;

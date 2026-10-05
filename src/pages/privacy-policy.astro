@@ -1,18 +1,17 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
 import { site } from '../lib/site';
 const name = site.company.registeredName || site.name;
+const an = site.analytics;
+const analyticsOn = [(an.gtmId || an.ga4Id) && 'Google Analytics', an.metaPixelId && 'Meta', an.googleAdsId && 'Google Ads'].filter(Boolean);
 ---
 
 <LegalLayout title="Privacy Policy | Coletrup Cooling" pageTitle="Privacy Policy" description="How Coletrup Cooling collects, uses and protects your personal information." path="/privacy-policy/">
   <h2>Who we are</h2>
   <p>
-    This website is operated by {name}
-    {site.company.companyNumber ? ` (company number ${site.company.companyNumber})` : <> (<Placeholder label="COMPANY NUMBER" />)</>}
-    {site.company.registeredOffice ? `, registered office ${site.company.registeredOffice}` : <>, registered office <Placeholder label="REGISTERED OFFICE" /></>}. We are the data controller for the personal information collected through this site.
+    This website is operated by {name}{site.company.companyNumber ? ` (company number ${site.company.companyNumber})` : ''}{site.company.registeredOffice ? `, registered office ${site.company.registeredOffice}` : ''}. We are the data controller for the personal information collected through this site.
   </p>
-  <p>Contact for privacy matters: {site.contact.email || <Placeholder label="PRIVACY CONTACT EMAIL" />}. <Placeholder label="ICO REGISTRATION NUMBER, IF REGISTERED" /></p>
+  {site.contact.email && <p>Contact for privacy matters: <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>}
 
   <h2>What we collect and why</h2>
   <ul>
@@ -24,15 +23,16 @@ const name = site.company.registeredName || site.name;
 
   <h2>Who we share it with</h2>
   <p>
-    Enquiries are delivered to us via <Placeholder label="FORM PROVIDER, e.g. NETLIFY FORMS / ZAPIER / CRM NAME" />. Analytics and advertising measurement providers (only if you accept cookies): <Placeholder label="e.g. GOOGLE ANALYTICS, META" />. We do not sell your personal information.
+    {site.forms.provider === 'netlify' ? 'Enquiries sent through the quote form are delivered to us by the form service of our website host (Netlify).' : 'Enquiries sent through the quote form are delivered to us by a form processing service.'}
+    {' '}Analytics and advertising measurement providers are only used if you accept cookies{analyticsOn.length ? ` (${analyticsOn.join(', ')})` : ''}. We do not sell your personal information.
   </p>
 
   <h2>How long we keep it</h2>
-  <p>Enquiry details are kept for <Placeholder label="RETENTION PERIOD" /> unless you become a customer, in which case they are kept as part of your customer records for <Placeholder label="RETENTION PERIOD" />.</p>
+  <p>Enquiry details are kept only for as long as they are needed to deal with your enquiry. If you become a customer, they are kept as part of your customer records.</p>
 
   <h2>Your rights</h2>
   <p>Under UK GDPR you have the right to access, correct, erase, restrict or object to our processing of your personal information, and to data portability. To exercise these rights contact us at the email address above. You can also complain to the Information Commissioner's Office (ico.org.uk).</p>
 
   <h2>Changes</h2>
-  <p>We may update this policy from time to time. The date at the top shows when it was last changed.</p>
+  <p>We may update this policy from time to time.</p>
 </LegalLayout>

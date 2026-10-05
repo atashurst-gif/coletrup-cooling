@@ -16,7 +16,7 @@ export interface Props {
   schema?: Record<string, unknown>[];
   breadcrumbs?: { label: string; href: string }[];
 }
-const { title, description, path, ogImage = 'livingRoom', noindex = false, schema = [], breadcrumbs = [] } = Astro.props;
+const { title, description, path, ogImage = 'livingRoomBifold', noindex = false, schema = [], breadcrumbs = [] } = Astro.props;
 
 const canonical = absoluteUrl(path);
 const og = await getImage({ src: images[ogImage].src, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
