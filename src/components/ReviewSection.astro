@@ -16,7 +16,9 @@ export interface Props {
   aside?: boolean;
 }
 const { image = 'van', aside: showAside = true } = Astro.props;
-const reviews = site.reviews;
+const reviews = site.reviews as any[];
+// 4+ reviews: a slow moving row that pauses when hovered, touched or focused.
+const moving = reviews.length >= 4;
 const accreditations = site.accreditations;
 const aside = images[image];
 ---
@@ -32,26 +34,41 @@ const aside = images[image];
       <div class="trust__reviews">
         {
           reviews.length > 0 ? (
-            <ul class="trust__list">
-              {reviews.slice(0, 3).map((r, i) => (
-                <li class="card trust__card" data-reveal style={`--reveal-delay:${i * 90}ms`}>
-                  <Icon name="quote" size={28} class="trust__quote" />
+            moving ? (
+              <div class="trust__marquee">
+                <ul class="trust__track">
+                  {[...reviews, ...reviews].map((r, i) => (
+                    <li class="card trust__card" aria-hidden={i >= reviews.length ? 'true' : undefined}>
+                  {r.stars && <p class="trust__stars" aria-label={`${r.stars} out of 5 stars`}>{'★'.repeat(r.stars)}</p>}
                   <blockquote class="trust__text">
-                    <p>{r.quote}</p>
+                    {String(r.quote).split('\n\n').map((para) => <p>{para}</p>)}
                   </blockquote>
                   <p class="trust__by">
                     <strong>{r.name}</strong>
                     {r.location && <span> · {r.location}</span>}
                     {r.service && <span class="trust__svc">{r.service}</span>}
-                    {r.source && (
-                      <span class="trust__src">
-                        via {r.sourceUrl ? <a href={r.sourceUrl} target="_blank" rel="noopener">{r.source}</a> : r.source}
-                      </span>
-                    )}
+                  </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+            <ul class:list={['trust__list', reviews.length === 1 && 'trust__list--one']}>
+              {reviews.slice(0, 3).map((r) => (
+                <li class="card trust__card" data-reveal>
+                  {r.stars && <p class="trust__stars" aria-label={`${r.stars} out of 5 stars`}>{'★'.repeat(r.stars)}</p>}
+                  <blockquote class="trust__text">
+                    {String(r.quote).split('\n\n').map((para) => <p>{para}</p>)}
+                  </blockquote>
+                  <p class="trust__by">
+                    <strong>{r.name}</strong>
+                    {r.location && <span> · {r.location}</span>}
+                    {r.service && <span class="trust__svc">{r.service}</span>}
                   </p>
                 </li>
               ))}
             </ul>
+            )
           ) : (
             <ul class="trust__list">
               {[0, 1, 2].map((i) => (
@@ -124,6 +141,50 @@ const aside = images[image];
     list-style: none;
     display: grid;
     gap: 1rem;
+  }
+  .trust__stars {
+    margin: 0 0 0.6rem;
+    color: var(--orange);
+    letter-spacing: 0.15em;
+    font-size: 1.1rem;
+  }
+  .trust__list--one {
+    max-width: 46rem;
+    margin-inline: auto;
+    grid-template-columns: 1fr !important;
+  }
+  .trust__marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .trust__track {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: trust-move 60s linear infinite;
+  }
+  .trust__track .trust__card {
+    width: min(82vw, 24rem);
+    flex: none;
+  }
+  .trust__marquee:hover .trust__track,
+  .trust__marquee:active .trust__track,
+  .trust__marquee:focus-within .trust__track {
+    animation-play-state: paused;
+  }
+  @keyframes trust-move {
+    to {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trust__marquee {
+      overflow-x: auto;
+    }
+    .trust__track {
+      animation: none;
+    }
   }
   .trust__card {
     padding: 1.6rem;

@@ -115,7 +115,15 @@ const siteConfig = {
    * { quote, name, location?, service?, source?, sourceUrl?, date? }
    * With no reviews the site shows [GENUINE CUSTOMER REVIEW TO BE ADDED].
    */
-  reviews: [],
+  reviews: [
+    {
+      quote:
+        'We recently had Coletrup Cooling out to service the air conditioning systems at our dance studio. Brad was professional, friendly and did a really thorough job, including a deep clean of the units.\n\nEverything was left clean and tidy and the air conditioning is working great. Really pleased with the service and would definitely recommend Coletrup Cooling. We’ll be using them again for our future servicing and maintenance.',
+      name: 'Dance studio',
+      service: 'Air conditioning servicing',
+      stars: 5,
+    },
+  ],
 
   /** Public review profile, e.g. { label: 'Google', url: 'https://…' } — optional */
   reviewProfile: null,
