@@ -24,6 +24,7 @@ const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
     whatsappMessage="Hi Coletrup Cooling, do you cover my area? My postcode is "
   />
 
+  {confirmedAreas.length > 0 && (
   <section class="section tone-white areas-list" aria-labelledby="areas-list-title">
     <div class="container">
       <div class="section-head section-head--split">
@@ -48,17 +49,11 @@ const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
               );
             })}
           </ul>
-        ) : (
-          <Placeholder block label="CONFIRMED SERVICE AREAS TO BE ADDED">
-            <p>
-              The strategy documents mention searches around {site.areas.map((a) => a.name).join(', ')}, but none are confirmed as service areas yet.
-              In <code>site.config.mjs</code>, set <code>confirmed: true</code> for each verified area to list it here. Add an <code>intro</code> and at least three <code>details</code> to generate a unique location page for that area.
-            </p>
-          </Placeholder>
-        )
+        ) : null
       }
     </div>
   </section>
+  )}
 
   <MidCTA id="areas-mid-cta" tone="white" quoteHref="#quote" title="Not sure if we cover you?" text="Send your postcode with a quote request, or ask on WhatsApp — we'll confirm straight away." />
 

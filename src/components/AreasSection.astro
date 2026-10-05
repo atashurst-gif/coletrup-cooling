@@ -4,7 +4,6 @@
  */
 import Icon from './Icon.astro';
 import Button from './Button.astro';
-import Placeholder from './Placeholder.astro';
 import NorthWestMap from './NorthWestMap.astro';
 import { site, confirmedAreas, areaPages } from '../lib/site';
 
@@ -33,11 +32,7 @@ const { id = 'areas', compact = false } = Astro.props;
               </li>
             ))}
           </ul>
-        ) : (
-          <Placeholder block label="CONFIRMED SERVICE AREAS TO BE ADDED">
-            <p>Only verified towns and areas will be listed here. Mark each area <code>confirmed: true</code> in <code>site.config.mjs</code> to display it.</p>
-          </Placeholder>
-        )
+        ) : null
       }
       <p class="areas__note">Not sure if we cover your area? Get in touch with your postcode and we'll let you know.</p>
       <div class="areas__actions">
@@ -63,7 +58,7 @@ const { id = 'areas', compact = false } = Astro.props;
     max-width: 56ch;
     font-size: var(--fs-lead);
     color: var(--charcoal);
-    margin-bottom: 1.5rem;
+    margin: 1.25rem 0 1.25rem;
   }
   .areas__list {
     list-style: none;
