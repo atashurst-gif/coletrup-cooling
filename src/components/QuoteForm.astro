@@ -6,6 +6,10 @@
  * normally. With JS: stepped UI, validation, enquiry ID, attribution, tracking
  * and an in-place confirmation with WhatsApp / phone options.
  *
+ * There is no "Continue" button (owner request, 5 Oct 2026): choosing an option on
+ * steps 1 and 2 moves straight to the next step, and the postcode step has a small
+ * arrow button beside the box (Enter works too). The behaviour is in src/lib/quote-form.ts.
+ *
  * Destination is set in site.config → forms (netlify | webhook | none).
  */
 import Icon from './Icon.astro';
@@ -93,6 +97,8 @@ const types = [
           <label>Company website <input type="text" name="company-website" tabindex="-1" autocomplete="off" /></label>
         </p>
         <input type="hidden" name="enquiry_id" data-field="enquiry_id" />
+        {/* Subject line of the notification email (Netlify Forms reads a field called "subject"); the script adds the service and reference */}
+        <input type="hidden" name="subject" data-field="subject" data-remove-prefix value={`Website enquiry - ${site.name}`} />
         <input type="hidden" name="utm_source" data-field="utm_source" />
         <input type="hidden" name="utm_medium" data-field="utm_medium" />
         <input type="hidden" name="utm_campaign" data-field="utm_campaign" />
@@ -112,7 +118,7 @@ const types = [
 
         <!-- STEP 1 -->
         <fieldset class="qf__step" data-step="1">
-          <legend class="qf__legend">What do you need?</legend>
+          <legend class="qf__legend">What do you need?<span class="sr-only"> Choosing an option moves you to the next step.</span></legend>
           <div class="qf__options qf__options--4">
             {
               services.map((s, i) => (
@@ -132,7 +138,7 @@ const types = [
 
         <!-- STEP 2 -->
         <fieldset class="qf__step" data-step="2">
-          <legend class="qf__legend">Residential or commercial?</legend>
+          <legend class="qf__legend">Residential or commercial?<span class="sr-only"> Choosing an option moves you to the next step.</span></legend>
           <div class="qf__options qf__options--2">
             {
               types.map((t) => (
@@ -155,18 +161,24 @@ const types = [
           <legend class="qf__legend">Where are you located?</legend>
           <div class="qf__field">
             <label for={`${uid}-postcode`}>Postcode</label>
-            <input
-              id={`${uid}-postcode`}
-              type="text"
-              name="postcode"
-              inputmode="text"
-              autocomplete="postal-code"
-              autocapitalize="characters"
-              placeholder="e.g. M1 1AA"
-              maxlength="10"
-              required
-              aria-describedby={`${uid}-postcode-hint`}
-            />
+            <div class="qf__inline">
+              <input
+                id={`${uid}-postcode`}
+                type="text"
+                name="postcode"
+                inputmode="text"
+                autocomplete="postal-code"
+                autocapitalize="characters"
+                enterkeyhint="next"
+                placeholder="e.g. M1 1AA"
+                maxlength="10"
+                required
+                aria-describedby={`${uid}-postcode-hint`}
+              />
+              <button type="button" class="btn btn-primary qf__go" data-next aria-label="Next step" title="Next">
+                <Icon name="arrow" strokeWidth={2.2} />
+              </button>
+            </div>
             <p class="qf__hint" id={`${uid}-postcode-hint`}>We use this to check we cover your area.</p>
             <p class="qf__error" data-error-for="postcode" role="alert" hidden>Please enter a valid UK postcode.</p>
           </div>
@@ -200,9 +212,6 @@ const types = [
         <div class="qf__nav">
           <button type="button" class="btn btn-outline qf__back" data-back hidden>
             <Icon name="arrow" strokeWidth={2} class="qf__back-icon" /> Back
-          </button>
-          <button type="button" class="btn btn-primary qf__next" data-next hidden>
-            Continue <Icon name="arrow" strokeWidth={2} />
           </button>
           <button type="submit" class="btn btn-primary btn-lg qf__submit" data-submit data-track="cta" data-cta="quote-submit" data-location={uid}>
             <span data-submit-label>Request your quote</span>
@@ -376,6 +385,10 @@ const types = [
     display: block;
     animation: qf-in 0.35s var(--ease);
   }
+  /* Step 1 has no buttons under it, so it needs no gap below the options */
+  :global(.js) .qf__form[data-current='1'] .qf__step {
+    margin-bottom: 0;
+  }
   @keyframes qf-in {
     from {
       opacity: 0;
@@ -507,6 +520,26 @@ const types = [
   .qf__field input[aria-invalid='true'] {
     border-color: #c8320f;
   }
+  /* Postcode box with its arrow button (only shown when the stepped form is running) */
+  .qf__inline {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .qf__inline input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .qf__go {
+    display: none;
+    flex: none;
+    width: 54px;
+    min-height: 54px;
+    padding: 0;
+  }
+  :global(.js) .qf__go {
+    display: inline-flex;
+  }
   .qf__hint {
     margin: 0.45rem 0 0;
     font-size: 0.8125rem;
@@ -540,11 +573,10 @@ const types = [
   .qf__nav [hidden] {
     display: none;
   }
-  .qf__back-icon {
+  /* The icon is a child component, so the rule has to be global to reach it (it never did before:
+     the Back arrow pointed right) */
+  .qf__nav :global(.qf__back-icon) {
     transform: rotate(180deg);
-  }
-  .qf__next {
-    margin-left: auto;
   }
   .qf__submit {
     flex: 1 1 auto;

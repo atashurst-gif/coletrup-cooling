@@ -1,10 +1,35 @@
 /**
  * Quote form behaviour: stepping, validation, enquiry ID, attribution,
  * submission (Netlify Forms / webhook) and confirmation.
+ *
+ * Moving between steps (there is no "Continue" button):
+ *  - Steps made of option cards (radios) move on as soon as an option is chosen: a click or
+ *    tap on a card, Space or Enter on the focused option, or activation by assistive tech.
+ *    Arrow keys only move between the options, so keyboard users can look before choosing.
+ *  - Typed steps (the postcode) move on with the arrow button beside the box, or Enter.
+ *
+ * NOTE: a click on a card reaches the hidden radio as a browser-made click whose `detail`
+ * is 0, exactly like a keyboard click — so never use `detail` to tell the two apart.
  */
 
 const UK_POSTCODE = /^(GIR ?0AA|[A-PR-UWYZ][A-HK-Y]?[0-9][0-9A-Z]? ?[0-9][ABD-HJLNP-UW-Z]{2})$/i;
 const UK_PHONE = /^(\+44\s?|0)(\d\s?){9,10}$/;
+
+/** How long the chosen card stays highlighted before the next step appears (ms). */
+const ADVANCE_DELAY = 200;
+/** After a step appears, option and arrow clicks are ignored for this long (ms) so the second
+ *  click of an accidental double-click cannot answer the next question as well. */
+const SETTLE = 350;
+
+/** Wording used in the notification email's subject line. */
+const LABELS: Record<string, string> = {
+  'air-conditioning': 'Air conditioning',
+  refrigeration: 'Refrigeration',
+  repair: 'Repair',
+  'servicing-maintenance': 'Servicing / maintenance',
+  residential: 'Residential',
+  commercial: 'Commercial',
+};
 
 function makeEnquiryId(prefix: string): string {
   const d = new Date();
@@ -19,7 +44,7 @@ function makeEnquiryId(prefix: string): string {
 function setupForm(form: HTMLFormElement) {
   const steps = Array.from(form.querySelectorAll<HTMLFieldSetElement>('[data-step]'));
   const back = form.querySelector<HTMLButtonElement>('[data-back]')!;
-  const next = form.querySelector<HTMLButtonElement>('[data-next]')!;
+  const nextButtons = Array.from(form.querySelectorAll<HTMLButtonElement>('[data-next]'));
   const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
   const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
   const progress = form.querySelector<HTMLElement>('[data-progress]')!;
@@ -35,7 +60,14 @@ function setupForm(form: HTMLFormElement) {
 
   let current = 0;
   let started = false;
+  let shownAt = -Infinity; // when the current step appeared
+  let advanceTimer = 0;
+  let arrowNav = false; // true while an arrow key is moving between options
   const enquiryId = makeEnquiryId(prefix);
+
+  // Options always start unselected in the stepped form: with no Continue button, a card that
+  // is already selected gives no obvious way forward. (Without JavaScript the page defaults stay.)
+  form.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach((r) => (r.checked = false));
   (form.querySelector('[data-field="enquiry_id"]') as HTMLInputElement).value = enquiryId;
 
   const setField = (name: string, value: string) => {
@@ -49,6 +81,12 @@ function setupForm(form: HTMLFormElement) {
     );
     setField('submitted_from', location.pathname);
     setField('submitted_at', new Date().toISOString());
+  };
+  /** Subject of the notification email, e.g. "Website enquiry - Repair, Commercial - CC-261005-K7M4Q". */
+  const subjectLine = () => {
+    const picked = (name: string) => form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value || '';
+    const what = [LABELS[picked('service')], LABELS[picked('customer_type')]].filter(Boolean).join(', ');
+    return `Website enquiry${what ? ` - ${what}` : ''} - ${enquiryId}`;
   };
 
   const showError = (name: string, show: boolean) => {
@@ -85,15 +123,27 @@ function setupForm(form: HTMLFormElement) {
 
   const render = () => {
     steps.forEach((s, i) => s.classList.toggle('is-active', i === current));
+    form.dataset.current = String(current + 1);
     back.hidden = current === 0;
-    const last = current === steps.length - 1;
-    next.hidden = last;
-    submit.classList.toggle('is-visible', last);
+    submit.classList.toggle('is-visible', current === steps.length - 1);
     bar.style.width = `${((current + 1) / steps.length) * 100}%`;
     progressText.textContent = `Step ${current + 1} of ${steps.length}`;
     progress.hidden = false;
     formError.hidden = true;
   };
+
+  /** Show a step and put the keyboard focus on its chosen (or first) field. */
+  const show = (idx: number) => {
+    window.clearTimeout(advanceTimer);
+    advanceTimer = 0;
+    current = idx;
+    shownAt = performance.now();
+    render();
+    const step = steps[current];
+    (step.querySelector<HTMLElement>('input:checked') ?? step.querySelector<HTMLElement>('input'))?.focus({ preventScroll: true });
+    step.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  };
+  const settled = () => performance.now() - shownAt >= SETTLE;
 
   const trackStart = () => {
     if (started) return;
@@ -104,29 +154,54 @@ function setupForm(form: HTMLFormElement) {
   form.addEventListener('focusin', trackStart, { once: true });
   form.addEventListener('change', trackStart, { once: true });
 
-  next.addEventListener('click', () => {
-    if (!validateStep(current)) return;
+  const goNext = () => {
+    window.clearTimeout(advanceTimer);
+    advanceTimer = 0;
+    if (current >= steps.length - 1 || !validateStep(current)) return;
     const step = steps[current];
     const checked = step.querySelector<HTMLInputElement>('input:checked');
     const text = step.querySelector<HTMLInputElement>('input:not([type=radio])');
     window.ccTrack?.('quote_form_step', { step: current + 1, value: checked?.value || (text?.name === 'postcode' ? 'postcode' : '') });
-    current = Math.min(current + 1, steps.length - 1);
-    render();
-    steps[current].querySelector<HTMLElement>('input')?.focus({ preventScroll: true });
-    steps[current].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  });
-  back.addEventListener('click', () => {
-    current = Math.max(current - 1, 0);
-    render();
-  });
-  // Auto-advance on radio steps for a faster feel (keyboard users still get Continue)
+    show(current + 1);
+  };
+  /** Move on shortly after an option is chosen, so the chosen card is seen to light up first. */
+  const queueAdvance = (from: number) => {
+    if (advanceTimer || from !== current) return;
+    advanceTimer = window.setTimeout(() => {
+      advanceTimer = 0;
+      if (from === current) goNext();
+    }, ADVANCE_DELAY);
+  };
+
+  // Typed steps: the arrow button beside the box
+  nextButtons.forEach((b) =>
+    b.addEventListener('click', () => {
+      if (settled()) goNext();
+    }),
+  );
+  back.addEventListener('click', () => show(Math.max(current - 1, 0)));
+
+  // Option steps: choosing an option moves straight on
   steps.forEach((s, i) => {
-    s.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach((r) =>
+    s.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach((r) => {
+      r.addEventListener('keydown', (e) => {
+        if (!e.key.startsWith('Arrow')) return;
+        arrowNav = true; // the browser now selects the neighbouring option and fires a click on it
+        window.setTimeout(() => (arrowNav = false), 60);
+      });
       r.addEventListener('click', (e) => {
-        if (i !== current || !(e as MouseEvent).detail) return;
-        setTimeout(() => next.click(), 180);
-      }),
-    );
+        if (arrowNav) {
+          arrowNav = false; // this click came from the arrow key: just a move between options
+          return;
+        }
+        if (i !== current) return;
+        if (!settled()) {
+          e.preventDefault(); // stray second click straight after the step appeared: leave it unanswered
+          return;
+        }
+        queueAdvance(i);
+      });
+    });
   });
   form.querySelectorAll<HTMLInputElement>('input').forEach((i) =>
     i.addEventListener('input', () => {
@@ -134,10 +209,19 @@ function setupForm(form: HTMLFormElement) {
     }),
   );
   form.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT' && current < steps.length - 1) {
-      e.preventDefault();
-      next.click();
+    const t = e.target as HTMLInputElement;
+    if (e.key !== 'Enter' || t.tagName !== 'INPUT') return;
+    if (e.repeat) {
+      e.preventDefault(); // a held-down Enter must not run through the steps or send the form
+      return;
     }
+    if (current >= steps.length - 1) return; // last step: Enter sends the form as usual
+    e.preventDefault();
+    if (t.type === 'radio') {
+      if (!settled()) return;
+      t.checked = true; // Enter chooses the focused option
+    }
+    goNext();
   });
 
   form.addEventListener('submit', async (e) => {
@@ -155,6 +239,7 @@ function setupForm(form: HTMLFormElement) {
       return;
     }
     fillAttribution();
+    setField('subject', subjectLine());
     submit.disabled = true;
     submitLabel.textContent = 'Sending…';
     formError.hidden = true;

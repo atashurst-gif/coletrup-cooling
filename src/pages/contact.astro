@@ -235,15 +235,3 @@ const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
     }
   }
 </style>
-
-<script>
-  // Preselect form options from ?service=…&type=… (used by CTAs across the site)
-  const params = new URLSearchParams(location.search);
-  const pick = (name: string, value: string | null) => {
-    if (!value) return;
-    const input = document.querySelector<HTMLInputElement>(`form[data-quote-form] input[name="${name}"][value="${CSS.escape(value)}"]`);
-    if (input) input.checked = true;
-  };
-  pick('service', params.get('service'));
-  pick('customer_type', params.get('type'));
-</script>

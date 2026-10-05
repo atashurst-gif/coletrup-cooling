@@ -1,4 +1,5 @@
-// Functional checks: form journey, tracking events, mobile menu, dropdowns, prefill, console errors
+// Functional checks: form journey, tracking events, mobile menu, dropdowns, console errors
+// (the quote form has its own fuller test: tools/form-flow.mjs)
 import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
@@ -25,16 +26,17 @@ let posted=null; await page.route('**/*', async (route)=>{ const req=route.reque
 await page.click('#cookie-banner [data-consent="accept"]');
 const step1 = await page.isVisible('#quote-form [data-step="1"]'); const step2hidden = !(await page.isVisible('#quote-form [data-step="2"]'));
 ok('Form shows only step 1 initially', step1 && step2hidden);
-await page.click('#quote-form [data-next]');
-ok('Validation blocks empty step 1', await page.isVisible('#quote-form [data-error-for="service"]'));
-await page.click('#quote-form input[name="service"][value="air-conditioning"]');
-await page.waitForTimeout(400);
-ok('Auto-advance to step 2 after choosing service', await page.isVisible('#quote-form [data-step="2"]'));
-await page.click('#quote-form input[name="customer_type"][value="residential"]'); await page.waitForTimeout(400);
-ok('Step 3 (postcode) visible', await page.isVisible('#quote-postcode'));
-await page.fill('#quote-postcode','NOTAPOSTCODE'); await page.click('#quote-form [data-next]');
+ok('No Continue button anywhere in the form', await page.evaluate(()=>![...document.querySelectorAll('#quote-form button')].some(b=>/continue/i.test(b.textContent))));
+ok('Options start unselected', await page.evaluate(()=>!document.querySelector('#quote-form input[type="radio"]:checked')));
+// click the CARD, as a visitor does (clicking the hidden radio itself behaves differently and hid a bug before)
+await page.click('#quote-form [data-step="1"] .qf__opt-card >> nth=0');
+await page.waitForTimeout(600);
+ok('Choosing a service moves straight to step 2', await page.isVisible('#quote-form [data-step="2"]') && await page.isChecked('#quote-form input[name="service"][value="air-conditioning"]'));
+await page.click('#quote-form [data-step="2"] .qf__opt-card >> nth=0'); await page.waitForTimeout(600);
+ok('Choosing home/business moves straight to step 3 (postcode)', await page.isVisible('#quote-postcode') && await page.isChecked('#quote-form input[name="customer_type"][value="residential"]'));
+await page.fill('#quote-postcode','NOTAPOSTCODE'); await page.click('#quote-form [data-step="3"] [data-next]');
 ok('Invalid postcode rejected', await page.isVisible('#quote-form [data-error-for="postcode"]'));
-await page.fill('#quote-postcode','OL1 3AB'); await page.click('#quote-form [data-next]');
+await page.fill('#quote-postcode','OL1 3AB'); await page.click('#quote-form [data-step="3"] [data-next]');
 ok('Step 4 (details) visible & submit button shown', await page.isVisible('#quote-name') && await page.isVisible('#quote-form [data-submit]'));
 await page.click('#quote-form [data-submit]');
 ok('Empty details rejected', await page.isVisible('#quote-form [data-error-for="name"]'));
@@ -43,7 +45,7 @@ await page.click('#quote-form [data-submit]'); await page.waitForTimeout(600);
 const conf = await page.isVisible('#quote [data-confirmation]'); const ref = await page.textContent('#quote [data-ref]');
 ok('Confirmation shown with enquiry reference', conf && /^CC-\d{6}-[A-Z2-9]{5}$/.test(ref||''), ref||'');
 const body = new URLSearchParams(posted?.body||'');
-ok('POST contains form-name, enquiry_id, service, customer_type, postcode, name, phone, email, landing_page', ['form-name','enquiry_id','service','customer_type','postcode','name','phone','email','landing_page'].every(k=>body.has(k)) && body.get('enquiry_id')===ref, posted?.url||'no post');
+ok('POST contains form-name, enquiry_id, subject, service, customer_type, postcode, name, phone, email, landing_page', ['form-name','enquiry_id','subject','service','customer_type','postcode','name','phone','email','landing_page'].every(k=>body.has(k)) && body.get('enquiry_id')===ref && body.get('subject').endsWith(ref), posted?.url||'no post');
 const dl = await page.evaluate(()=>window.dataLayer.map(e=>e.event).filter(Boolean));
 ok('dataLayer has quote_form_start, quote_form_step, quote_form_complete', ['quote_form_start','quote_form_step','quote_form_complete'].every(e=>dl.includes(e)), dl.join(','));
 const waConf = await page.getAttribute('#quote [data-wa-link]','href');
@@ -54,7 +56,7 @@ await page.goto('http://localhost:4321/?utm_source=google&utm_medium=cpc&utm_cam
 await page.goto('http://localhost:4321/contact/?service=refrigeration&type=commercial', {waitUntil:'networkidle'});
 const attr = await page.evaluate(()=>window.ccAttribution());
 ok('UTM persisted across pages after consent', attr.utm_source==='google' && attr.utm_campaign==='summer' && attr.landing_page.startsWith('/?utm_source'), JSON.stringify(attr));
-ok('Contact prefill from ?service=&type=', await page.isChecked('#quote-form input[name="service"][value="refrigeration"]') && await page.isChecked('#quote-form input[name="customer_type"][value="commercial"]'));
+ok('Options start unselected even with ?service=&type= in the address', await page.evaluate(()=>!document.querySelector('#quote-form input[type="radio"]:checked')));
 const cta = await page.evaluate(async()=>{ const a=document.querySelector('[data-cta="whatsapp"]'); a.addEventListener('click',e=>e.preventDefault(),{once:true}); a.click(); return window.dataLayer.filter(e=>e.event==='whatsapp_click').length; });
 ok('WhatsApp click tracked', cta>=1);
 
