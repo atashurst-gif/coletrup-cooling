@@ -1,4 +1,4 @@
-// Header check: node tools/snap-header.mjs  → header at several widths + the open mobile menu
+// Header check: node tools/snap-header.mjs [path]  → the header at several widths (top of page)
 import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
@@ -10,21 +10,13 @@ const srv = createServer((req,res)=>{ let p=decodeURIComponent(req.url.split('?'
 await new Promise(r=>srv.listen(0,r));
 const base = `http://localhost:${srv.address().port}`;
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell' });
-for (const w of [1440, 1280, 1100, 1024]) {
-  const page = await browser.newPage({ viewport: { width: w, height: 300 } });
-  await page.addInitScript(() => { try { sessionStorage.setItem('cc-promo-seen', '1'); } catch {} });
-  await page.goto(base + '/about/', { waitUntil: 'networkidle' });
-  const over = await page.evaluate(() => { const h = document.querySelector('.site-header__inner'); return { scrollW: document.documentElement.scrollWidth, innerW: innerWidth, headerOverflow: h ? h.scrollWidth - h.clientWidth : null, items: [...document.querySelectorAll('.site-header nav > ul > li > a, .site-header nav > ul > li > button, .site-header nav a.nav__link')].map(a => a.textContent.trim().replace(/\s+/g,' ')).filter(Boolean).slice(0, 12) }; });
-  console.log(w, JSON.stringify(over));
-  await page.screenshot({ path: `${out}hdr-${w}.png`, clip: { x: 0, y: 0, width: w, height: 130 } });
+for (const w of [320, 390, 800, 1080, 1280, 1440]) {
+  const page = await browser.newPage({ viewport: { width: w, height: 900 }, deviceScaleFactor: w < 600 ? 2 : 1 });
+  await page.goto(base + (process.argv[2] || '/'), { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.querySelectorAll('dialog[open]').forEach((d) => d.close()));
+  await page.waitForTimeout(200);
+  await page.screenshot({ path: `${out}hdr-${w}.png`, clip: { x: 0, y: 0, width: w, height: w < 640 ? 100 : 140 } });
   await page.close();
 }
-const m = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
-await m.goto(base + '/', { waitUntil: 'networkidle' });
-await m.evaluate(() => document.querySelectorAll('dialog[open]').forEach(d => d.close()));
-const btn = m.locator('[data-menu-open], .site-header__menu, button[aria-controls]').first();
-await btn.click().catch(e => console.log('menu click failed', e.message));
-await m.waitForTimeout(500);
-await m.screenshot({ path: `${out}menu-mob.png` });
-console.log('menu items', JSON.stringify(await m.evaluate(() => [...document.querySelectorAll('.mm a, .mm button')].map(a => a.textContent.trim().replace(/\s+/g,' ')).filter(Boolean).slice(0, 14))));
 await browser.close(); srv.close();
+console.log('header shots saved');

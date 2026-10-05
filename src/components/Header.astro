@@ -8,6 +8,10 @@ import Button from './Button.astro';
 const current = Astro.url.pathname.replace(/\/?$/, '/');
 const isActive = (item: (typeof mainNav)[number]) =>
   item.href === current || item.children?.some((c) => c.href === current);
+// Social links shown at the top right on every screen size (only the ones set in site.config)
+const socialLinks = (['facebook', 'instagram'] as const)
+  .filter((n) => site.socials[n])
+  .map((n) => ({ name: n, url: site.socials[n], label: `${site.name} on ${n[0].toUpperCase()}${n.slice(1)}` }));
 ---
 
 <header class="site-header" id="site-header">
@@ -68,6 +72,19 @@ const isActive = (item: (typeof mainNav)[number]) =>
     </nav>
 
     <div class="site-header__actions">
+      {
+        socialLinks.length > 0 && (
+          <ul class="site-header__social" aria-label="Social media">
+            {socialLinks.map((sl) => (
+              <li>
+                <a href={sl.url} target="_blank" rel="noopener" data-net={sl.name} aria-label={sl.label}>
+                  <Icon name={sl.name} size={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
       <a href={telHref} class="site-header__phone" aria-label={hasPhone ? `Call ${site.contact.phoneDisplay}` : 'Call us'} data-track="cta" data-cta="phone" data-location="header">
         <Icon name="phone" size={18} strokeWidth={2} />
         <span>{hasPhone ? site.contact.phoneDisplay : 'Call us'}</span>
@@ -163,6 +180,54 @@ const isActive = (item: (typeof mainNav)[number]) =>
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+  /* Social icons, in each network's own colours */
+  .site-header__social {
+    --soc: 30px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin: 0 0.1rem 0 0;
+    padding: 0;
+  }
+  .site-header__social a {
+    display: grid;
+    place-items: center;
+    width: var(--soc);
+    height: var(--soc);
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    transition:
+      transform 0.2s var(--ease),
+      box-shadow 0.2s var(--ease);
+  }
+  .site-header__social a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px -10px rgba(7, 45, 82, 0.7);
+  }
+  .site-header__social a[data-net='facebook'] {
+    background: #1877f2;
+  }
+  .site-header__social a[data-net='instagram'] {
+    border-radius: 32%;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  }
+  @media (min-width: 640px) {
+    .site-header__social {
+      --soc: 32px;
+    }
+  }
+  /* Narrowest desktop row: slightly smaller icons and gaps so everything stays on one line */
+  @media (min-width: 1080px) and (max-width: 1279px) {
+    .site-header__inner {
+      gap: 0.6rem;
+    }
+    .site-header__social {
+      --soc: 28px;
+      gap: 0.3rem;
+    }
   }
   .site-header__phone {
     display: inline-flex;
