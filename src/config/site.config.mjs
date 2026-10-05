@@ -112,13 +112,15 @@ const siteConfig = {
 
   /**
    * GENUINE customer reviews only. Never write or paraphrase reviews.
+   * (5 Oct 2026: the engineer's first name was taken out of the dance studio review at the
+   * owner's request — two words deleted, nothing added.)
    * { quote, name, location?, service?, source?, sourceUrl?, date? }
    * With no reviews the site shows [GENUINE CUSTOMER REVIEW TO BE ADDED].
    */
   reviews: [
     {
       quote:
-        'We recently had Coletrup Cooling out to service the air conditioning systems at our dance studio. Brad was professional, friendly and did a really thorough job, including a deep clean of the units.\n\nEverything was left clean and tidy and the air conditioning is working great. Really pleased with the service and would definitely recommend Coletrup Cooling. We’ll be using them again for our future servicing and maintenance.',
+        'We recently had Coletrup Cooling out to service the air conditioning systems at our dance studio. Professional, friendly and did a really thorough job, including a deep clean of the units.\n\nEverything was left clean and tidy and the air conditioning is working great. Really pleased with the service and would definitely recommend Coletrup Cooling. We’ll be using them again for our future servicing and maintenance.',
       name: 'Dance studio',
       service: 'Air conditioning servicing',
       stars: 5,
