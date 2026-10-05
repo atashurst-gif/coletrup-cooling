@@ -41,7 +41,7 @@ import displayFridges from '../assets/images/commercial-display-fridges.jpg';
 import supermarketChillers from '../assets/images/supermarket-chilled-and-frozen-food-display-cabinets.jpg';
 import coldRoom from '../assets/images/cold-room-refrigeration.jpg';
 import coldRoomEngineer from '../assets/images/refrigeration-engineer-repairing-cold-room-evaporator.jpg';
-import fridgeGaugesCoat from '../assets/images/refrigeration-engineer-testing-display-fridge-gauges.jpg';
+import fridgeGaugesCoat from '../assets/images/refrigeration-gauges-connected-commercial-cabinet.jpg';
 // ---- Brand & planning
 import van from '../assets/images/coletrup-cooling-service-van.jpg';
 import maintenanceChecklist from '../assets/images/planned-maintenance-service-contract-checklist.jpg';
@@ -252,8 +252,8 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   fridgeGaugesCoat: {
     src: fridgeGaugesCoat,
-    alt: 'Coletrup Cooling engineer testing a glass-door display fridge with refrigerant gauges in a shop',
-    title: 'Commercial refrigeration servicing',
+    alt: 'Refrigeration gauges connected to the pipework of a commercial refrigeration cabinet',
+    title: 'Commercial refrigeration fault finding and repair',
   },
   // ---- Brand & planning
   van: {
