@@ -63,17 +63,29 @@ const { id = 'gallery', tone = 'white', eyebrow = 'Our work', title = 'Gallery',
     const track = vp.querySelector<HTMLElement>('.gal__track');
     if (!track || track.children.length < 2) return;
 
-    // Copy the strip once so the end runs straight back into the start.
-    [...track.children].forEach((li) => {
-      const copy = li.cloneNode(true) as HTMLElement;
-      copy.setAttribute('aria-hidden', 'true');
-      copy.querySelectorAll('img').forEach((im) => {
-        im.alt = '';
-        im.loading = 'lazy';
+    // Repeat the set so the end runs straight back into the start. A short set is
+    // repeated as often as it takes to fill the screen, so the strip never runs out.
+    const originals = [...track.children];
+    let sets = 1;
+    const addSet = () => {
+      originals.forEach((li) => {
+        const copy = li.cloneNode(true) as HTMLElement;
+        copy.setAttribute('aria-hidden', 'true');
+        copy.querySelectorAll('img').forEach((im) => (im.alt = ''));
+        track.appendChild(copy);
       });
-      track.appendChild(copy);
-    });
+      sets++;
+    };
     vp.classList.add('is-looping');
+    const setWidth = () => track.scrollWidth / sets;
+    const fill = () => {
+      const w = setWidth();
+      if (!w) return;
+      const need = Math.ceil(vp.clientWidth / w) + 1;
+      while (sets < need && sets < 16) addSet();
+    };
+    fill();
+    window.addEventListener('resize', fill);
 
     let pos = vp.scrollLeft;
     let last = 0;
@@ -98,7 +110,6 @@ const { id = 'gallery', tone = 'white', eyebrow = 'Our work', title = 'Gallery',
     vp.addEventListener('touchstart', hold, { passive: true });
     vp.addEventListener('touchend', () => release(2200), { passive: true });
     vp.addEventListener('touchcancel', () => release(2200), { passive: true });
-    vp.addEventListener('wheel', () => { hold(); release(1500); }, { passive: true });
     vp.addEventListener('focusin', hold);
     vp.addEventListener('focusout', () => release());
 
@@ -107,16 +118,16 @@ const { id = 'gallery', tone = 'white', eyebrow = 'Our work', title = 'Gallery',
     const tick = (now: number) => {
       const dt = last ? Math.min(64, now - last) : 0;
       last = now;
-      const half = track.scrollWidth / 2;
-      if (half > vp.clientWidth * 0.5) {
+      const w = setWidth();
+      if (w > 0) {
         // keep hand scrolling inside the loop too
-        if (vp.scrollLeft >= half) {
-          vp.scrollLeft -= half;
+        if (vp.scrollLeft >= w) {
+          vp.scrollLeft -= w;
           pos = vp.scrollLeft;
         }
         if (!held && onScreen && !reduce.matches && !document.hidden) {
           pos += (SPEED * dt) / 1000;
-          if (pos >= half) pos -= half;
+          if (pos >= w) pos -= w;
           vp.scrollLeft = pos;
         }
       }

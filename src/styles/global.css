@@ -259,13 +259,14 @@ button {
 }
 /* Even spacing: when two neighbouring sections share a background there is no colour
    change to separate them, so the second one drops its top padding (one gap, not two). */
-.tone-cream + .tone-cream:not(.mcta),
-.tone-white + .tone-white:not(.mcta),
-.tone-sand + .tone-sand:not(.mcta),
-.tone-navy + .tone-navy:not(.mcta) {
+.tone-cream:not(.mcta) + .tone-cream:not(.mcta),
+.tone-white:not(.mcta) + .tone-white:not(.mcta),
+.tone-sand:not(.mcta) + .tone-sand:not(.mcta),
+.tone-navy:not(.mcta) + .tone-navy:not(.mcta) {
   padding-top: 0;
 }
-/* …but a section that follows the mid-page call to action keeps its own top padding */
+/* …but a section that follows the mid-page call to action keeps its own top padding
+   (the band has none of its own), so it never sits tight under the band */
 .mcta + .section {
   padding-top: var(--section-y);
 }

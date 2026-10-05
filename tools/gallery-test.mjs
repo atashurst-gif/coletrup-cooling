@@ -1,0 +1,26 @@
+// Checks the scrolling gallery moves, stops on hover and resumes: node tools/gallery-test.mjs <path> [width]
+import { chromium } from 'playwright';
+import { createServer } from 'node:http';
+import { readFileSync, existsSync, statSync } from 'node:fs';
+import { join, extname } from 'node:path';
+const dist = new URL('../dist/', import.meta.url).pathname;
+const types = { '.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.avif':'image/avif', '.webp':'image/webp', '.jpg':'image/jpeg', '.png':'image/png', '.svg':'image/svg+xml', '.woff2':'font/woff2' };
+const srv = createServer((req,res)=>{ let p=decodeURIComponent(req.url.split('?')[0]); let f=join(dist,p); if(existsSync(f)&&statSync(f).isDirectory()) f=join(f,'index.html'); if(!existsSync(f)){res.writeHead(404);res.end('nf');return;} res.writeHead(200,{'Content-Type':types[extname(f)]||'application/octet-stream'}); res.end(readFileSync(f)); });
+await new Promise(r=>srv.listen(0,r));
+const [,, path='/', width='1440'] = process.argv;
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell' });
+const page = await browser.newPage({ viewport:{ width:+width, height: 900 } });
+page.on('pageerror', e=>console.log('PAGEERROR', e.message));
+await page.goto(`http://localhost:${srv.address().port}${path}`, { waitUntil:'networkidle' });
+const vp = page.locator('[data-gallery]').first();
+await vp.scrollIntoViewIfNeeded();
+await page.mouse.move(5, 5);
+const read = () => vp.evaluate(e => ({ x: Math.round(e.scrollLeft), items: e.querySelectorAll('.gal__item').length, track: e.querySelector('.gal__track').scrollWidth, vw: e.clientWidth }));
+await page.waitForTimeout(600);
+const a = await read(); await page.waitForTimeout(2000); const b = await read();
+const box = await vp.boundingBox();
+await page.mouse.move(box.x + box.width/2, box.y + box.height/2);
+await page.waitForTimeout(300); const c = await read(); await page.waitForTimeout(1500); const d = await read();
+await page.mouse.move(5, 5); await page.waitForTimeout(1500); const e = await read();
+console.log(path, 'width', width, JSON.stringify({ a, moved2s: b.x - a.x, hoverDrift: d.x - c.x, resumed: e.x - d.x }));
+await browser.close(); srv.close();

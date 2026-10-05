@@ -2,6 +2,8 @@
 /**
  * "On the job" gallery — real photos from site. A swipeable slide on phones,
  * a neat row on larger screens. Each photo carries a short caption.
+ * With a single photo it becomes a feature: heading beside one large photo shown whole
+ * (its own shape, nothing cropped).
  */
 import { Picture } from 'astro:assets';
 import { images, type ImageKey } from '../lib/images';
@@ -15,9 +17,27 @@ export interface Props {
   items: { image: ImageKey; caption?: string }[];
 }
 const { id, tone = 'cream', eyebrow = 'On the job', title = 'Real work, carried out properly.', intro, items } = Astro.props;
+const solo = items.length === 1 ? items[0] : null;
+const soloImg = solo ? images[solo.image] : null;
 ---
 
 <section class:list={['section', 'jobs', `tone-${tone}`]} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+  {solo && soloImg && (
+    <div class="container jobs__solo">
+      <div class="jobs__solo-copy" data-reveal>
+        <p class="eyebrow">{eyebrow}</p>
+        <h2 id={id ? `${id}-title` : undefined}>{title}</h2>
+        {intro && <p class="jobs__solo-intro">{intro}</p>}
+      </div>
+      <figure class="jobs__solo-fig" data-reveal style="--reveal-delay:120ms">
+        <div class="frame jobs__solo-frame" style={`aspect-ratio:${soloImg.src.width} / ${soloImg.src.height}`}>
+          <Picture src={soloImg.src} alt={soloImg.alt} widths={[480, 800, 1200]} sizes="(min-width: 900px) 520px, 92vw" formats={['avif', 'webp']} fallbackFormat="webp" loading="lazy" decoding="async" quality={84} />
+        </div>
+        <figcaption class="jobs__cap">{solo.caption ?? soloImg.title}</figcaption>
+      </figure>
+    </div>
+  )}
+  {!solo && (
   <div class="container">
     <div class:list={['section-head', intro ? 'section-head--split' : '']}>
       <div>
@@ -44,6 +64,7 @@ const { id, tone = 'cream', eyebrow = 'On the job', title = 'Real work, carried 
       }
     </ul>
   </div>
+  )}
 </section>
 
 <style>
@@ -71,6 +92,44 @@ const { id, tone = 'cream', eyebrow = 'On the job', title = 'Real work, carried 
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  /* One photo: heading beside a large, uncropped photo */
+  .jobs__solo {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .jobs__solo-copy h2 {
+    font-size: var(--fs-h2);
+  }
+  .jobs__solo-intro {
+    margin-top: 1.1rem;
+    max-width: 46ch;
+    font-size: var(--fs-lead);
+    color: var(--muted);
+  }
+  .jobs__solo-fig {
+    margin: 0;
+    width: 100%;
+    max-width: 520px;
+    justify-self: center;
+  }
+  .jobs__solo-frame {
+    box-shadow: var(--shadow-md);
+  }
+  .jobs__solo-frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (min-width: 900px) {
+    .jobs__solo {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .jobs__solo-fig {
+      justify-self: end;
+    }
   }
   .jobs__cap {
     margin-top: 0.85rem;

@@ -464,6 +464,13 @@ export const services = [
         ],
         links: [{ label: 'Planned service & maintenance contracts', href: '/planned-maintenance-service-contracts/', track: 'maintenance' }],
       },
+      {
+        type: 'scrollGallery',
+        tone: 'white',
+        eyebrow: 'Our work',
+        title: 'Gallery',
+        items: ['galOfficeWallUnit', 'galOfficeCassette', 'galOfficeDesk'],
+      },
     ],
     faq: { title: 'Commercial air conditioning FAQs', intro: 'Answers to some of the most common questions about our commercial air conditioning services.' },
     faqs: [
@@ -530,6 +537,14 @@ export const services = [
           { icon: 'alert', title: 'Error codes', text: 'Fault codes, warning lights or error messages showing on the controller.' },
           { icon: 'bolt', title: 'Electrical faults', text: 'Systems tripping, cutting out, failing to start or losing power.' },
         ],
+      },
+      {
+        type: 'gallery',
+        tone: 'cream',
+        eyebrow: 'On the job',
+        title: 'Real work, carried out properly.',
+        intro: 'A ceiling cassette unit being deep cleaned during a service visit, with a cover fitted to catch the water.',
+        items: [{ image: 'jobCassetteDeepClean', caption: 'Ceiling cassette deep clean' }],
       },
       {
         type: 'split',
@@ -611,12 +626,17 @@ export const services = [
         ],
       },
       {
-        type: 'gallery',
+        type: 'beforeAfter',
         tone: 'cream',
-        eyebrow: 'On the job',
+        eyebrow: 'Before & after',
         title: 'What a service uncovers.',
         intro: 'Blocked filters and dirty outdoor units reduce performance. This is what we find, and clean, during servicing.',
-        items: [{ image: 'jobDirtyFilters' }, { image: 'jobOutdoorClean' }],
+        items: [
+          { before: 'baOutdoorBefore', after: 'baOutdoorAfter', caption: 'Outdoor unit, before and after cleaning' },
+          { before: 'baTwinFanBefore', after: 'baTwinFanAfter', caption: 'Twin-fan outdoor unit, before and after cleaning' },
+          { before: 'baFilterBefore', after: 'baFilterAfter', caption: 'Filters, before and after cleaning' },
+          { image: 'baTempCheck', position: '50% 16%', caption: 'Temperature check at a ceiling cassette' },
+        ],
       },
       {
         type: 'split',
@@ -819,7 +839,18 @@ export const services = [
         ],
       },
       {
+        // Same "Out on site" section as the Refrigeration page (owner request, 5 Oct) — these three
+        // photos are the one allowed exception to the one-page-per-photo rule (see tools/image-audit.mjs)
+        type: 'gallery',
+        tone: 'cream',
+        eyebrow: 'On the job',
+        title: 'Out on site.',
+        intro: 'Photos from recent refrigeration work on display cabinets and chilled equipment.',
+        items: [{ image: 'jobCabinetGauges' }, { image: 'jobCabinetCompressor' }, { image: 'jobShopFloorTools' }],
+      },
+      {
         type: 'split',
+        tone: 'white',
         icon: 'display',
         imageSide: 'right',
         eyebrow: 'More refrigeration support',

@@ -69,6 +69,19 @@ import galBlackCupboards from '../assets/images/black-wall-mounted-air-condition
 import galUpstairsRoom from '../assets/images/wall-mounted-air-conditioning-unit-upstairs-room.jpg';
 import galOutdoorBetween from '../assets/images/outdoor-air-conditioning-unit-wall-brackets-between-houses.jpg';
 import repairOutdoorOpen from '../assets/images/outdoor-air-conditioning-unit-opened-for-repair-clamp-meter.jpg';
+// ---- Servicing: before and after (supplied 5 Oct)
+import baOutdoorBefore from '../assets/images/outdoor-air-conditioning-unit-before-cleaning.jpg';
+import baOutdoorAfter from '../assets/images/outdoor-air-conditioning-unit-after-cleaning.jpg';
+import baTwinFanBefore from '../assets/images/twin-fan-outdoor-air-conditioning-unit-before-cleaning.jpg';
+import baTwinFanAfter from '../assets/images/twin-fan-outdoor-air-conditioning-unit-after-cleaning.jpg';
+import baFilterBefore from '../assets/images/air-conditioning-filter-before-cleaning.jpg';
+import baFilterAfter from '../assets/images/air-conditioning-filter-after-cleaning.jpg';
+import baTempCheck from '../assets/images/infrared-thermometer-temperature-check-ceiling-cassette.jpg';
+import jobCassetteDeepClean from '../assets/images/ceiling-cassette-air-conditioning-deep-clean-in-progress.jpg';
+// ---- Commercial: real installs (gallery photos supplied 5 Oct)
+import galOfficeWallUnit from '../assets/images/office-wall-mounted-air-conditioning-unit-suspended-ceiling.jpg';
+import galOfficeCassette from '../assets/images/office-ceiling-cassette-air-conditioning-unit.jpg';
+import galOfficeDesk from '../assets/images/office-wall-mounted-air-conditioning-unit-above-desk.jpg';
 import airflow from '../assets/images/coletrup-airflow-graphic.jpg';
 import graphicWaves from '../assets/images/coletrup-airflow-graphic-blue-orange-waves.jpg';
 import graphicDeepWave from '../assets/images/coletrup-airflow-graphic-deep-blue-wave.jpg';
@@ -128,6 +141,17 @@ export type ImageKey =
   | 'galUpstairsRoom'
   | 'galOutdoorBetween'
   | 'repairOutdoorOpen'
+  | 'baOutdoorBefore'
+  | 'baOutdoorAfter'
+  | 'baTwinFanBefore'
+  | 'baTwinFanAfter'
+  | 'baFilterBefore'
+  | 'baFilterAfter'
+  | 'baTempCheck'
+  | 'jobCassetteDeepClean'
+  | 'galOfficeWallUnit'
+  | 'galOfficeCassette'
+  | 'galOfficeDesk'
   | 'airflow'
   | 'graphicWaves'
   | 'graphicDeepWave'
@@ -363,6 +387,63 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
     src: repairOutdoorOpen,
     alt: 'Outdoor air conditioning unit with its casing removed for repair, with a clamp meter and hand tools on the unit',
     title: 'Air conditioning repair and fault finding',
+  },
+  // ---- Servicing: before and after
+  baOutdoorBefore: {
+    src: baOutdoorBefore,
+    alt: 'Wall-mounted outdoor air conditioning unit marked with dirt and grime before cleaning',
+    title: 'Outdoor unit before cleaning',
+  },
+  baOutdoorAfter: {
+    src: baOutdoorAfter,
+    alt: 'The same wall-mounted outdoor air conditioning unit after cleaning',
+    title: 'Outdoor unit after cleaning',
+  },
+  baTwinFanBefore: {
+    src: baTwinFanBefore,
+    alt: 'Twin-fan outdoor air conditioning unit with dirt and green staining before cleaning',
+    title: 'Twin-fan outdoor unit before cleaning',
+  },
+  baTwinFanAfter: {
+    src: baTwinFanAfter,
+    alt: 'Twin-fan outdoor air conditioning unit after cleaning',
+    title: 'Twin-fan outdoor unit after cleaning',
+  },
+  baFilterBefore: {
+    src: baFilterBefore,
+    alt: 'Air conditioning filter clogged with dust before cleaning',
+    title: 'Filter before cleaning',
+  },
+  baFilterAfter: {
+    src: baFilterAfter,
+    alt: 'Air conditioning filter after cleaning',
+    title: 'Filter after cleaning',
+  },
+  baTempCheck: {
+    src: baTempCheck,
+    alt: 'Infrared thermometer held up to a ceiling cassette air conditioning unit, showing a temperature reading',
+    title: 'Temperature check at a ceiling cassette',
+  },
+  jobCassetteDeepClean: {
+    src: jobCassetteDeepClean,
+    alt: 'Ceiling cassette air conditioning unit being deep cleaned, with a cleaning cover fitted and draining into a bucket',
+    title: 'Ceiling cassette deep clean',
+  },
+  // ---- Commercial gallery: real installs
+  galOfficeWallUnit: {
+    src: galOfficeWallUnit,
+    alt: 'Wall-mounted air conditioning unit fitted below a suspended ceiling in an office',
+    title: 'Office wall-mounted unit',
+  },
+  galOfficeCassette: {
+    src: galOfficeCassette,
+    alt: 'Ceiling cassette air conditioning unit set into a suspended office ceiling',
+    title: 'Office ceiling cassette',
+  },
+  galOfficeDesk: {
+    src: galOfficeDesk,
+    alt: 'Wall-mounted air conditioning unit on an office wall above a desk and chair',
+    title: 'Office wall-mounted unit above a desk',
   },
   airflow: { src: airflow, alt: '' },
   graphicWaves: { src: graphicWaves, alt: '' },

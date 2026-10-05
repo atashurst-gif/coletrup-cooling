@@ -1,7 +1,7 @@
 ---
 /**
  * Renders a service page's `sections[]` from src/data/services.mjs.
- * Types: intro | features | links | split | steps | duo | callout | checklist
+ * Types: intro | features | links | split | gallery | scrollGallery | beforeAfter | steps | duo | callout | checklist
  */
 import Icon from './Icon.astro';
 import FeatureSection from './FeatureSection.astro';
@@ -9,6 +9,8 @@ import ServiceCards from './ServiceCards.astro';
 import ImageTextSection from './ImageTextSection.astro';
 import ProcessSteps from './ProcessSteps.astro';
 import JobGallery from './JobGallery.astro';
+import BeforeAfterGallery from './BeforeAfterGallery.astro';
+import ScrollGallery from './ScrollGallery.astro';
 import MidCTA from './MidCTA.astro';
 import { Picture } from 'astro:assets';
 import { images } from '../lib/images';
@@ -88,6 +90,10 @@ const midAfter =
         );
       case 'gallery':
         return <JobGallery id={id} tone={s.tone ?? 'cream'} eyebrow={s.eyebrow} title={s.title} intro={s.intro} items={s.items} />;
+      case 'scrollGallery':
+        return <ScrollGallery id={id} tone={toneOf(s)} eyebrow={s.eyebrow} title={s.title} items={s.items} />;
+      case 'beforeAfter':
+        return <BeforeAfterGallery id={id} tone={s.tone ?? 'cream'} eyebrow={s.eyebrow} title={s.title} intro={s.intro} items={s.items} />;
       case 'steps':
         return <ProcessSteps id={id} tone={s.tone ?? 'cream'} eyebrow={s.eyebrow} title={s.title} steps={s.items} />;
       case 'duo':

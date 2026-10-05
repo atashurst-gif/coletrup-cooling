@@ -22,6 +22,15 @@ const pages = [];
 })(dist);
 
 const isGraphic = (name) => /^coletrup-airflow-graphic/.test(name);
+// Owner-approved exceptions: photos allowed on more than one page, and only on the pages listed
+// (still once per page). 5 Oct: the "Out on site" section is shown on both refrigeration pages.
+const OUT_ON_SITE = ['/refrigeration-repairs-maintenance/', '/commercial-chiller-freezer-repairs/'];
+const SHARED = {
+  'refrigerant-gauges-on-display-cabinet-refrigeration-system': OUT_ON_SITE,
+  'compressor-and-pipework-inside-refrigerated-cabinet': OUT_ON_SITE,
+  'refrigeration-engineer-tools-and-gauges-on-shop-floor': OUT_ON_SITE,
+};
+const sharedOk = (name, routes) => Boolean(SHARED[name]) && [...routes].every((r) => SHARED[name].includes(r));
 const usage = new Map(); // photo → Set(routes)
 let problems = 0;
 
@@ -43,7 +52,9 @@ for (const p of pages.sort()) {
   console.log('     ' + photos.join(', '));
 }
 
-const cross = [...usage.entries()].filter(([, routes]) => routes.size > 1);
+const cross = [...usage.entries()].filter(([n, routes]) => routes.size > 1 && !sharedOk(n, routes));
+const allowed = [...usage.entries()].filter(([n, routes]) => routes.size > 1 && sharedOk(n, routes));
+if (allowed.length) console.log(`\nℹ ${allowed.length} photo(s) shared across pages by owner request: ${allowed.map(([n]) => n).join(', ')}`);
 if (cross.length) {
   problems += cross.length;
   console.log('\n✘ Photos used on more than one page:');
@@ -54,4 +65,4 @@ if (problems) {
   console.error(`\n${problems} problem(s) — every photo must appear on exactly one page.`);
   process.exit(1);
 }
-console.log('✔ no duplicates: every photo appears on exactly one page');
+console.log(allowed.length ? '✔ no duplicates apart from the owner-approved shared photos' : '✔ no duplicates: every photo appears on exactly one page');
