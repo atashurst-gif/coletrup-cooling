@@ -11,7 +11,7 @@
  */
 // ---- Homes (no people)
 import livingRoom from '../assets/images/residential-air-conditioning-living-room.jpg';
-import livingRoomBifold from '../assets/images/living-room-bifold-doors-air-conditioning.jpg';
+import livingRoomBifold from '../assets/images/living-room-corner-sofa-wall-mounted-air-conditioning.jpg';
 import bedroom from '../assets/images/bedroom-wall-mounted-air-conditioning.jpg';
 import homeOffice from '../assets/images/home-office-wall-mounted-air-conditioning.jpg';
 import gardenRoom from '../assets/images/garden-room-home-office-air-conditioning.jpg';
@@ -118,8 +118,8 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   livingRoomBifold: {
     src: livingRoomBifold,
-    alt: 'Living room with bifold doors to the garden and a wall-mounted air conditioning unit above the sofa',
-    title: 'Home air conditioning — living room with bifold doors',
+    alt: 'Living room with a wall-mounted air conditioning unit above a corner sofa',
+    title: 'Home air conditioning — living room',
   },
   bedroom: {
     src: bedroom,
