@@ -11,11 +11,11 @@
  */
 // ---- Homes (no people)
 import livingRoom from '../assets/images/residential-air-conditioning-living-room.jpg';
-import livingRoomBifold from '../assets/images/living-room-corner-sofa-wall-mounted-air-conditioning.jpg';
+import livingRoomBifold from '../assets/images/living-room-bifold-doors-air-conditioning.jpg';
 import bedroom from '../assets/images/bedroom-wall-mounted-air-conditioning.jpg';
 import homeOffice from '../assets/images/home-office-wall-mounted-air-conditioning.jpg';
 import gardenRoom from '../assets/images/garden-room-home-office-air-conditioning.jpg';
-import openPlanLiving from '../assets/images/open-plan-living-kitchen-air-conditioning.jpg';
+import openPlanLiving from '../assets/images/living-room-corner-sofa-wall-mounted-air-conditioning.jpg';
 import kitchenDiner from '../assets/images/kitchen-diner-wall-mounted-air-conditioning.jpg';
 import thermostat from '../assets/images/home-air-conditioning-thermostat-room-temperature.jpg';
 import outdoorFan from '../assets/images/air-conditioning-outdoor-unit-fan.jpg';
@@ -118,8 +118,8 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   livingRoomBifold: {
     src: livingRoomBifold,
-    alt: 'Living room with a wall-mounted air conditioning unit above a corner sofa',
-    title: 'Home air conditioning — living room',
+    alt: 'Living room with bifold doors to the garden and a wall-mounted air conditioning unit above the sofa',
+    title: 'Home air conditioning — living room with bifold doors',
   },
   bedroom: {
     src: bedroom,
@@ -138,8 +138,8 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   openPlanLiving: {
     src: openPlanLiving,
-    alt: 'Open-plan living, dining and kitchen space with two wall-mounted air conditioning units',
-    title: 'Air conditioning for open-plan living spaces',
+    alt: 'Living room with a wall-mounted air conditioning unit above a corner sofa',
+    title: 'Home air conditioning — living room',
   },
   kitchenDiner: {
     src: kitchenDiner,
