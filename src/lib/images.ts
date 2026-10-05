@@ -88,6 +88,7 @@ import jobFreezerPack from '../assets/images/new-scroll-compressor-beside-refrig
 import jobFreezerCabinet from '../assets/images/freezer-cabinet-compressor-repair-with-tools.jpg';
 import jobFreezerSwap from '../assets/images/old-and-new-refrigeration-compressors-side-by-side.jpg';
 import jobFreezerFanGuard from '../assets/images/refrigeration-fan-guard-clogged-with-dust.jpg';
+import cellarCooler from '../assets/images/cellar-cooling-unit-above-beer-kegs-in-pub-cellar.jpg';
 import airflow from '../assets/images/coletrup-airflow-graphic.jpg';
 import graphicWaves from '../assets/images/coletrup-airflow-graphic-blue-orange-waves.jpg';
 import graphicDeepWave from '../assets/images/coletrup-airflow-graphic-deep-blue-wave.jpg';
@@ -163,6 +164,7 @@ export type ImageKey =
   | 'jobFreezerCabinet'
   | 'jobFreezerSwap'
   | 'jobFreezerFanGuard'
+  | 'cellarCooler'
   | 'airflow'
   | 'graphicWaves'
   | 'graphicDeepWave'
@@ -481,6 +483,11 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
     src: jobFreezerFanGuard,
     alt: 'Fan guard on a refrigerated cabinet clogged with dust',
     title: 'Fan guard clogged with dust',
+  },
+  cellarCooler: {
+    src: cellarCooler,
+    alt: 'Cellar cooling unit mounted on the wall of a pub cellar above beer kegs',
+    title: 'Cellar cooling repairs and maintenance',
   },
   airflow: { src: airflow, alt: '' },
   graphicWaves: { src: graphicWaves, alt: '' },

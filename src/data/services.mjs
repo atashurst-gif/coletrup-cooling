@@ -1055,6 +1055,8 @@ export const services = [
       eyebrow: 'Cellar cooling',
       h1: 'Cellar cooling repairs & maintenance.',
       lead: 'A cellar that holds the correct temperature is essential for pubs, bars and hospitality venues. We provide servicing, maintenance, fault finding and repairs to keep your cellar cooling system operating reliably.',
+      image: 'cellarCooler',
+      imagePosition: '50% 32%',
       chips: ['Fault finding', 'Servicing', 'Repairs', 'Maintenance'],
     },
     cta: { label: 'Request a repair', service: 'refrigeration', type: 'commercial', track: 'refrigeration' },
