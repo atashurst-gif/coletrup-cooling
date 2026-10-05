@@ -7,6 +7,7 @@ import PageHero from '../components/PageHero.astro';
 import SectionRenderer from '../components/SectionRenderer.astro';
 import FAQ from '../components/FAQ.astro';
 import RelatedServices from '../components/RelatedServices.astro';
+import ScrollGallery from '../components/ScrollGallery.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import FinalCTA from '../components/FinalCTA.astro';
 import { services } from '../data/services.mjs';
@@ -77,6 +78,8 @@ const isCommercialish = s.group === 'commercial' || s.group === 'maintenance' ||
   <FAQ items={s.faqs} title={s.faq?.title} intro={s.faq?.intro} tone={s.sections.length % 2 === 0 ? 'white' : 'cream'} />
 
   <RelatedServices items={s.related} title={s.relatedTitle} tone={s.sections.length % 2 === 0 ? 'cream' : 'white'} />
+
+  {s.gallery && <ScrollGallery id="gallery" eyebrow={s.gallery.eyebrow} title={s.gallery.title} items={s.gallery.items} tone={s.sections.length % 2 === 0 ? 'white' : 'cream'} />}
 
   <QuoteForm
     id="quote"

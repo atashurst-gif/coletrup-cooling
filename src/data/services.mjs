@@ -220,6 +220,12 @@ export const services = [
     ],
     relatedTitle: 'Other services we offer.',
     related: [REL_RESIDENTIAL, REL_COMMERCIAL, REL_SERVICE, REL_PLANNED],
+    // Scrolling photo strip near the foot of the page (each photo is used on this page only)
+    gallery: {
+      eyebrow: 'Our work',
+      title: 'Gallery',
+      items: ['galRoofLightBlack', 'galOutdoorWindow', 'galSlattedWall', 'galTrunking', 'galOutdoorBrick', 'galWhiteUnit', 'galOutdoorGable', 'galBlackCupboards', 'galUpstairsRoom', 'galOutdoorBetween'],
+    },
     schema: { serviceType: 'Air conditioning installation' },
   },
 
@@ -237,8 +243,8 @@ export const services = [
       eyebrow: 'Air conditioning repairs',
       h1: "When your air conditioning isn't performing properly, we're here to help.",
       lead: "If your air conditioning isn't performing as it should, we'll diagnose the fault and identify the right repair. From heating and cooling issues to leaks, unusual noises and electrical faults, we'll work to get your system back up and running.",
-      image: 'engineerOutdoorGauges',
-      imagePosition: '50% 45%',
+      image: 'repairOutdoorOpen',
+      imagePosition: '50% 22%',
       chips: ['Fault finding', 'Repairs'],
     },
     cta: { label: 'Request a repair', service: 'repair', type: 'residential', track: 'repair' },
@@ -404,6 +410,7 @@ export const services = [
       chips: ['Installation', 'Servicing', 'Maintenance', 'Repairs'],
     },
     cta: { label: 'Get a commercial quote', service: 'air-conditioning', type: 'commercial', track: 'commercial' },
+    midCta: { after: 2 }, // keep the "How can we help?" band after the systems section
     whatsappMessage: "Hi Coletrup Cooling, I'd like a quote for commercial air conditioning.",
     sections: [
       {
@@ -445,16 +452,8 @@ export const services = [
         ],
       },
       {
-        type: 'gallery',
-        tone: 'cream',
-        eyebrow: 'On the job',
-        title: 'Real jobs, carried out properly.',
-        intro: 'A few photos from recent commercial work, from testing and diagnostics to electrical fault finding.',
-        items: [{ image: 'jobClampMeter' }, { image: 'jobControlPanel' }, { image: 'jobUnitGauges' }],
-      },
-      {
         type: 'split',
-        tone: 'white',
+        tone: 'cream',
         image: 'restaurantCassette',
         imageSide: 'right',
         eyebrow: 'Working with businesses',
@@ -531,14 +530,6 @@ export const services = [
           { icon: 'alert', title: 'Error codes', text: 'Fault codes, warning lights or error messages showing on the controller.' },
           { icon: 'bolt', title: 'Electrical faults', text: 'Systems tripping, cutting out, failing to start or losing power.' },
         ],
-      },
-      {
-        type: 'gallery',
-        tone: 'cream',
-        eyebrow: 'On the job',
-        title: 'Faults found. Repairs done.',
-        intro: 'Photos from recent repair work, including faulty compressors being changed.',
-        items: [{ image: 'jobCompressorSwap' }, { image: 'jobCompressorPack' }],
       },
       {
         type: 'split',

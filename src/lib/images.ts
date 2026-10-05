@@ -57,6 +57,18 @@ import jobControlPanel from '../assets/images/control-panel-contactors-and-wirin
 import jobClampMeter from '../assets/images/clamp-meter-testing-ceiling-cassette-air-conditioning.jpg';
 import jobOutdoorClean from '../assets/images/outdoor-air-conditioning-unit-being-cleaned.jpg';
 import jobDirtyFilters from '../assets/images/dirty-air-conditioning-filters-removed-for-cleaning.jpg';
+// ---- Homes: real installs (gallery photos supplied 5 Oct)
+import galRoofLightBlack from '../assets/images/black-wall-mounted-air-conditioning-unit-roof-light.jpg';
+import galOutdoorWindow from '../assets/images/outdoor-air-conditioning-unit-below-window.jpg';
+import galSlattedWall from '../assets/images/wall-mounted-air-conditioning-unit-slatted-wall-panel.jpg';
+import galTrunking from '../assets/images/wall-mounted-air-conditioning-unit-white-pipe-trunking.jpg';
+import galOutdoorBrick from '../assets/images/outdoor-air-conditioning-unit-side-of-brick-house.jpg';
+import galWhiteUnit from '../assets/images/white-wall-mounted-air-conditioning-unit-beside-picture.jpg';
+import galOutdoorGable from '../assets/images/outdoor-air-conditioning-unit-gable-wall-pipe-covers.jpg';
+import galBlackCupboards from '../assets/images/black-wall-mounted-air-conditioning-unit-above-cupboards.jpg';
+import galUpstairsRoom from '../assets/images/wall-mounted-air-conditioning-unit-upstairs-room.jpg';
+import galOutdoorBetween from '../assets/images/outdoor-air-conditioning-unit-wall-brackets-between-houses.jpg';
+import repairOutdoorOpen from '../assets/images/outdoor-air-conditioning-unit-opened-for-repair-clamp-meter.jpg';
 import airflow from '../assets/images/coletrup-airflow-graphic.jpg';
 import graphicWaves from '../assets/images/coletrup-airflow-graphic-blue-orange-waves.jpg';
 import graphicDeepWave from '../assets/images/coletrup-airflow-graphic-deep-blue-wave.jpg';
@@ -105,6 +117,17 @@ export type ImageKey =
   | 'jobClampMeter'
   | 'jobOutdoorClean'
   | 'jobDirtyFilters'
+  | 'galRoofLightBlack'
+  | 'galOutdoorWindow'
+  | 'galSlattedWall'
+  | 'galTrunking'
+  | 'galOutdoorBrick'
+  | 'galWhiteUnit'
+  | 'galOutdoorGable'
+  | 'galBlackCupboards'
+  | 'galUpstairsRoom'
+  | 'galOutdoorBetween'
+  | 'repairOutdoorOpen'
   | 'airflow'
   | 'graphicWaves'
   | 'graphicDeepWave'
@@ -285,6 +308,62 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   jobOutdoorClean: { src: jobOutdoorClean, alt: 'Outdoor air conditioning unit with its fan guard removed, part-way through a deep clean', title: 'Outdoor unit deep clean' },
   jobDirtyFilters: { src: jobDirtyFilters, alt: 'Two air conditioning filters clogged with dust, removed for cleaning during a service', title: 'Filters before cleaning' },
   // ---- Decorative graphics (empty alt: purely visual)
+  // ---- Gallery: real installs
+  galRoofLightBlack: {
+    src: galRoofLightBlack,
+    alt: 'Black wall-mounted air conditioning unit in a room with a roof light',
+    title: 'Black wall-mounted unit',
+  },
+  galOutdoorWindow: {
+    src: galOutdoorWindow,
+    alt: 'Outdoor air conditioning unit on wall brackets below a window on a brick house',
+    title: 'Outdoor unit below a window',
+  },
+  galSlattedWall: {
+    src: galSlattedWall,
+    alt: 'Wall-mounted air conditioning unit on a slatted panel wall above a wooden sideboard',
+    title: 'Wall-mounted unit on a panelled wall',
+  },
+  galTrunking: {
+    src: galTrunking,
+    alt: 'Close-up of a white wall-mounted air conditioning unit with white pipe trunking',
+    title: 'Wall-mounted unit with pipe trunking',
+  },
+  galOutdoorBrick: {
+    src: galOutdoorBrick,
+    alt: 'Outdoor air conditioning unit on wall brackets at the side of a brick house',
+    title: 'Outdoor unit at the side of a house',
+  },
+  galWhiteUnit: {
+    src: galWhiteUnit,
+    alt: 'White wall-mounted air conditioning unit on a painted wall beside a framed picture',
+    title: 'White wall-mounted unit',
+  },
+  galOutdoorGable: {
+    src: galOutdoorGable,
+    alt: 'Outdoor air conditioning unit on wall brackets on the gable wall of a house, with black pipe covers',
+    title: 'Outdoor unit on a gable wall',
+  },
+  galBlackCupboards: {
+    src: galBlackCupboards,
+    alt: 'Black wall-mounted air conditioning unit fitted above built-in cupboards',
+    title: 'Black wall-mounted unit above cupboards',
+  },
+  galUpstairsRoom: {
+    src: galUpstairsRoom,
+    alt: 'White wall-mounted air conditioning unit fitted high on the wall of an upstairs room',
+    title: 'Wall-mounted unit in an upstairs room',
+  },
+  galOutdoorBetween: {
+    src: galOutdoorBetween,
+    alt: 'Outdoor air conditioning unit mounted on wall brackets on the side of a house',
+    title: 'Outdoor unit on wall brackets',
+  },
+  repairOutdoorOpen: {
+    src: repairOutdoorOpen,
+    alt: 'Outdoor air conditioning unit with its casing removed for repair, with a clamp meter and hand tools on the unit',
+    title: 'Air conditioning repair and fault finding',
+  },
   airflow: { src: airflow, alt: '' },
   graphicWaves: { src: graphicWaves, alt: '' },
   graphicDeepWave: { src: graphicDeepWave, alt: '' },

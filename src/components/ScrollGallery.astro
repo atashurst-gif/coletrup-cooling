@@ -1,0 +1,186 @@
+---
+/**
+ * Scrolling photo gallery — a strip of job photos that drifts sideways on its own and
+ * stops while it is hovered, touched or focused. Each photo keeps its own shape (nothing
+ * is cropped), and the strip can always be swiped or scrolled by hand.
+ *
+ * The built HTML carries every photo ONCE (site rule: one photo, one page, once). The
+ * script copies the strip in the browser so the loop is seamless; with no script, or with
+ * "reduce motion" switched on, it is simply a strip you scroll yourself.
+ */
+import { Picture } from 'astro:assets';
+import { images, type ImageKey } from '../lib/images';
+
+export interface Props {
+  id?: string;
+  tone?: 'cream' | 'white' | 'sand';
+  eyebrow?: string;
+  title?: string;
+  items: ImageKey[];
+}
+const { id = 'gallery', tone = 'white', eyebrow = 'Our work', title = 'Gallery', items } = Astro.props;
+---
+
+<section class:list={['section', 'gal', `tone-${tone}`]} id={id} aria-labelledby={`${id}-title`}>
+  <div class="container">
+    <div class="section-head gal__head" data-reveal>
+      <p class="eyebrow">{eyebrow}</p>
+      <h2 id={`${id}-title`}>{title}</h2>
+    </div>
+  </div>
+  <div class="gal__viewport" data-gallery tabindex="0" role="region" aria-labelledby={`${id}-title`}>
+    <ul class="gal__track">
+      {
+        items.map((key) => {
+          const img = images[key];
+          const ratio = img.src.width / img.src.height;
+          return (
+            <li class="gal__item" style={`--ratio:${ratio.toFixed(4)}`}>
+              <Picture
+                src={img.src}
+                alt={img.alt}
+                widths={[360, 640, 960]}
+                sizes={`(min-width: 1200px) ${Math.round(360 * ratio)}px, (min-width: 800px) ${(30 * ratio).toFixed(1)}vw, ${Math.round(240 * ratio)}px`}
+                formats={['avif', 'webp']}
+                fallbackFormat="webp"
+                loading="lazy"
+                decoding="async"
+                quality={78}
+              />
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  const SPEED = 38; // px per second
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((vp) => {
+    const track = vp.querySelector<HTMLElement>('.gal__track');
+    if (!track || track.children.length < 2) return;
+
+    // Copy the strip once so the end runs straight back into the start.
+    [...track.children].forEach((li) => {
+      const copy = li.cloneNode(true) as HTMLElement;
+      copy.setAttribute('aria-hidden', 'true');
+      copy.querySelectorAll('img').forEach((im) => {
+        im.alt = '';
+        im.loading = 'lazy';
+      });
+      track.appendChild(copy);
+    });
+    vp.classList.add('is-looping');
+
+    let pos = vp.scrollLeft;
+    let last = 0;
+    let held = false; // pointer over it, finger on it or keyboard focus in it
+    let onScreen = false;
+    let resumeTimer = 0;
+
+    const hold = () => {
+      window.clearTimeout(resumeTimer);
+      held = true;
+    };
+    const release = (delay = 0) => {
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => {
+        held = false;
+        pos = vp.scrollLeft;
+      }, delay);
+    };
+
+    vp.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && hold());
+    vp.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && release());
+    vp.addEventListener('touchstart', hold, { passive: true });
+    vp.addEventListener('touchend', () => release(2200), { passive: true });
+    vp.addEventListener('touchcancel', () => release(2200), { passive: true });
+    vp.addEventListener('wheel', () => { hold(); release(1500); }, { passive: true });
+    vp.addEventListener('focusin', hold);
+    vp.addEventListener('focusout', () => release());
+
+    new IntersectionObserver(([entry]) => (onScreen = entry.isIntersecting), { rootMargin: '120px 0px' }).observe(vp);
+
+    const tick = (now: number) => {
+      const dt = last ? Math.min(64, now - last) : 0;
+      last = now;
+      const half = track.scrollWidth / 2;
+      if (half > vp.clientWidth * 0.5) {
+        // keep hand scrolling inside the loop too
+        if (vp.scrollLeft >= half) {
+          vp.scrollLeft -= half;
+          pos = vp.scrollLeft;
+        }
+        if (!held && onScreen && !reduce.matches && !document.hidden) {
+          pos += (SPEED * dt) / 1000;
+          if (pos >= half) pos -= half;
+          vp.scrollLeft = pos;
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+</script>
+
+<style>
+  .gal {
+    overflow: hidden;
+  }
+  .gal__head {
+    margin-bottom: clamp(24px, 3vw, 40px);
+  }
+  .gal__viewport {
+    --gal-h: clamp(240px, 30vw, 360px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-block: 0.5rem 1.5rem;
+    outline-offset: -3px;
+  }
+  .gal__viewport::-webkit-scrollbar {
+    display: none;
+  }
+  /* soft fade at both edges once the strip is looping */
+  .gal__viewport.is-looping {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  }
+  .gal__track {
+    list-style: none;
+    display: flex;
+    width: max-content;
+    padding-left: var(--gutter);
+  }
+  .gal__viewport.is-looping .gal__track {
+    padding-left: 0;
+  }
+  .gal__item {
+    flex: none;
+    height: var(--gal-h);
+    width: calc(var(--gal-h) * var(--ratio));
+    margin-right: clamp(12px, 1.4vw, 20px);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--sand);
+    box-shadow: var(--shadow-sm);
+  }
+  .gal__item :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gal__viewport {
+      scrollbar-width: thin;
+    }
+    .gal__viewport::-webkit-scrollbar {
+      display: initial;
+    }
+  }
+</style>
