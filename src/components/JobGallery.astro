@@ -169,5 +169,28 @@ const soloImg = solo ? images[solo.image] : null;
     .jobs__track--4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
+    /* Five photos: three over two (second row centred), then one row of five on wide screens */
+    .jobs__track--5 {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .jobs__track--5 .jobs__fig {
+      margin: 0; /* photos fill their columns, so five across stay a good size */
+    }
+    .jobs__track--5 .jobs__item {
+      grid-column: span 2;
+    }
+    .jobs__track--5 .jobs__item:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+  }
+  @media (min-width: 1100px) {
+    .jobs__track--5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    .jobs__track--5 .jobs__item,
+    .jobs__track--5 .jobs__item:nth-child(4) {
+      grid-column: auto;
+    }
   }
 </style>

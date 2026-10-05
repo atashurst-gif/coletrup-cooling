@@ -82,6 +82,12 @@ import jobCassetteDeepClean from '../assets/images/ceiling-cassette-air-conditio
 import galOfficeWallUnit from '../assets/images/office-wall-mounted-air-conditioning-unit-suspended-ceiling.jpg';
 import galOfficeCassette from '../assets/images/office-ceiling-cassette-air-conditioning-unit.jpg';
 import galOfficeDesk from '../assets/images/office-wall-mounted-air-conditioning-unit-above-desk.jpg';
+// ---- Chiller & freezer repairs: on the job (supplied 5 Oct; story captions cropped off)
+import jobFreezerPanel from '../assets/images/refrigeration-control-panel-fault-finding-with-test-tools.jpg';
+import jobFreezerPack from '../assets/images/new-scroll-compressor-beside-refrigeration-compressor-pack.jpg';
+import jobFreezerCabinet from '../assets/images/freezer-cabinet-compressor-repair-with-tools.jpg';
+import jobFreezerSwap from '../assets/images/old-and-new-refrigeration-compressors-side-by-side.jpg';
+import jobFreezerFanGuard from '../assets/images/refrigeration-fan-guard-clogged-with-dust.jpg';
 import airflow from '../assets/images/coletrup-airflow-graphic.jpg';
 import graphicWaves from '../assets/images/coletrup-airflow-graphic-blue-orange-waves.jpg';
 import graphicDeepWave from '../assets/images/coletrup-airflow-graphic-deep-blue-wave.jpg';
@@ -152,6 +158,11 @@ export type ImageKey =
   | 'galOfficeWallUnit'
   | 'galOfficeCassette'
   | 'galOfficeDesk'
+  | 'jobFreezerPanel'
+  | 'jobFreezerPack'
+  | 'jobFreezerCabinet'
+  | 'jobFreezerSwap'
+  | 'jobFreezerFanGuard'
   | 'airflow'
   | 'graphicWaves'
   | 'graphicDeepWave'
@@ -444,6 +455,32 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
     src: galOfficeDesk,
     alt: 'Wall-mounted air conditioning unit on an office wall above a desk and chair',
     title: 'Office wall-mounted unit above a desk',
+  },
+  // ---- Chiller & freezer repairs: on the job
+  jobFreezerPanel: {
+    src: jobFreezerPanel,
+    alt: 'Refrigeration control panel with contactors and wiring, with a clamp meter and hand tools below',
+    title: 'Control panel fault finding',
+  },
+  jobFreezerPack: {
+    src: jobFreezerPack,
+    alt: 'New scroll compressor on the floor beside a refrigeration compressor pack, with tools ready',
+    title: 'Compressor pack repair',
+  },
+  jobFreezerCabinet: {
+    src: jobFreezerCabinet,
+    alt: 'Compressor and pipework inside a commercial freezer cabinet during a compressor repair, with a drill and socket set',
+    title: 'Freezer compressor repair',
+  },
+  jobFreezerSwap: {
+    src: jobFreezerSwap,
+    alt: 'New and old scroll compressors side by side on the floor during a repair',
+    title: 'Faulty compressor changed',
+  },
+  jobFreezerFanGuard: {
+    src: jobFreezerFanGuard,
+    alt: 'Fan guard on a refrigerated cabinet clogged with dust',
+    title: 'Fan guard clogged with dust',
   },
   airflow: { src: airflow, alt: '' },
   graphicWaves: { src: graphicWaves, alt: '' },

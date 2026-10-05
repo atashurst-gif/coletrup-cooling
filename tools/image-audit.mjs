@@ -23,12 +23,9 @@ const pages = [];
 
 const isGraphic = (name) => /^coletrup-airflow-graphic/.test(name);
 // Owner-approved exceptions: photos allowed on more than one page, and only on the pages listed
-// (still once per page). 5 Oct: the "Out on site" section is shown on both refrigeration pages.
-const OUT_ON_SITE = ['/refrigeration-repairs-maintenance/', '/commercial-chiller-freezer-repairs/'];
+// (still once per page). 5 Oct: the homepage refrigeration photo is also the Display Refrigeration hero.
 const SHARED = {
-  'refrigerant-gauges-on-display-cabinet-refrigeration-system': OUT_ON_SITE,
-  'compressor-and-pipework-inside-refrigerated-cabinet': OUT_ON_SITE,
-  'refrigeration-engineer-tools-and-gauges-on-shop-floor': OUT_ON_SITE,
+  'supermarket-chilled-and-frozen-food-display-cabinets': ['/', '/display-fridge-repairs-maintenance/'],
 };
 const sharedOk = (name, routes) => Boolean(SHARED[name]) && [...routes].every((r) => SHARED[name].includes(r));
 const usage = new Map(); // photo → Set(routes)

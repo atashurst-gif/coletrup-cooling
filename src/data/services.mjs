@@ -839,14 +839,12 @@ export const services = [
         ],
       },
       {
-        // Same "Out on site" section as the Refrigeration page (owner request, 5 Oct) — these three
-        // photos are the one allowed exception to the one-page-per-photo rule (see tools/image-audit.mjs)
         type: 'gallery',
         tone: 'cream',
         eyebrow: 'On the job',
         title: 'Out on site.',
-        intro: 'Photos from recent refrigeration work on display cabinets and chilled equipment.',
-        items: [{ image: 'jobCabinetGauges' }, { image: 'jobCabinetCompressor' }, { image: 'jobShopFloorTools' }],
+        intro: 'Photos from recent refrigeration repairs, from compressor changes to electrical fault finding.',
+        items: [{ image: 'jobFreezerPanel' }, { image: 'jobFreezerPack' }, { image: 'jobFreezerCabinet' }, { image: 'jobFreezerSwap' }, { image: 'jobFreezerFanGuard' }],
       },
       {
         type: 'split',
@@ -967,8 +965,8 @@ export const services = [
       eyebrow: 'Display refrigeration',
       h1: 'Display refrigeration service & repairs.',
       lead: 'We provide servicing, maintenance, fault finding and repairs for commercial display refrigeration, helping keep your equipment operating reliably and products at the correct temperature.',
-      image: 'displayFridges',
-      imagePosition: '60% 50%',
+      image: 'supermarketChillers', // same photo as the homepage refrigeration card (owner request, 5 Oct)
+      imagePosition: '50% 40%',
       chips: ['Service', 'Maintenance', 'Fault finding', 'Repairs'],
     },
     cta: { label: 'Request support', service: 'refrigeration', type: 'commercial', track: 'refrigeration' },
