@@ -31,7 +31,7 @@ import engineerOutdoorGauges from '../assets/images/engineer-testing-outdoor-air
 import commercialRooftopGauges from '../assets/images/commercial-rooftop-air-conditioning-unit-repair-gauges.jpg';
 import engineerGauges from '../assets/images/engineer-refrigerant-gauges-diagnostics.jpg';
 import outdoorElectrical from '../assets/images/engineer-wiring-outdoor-air-conditioning-unit.jpg';
-import outdoorTablet from '../assets/images/engineer-recording-commercial-air-conditioning-checks-tablet.jpg';
+import outdoorTablet from '../assets/images/commercial-rooftop-air-conditioning-outdoor-units.jpg';
 import engineerPortrait from '../assets/images/coletrup-cooling-engineer-outside-premises.jpg';
 // ---- Commercial spaces (no people)
 import officeBoardroom from '../assets/images/office-meeting-room-ceiling-cassette-air-conditioning.jpg';
@@ -210,8 +210,8 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   outdoorTablet: {
     src: outdoorTablet,
-    alt: 'Coletrup Cooling engineer recording checks on a tablet beside a commercial air conditioning unit',
-    title: 'Commercial air conditioning servicing',
+    alt: 'Row of commercial air conditioning outdoor units on a rooftop',
+    title: 'Commercial air conditioning outdoor units',
   },
   engineerPortrait: {
     src: engineerPortrait,
