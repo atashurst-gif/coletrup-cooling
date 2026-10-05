@@ -21,6 +21,10 @@ export interface Props {
   panelSeed?: number;
   imagePosition?: string;
   imageSide?: 'left' | 'right';
+  /** false = text only: no photo and no brand panel; heading and copy sit side by side on desktop. */
+  media?: boolean;
+  /** Show the brand panel only where it sits beside the text (desktop); hide it when the layout stacks. */
+  panelDesktopOnly?: boolean;
   secondaryImage?: ImageKey;
   eyebrow: string;
   title: string;
@@ -43,6 +47,8 @@ const {
   panelSeed = 31,
   imagePosition = '50% 50%',
   imageSide = 'right',
+  media = true,
+  panelDesktopOnly = false,
   secondaryImage,
   eyebrow,
   title,
@@ -65,8 +71,9 @@ const Title = titleTag;
 
 <section class:list={['section', 'its', `tone-${tone}`, emphasis && 'its--emphasis']} id={id} aria-labelledby={id ? `${id}-title` : undefined}>
   {tone === 'navy' && <Airflow tone="dark" lines={6} seed={9} intensity={0.7} mask="linear-gradient(180deg, transparent 0%, #000 40%, #000 100%)" />}
-  <div class:list={['container', 'its__grid', `its__grid--${imageSide}`, 'its__grid--layered']}>
-    <div class="its__media" data-reveal>
+  <div class:list={['container', 'its__grid', media ? `its__grid--${imageSide}` : 'its__grid--text', 'its__grid--layered']}>
+    {media && (
+    <div class:list={['its__media', !img && panelDesktopOnly && 'its__media--desktop']} data-reveal>
       {
         img ? (
           <div class:list={['frame', 'its__frame', !decorative && 'zoom']}>
@@ -98,9 +105,13 @@ const Title = titleTag;
         )
       }
     </div>
-    <div class="its__copy" data-reveal style="--reveal-delay:120ms">
-      <p class="eyebrow">{eyebrow}</p>
-      <Title id={id ? `${id}-title` : undefined} class="its__title">{title}</Title>
+    )}
+    <div class="its__copy" data-reveal style={media ? '--reveal-delay:120ms' : undefined}>
+      <div class="its__head">
+        <p class="eyebrow">{eyebrow}</p>
+        <Title id={id ? `${id}-title` : undefined} class="its__title">{title}</Title>
+      </div>
+      <div class="its__rest">
       {body.map((p) => <p class="its__body">{p}</p>)}
       {
         bullets.length > 0 && (
@@ -137,6 +148,7 @@ const Title = titleTag;
         )
       }
       <slot />
+      </div>
     </div>
   </div>
 </section>
@@ -212,15 +224,8 @@ const Title = titleTag;
     color: var(--muted);
     max-width: 58ch;
   }
-  .its__body:first-of-type {
-    font-size: var(--fs-lead);
-    color: var(--charcoal);
-  }
   .tone-navy .its__body {
     color: var(--on-navy-muted);
-  }
-  .tone-navy .its__body:first-of-type {
-    color: var(--on-navy);
   }
   .its__ticks {
     margin-top: 1.5rem;
@@ -260,6 +265,12 @@ const Title = titleTag;
       grid-template-columns: 1fr;
     }
   }
+  /* Brand panel only where it sits beside the text */
+  @media (max-width: 1079px) {
+    .its__media--desktop {
+      display: none;
+    }
+  }
   @media (min-width: 1080px) {
     .its__grid {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -279,6 +290,19 @@ const Title = titleTag;
     }
     .its--emphasis .its__grid {
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+    /* Text only: heading on the left, copy and ticks on the right */
+    .its__grid--text {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .its__grid--text .its__copy {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+    .its__grid--text .its__title {
+      margin-bottom: 0;
     }
     .its__frame-2 {
       right: -32px;

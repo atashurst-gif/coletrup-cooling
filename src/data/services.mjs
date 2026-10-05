@@ -111,6 +111,7 @@ export const services = [
         tone: 'white',
         icon: 'leaf',
         imageSide: 'right',
+        panelDesktopOnly: true, // "Keeping it cool" graphic beside the text on desktop only
         eyebrow: 'Efficient heating & cooling',
         title: 'Energy efficient year round comfort for your home.',
         body: [
@@ -122,8 +123,7 @@ export const services = [
       },
       {
         type: 'split',
-        icon: 'handshake',
-        imageSide: 'left',
+        media: false, // text only — no photo or brand graphic
         eyebrow: 'From start to finish',
         title: 'Professional service every step of the way.',
         body: [
@@ -160,10 +160,10 @@ export const services = [
     breadcrumb: [{ label: 'Residential Air Conditioning', href: '/residential-air-conditioning/' }],
     hero: {
       eyebrow: 'Air conditioning installation',
-      h1: 'Professional air conditioning for your home or business.',
+      h1: 'Professional air conditioning for your home.',
       lead: "Whether you need air conditioning for a single room, your home or commercial premises, we'll recommend the right system for your requirements and provide a professional installation from start to finish.",
-      image: 'outdoorElectrical',
-      imagePosition: '50% 45%',
+      image: 'stairsUnit',
+      imagePosition: '50% 30%',
       chips: ['Homes', 'Businesses'],
     },
     cta: { label: 'Get a quote', service: 'air-conditioning', type: '', track: 'installation' },

@@ -19,6 +19,7 @@ import openPlanLiving from '../assets/images/living-room-corner-sofa-wall-mounte
 import kitchenDiner from '../assets/images/kitchen-diner-wall-mounted-air-conditioning.jpg';
 import thermostat from '../assets/images/home-air-conditioning-thermostat-room-temperature.jpg';
 import outdoorFan from '../assets/images/air-conditioning-outdoor-unit-fan.jpg';
+import stairsUnit from '../assets/images/wall-mounted-air-conditioning-above-staircase.jpg';
 // ---- Engineers indoors (shirt)
 import engineerHomeDark from '../assets/images/engineer-inspecting-wall-mounted-air-conditioning-unit.jpg';
 import engineerFilterCleanDark from '../assets/images/engineer-cleaning-wall-mounted-air-conditioning-filter.jpg';
@@ -72,6 +73,7 @@ export type ImageKey =
   | 'kitchenDiner'
   | 'thermostat'
   | 'outdoorFan'
+  | 'stairsUnit'
   | 'engineerHomeDark'
   | 'engineerFilterCleanDark'
   | 'engineerInstallDiningDark'
@@ -150,6 +152,11 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
     src: thermostat,
     alt: 'Wall-mounted digital thermostat showing a room temperature of 21.5°C',
     title: 'Temperature control for several rooms',
+  },
+  stairsUnit: {
+    src: stairsUnit,
+    alt: 'Wall-mounted air conditioning unit on the wall above a timber staircase with a glass balustrade',
+    title: 'Home air conditioning installation',
   },
   outdoorFan: {
     src: outdoorFan,
