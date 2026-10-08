@@ -9,14 +9,16 @@
  * engineers indoors wear the shirt; outdoors and around fridges/freezers/cold rooms they
  * wear the black coat. Earlier navy-uniform variants live in tools/photo-originals/retired/.
  */
-// ---- Homes (no people). The five room photos are stock photos of real homes — sources and licence in tools/photo-credits.md
-import livingRoom from '../assets/images/living-room-with-wall-mounted-air-conditioning-unit.jpg';
+// ---- Homes (no people). The five Residential room photos had their navy and orange decor recoloured
+// (deep green / dusty pink) so it no longer matches the brand colours — tools/recolour-rooms.py, originals in
+// tools/photo-originals/rooms-brand-colours/ (owner request, 8 Oct 2026).
+import livingRoom from '../assets/images/residential-air-conditioning-living-room.jpg';
 import livingRoomBifold from '../assets/images/living-room-bifold-doors-air-conditioning.jpg';
-import bedroom from '../assets/images/bedroom-with-wall-mounted-air-conditioning-unit.jpg';
-import homeOffice from '../assets/images/home-office-with-wall-mounted-air-conditioning-unit.jpg';
-import gardenRoom from '../assets/images/garden-room-with-timber-ceiling-and-air-conditioning-unit.jpg';
+import bedroom from '../assets/images/bedroom-wall-mounted-air-conditioning.jpg';
+import homeOffice from '../assets/images/home-office-wall-mounted-air-conditioning.jpg';
+import gardenRoom from '../assets/images/garden-room-home-office-air-conditioning.jpg';
 import openPlanLiving from '../assets/images/living-room-corner-sofa-wall-mounted-air-conditioning.jpg';
-import kitchenDiner from '../assets/images/open-plan-kitchen-dining-living-space-with-air-conditioning-unit.jpg';
+import kitchenDiner from '../assets/images/kitchen-diner-wall-mounted-air-conditioning.jpg';
 import thermostat from '../assets/images/air-conditioning-wall-controller-temperature-display.jpg';
 import outdoorFan from '../assets/images/air-conditioning-outdoor-unit-fan.jpg';
 import stairsUnit from '../assets/images/wall-mounted-air-conditioning-above-staircase.jpg';
@@ -177,7 +179,7 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   // ---- Homes
   livingRoom: {
     src: livingRoom,
-    alt: 'Living room with a corner sofa and a wall-mounted air conditioning unit beside the window',
+    alt: 'Modern living room with a white wall-mounted air conditioning unit above a cream sofa and patio doors',
     title: 'Living room air conditioning',
   },
   livingRoomBifold: {
@@ -187,17 +189,17 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   bedroom: {
     src: bedroom,
-    alt: 'Bedroom with a wall-mounted air conditioning unit high on the wall beside the curtains',
+    alt: 'Bedroom with a wall-mounted air conditioning unit above the bed and doors to the garden',
     title: 'Bedroom air conditioning',
   },
   homeOffice: {
     src: homeOffice,
-    alt: 'Home office with a desk chair, framed prints and a wall-mounted air conditioning unit above',
+    alt: 'Home office with a wall-mounted air conditioning unit above the desk',
     title: 'Home office air conditioning',
   },
   gardenRoom: {
     src: gardenRoom,
-    alt: 'Timber-lined garden room with a sofa, glazed doors and a wall-mounted air conditioning unit',
+    alt: 'Garden room home office with sliding doors and a wall-mounted air conditioning unit',
     title: 'Air conditioning for garden rooms and extensions',
   },
   openPlanLiving: {
@@ -207,8 +209,8 @@ export const images: Record<ImageKey, { src: ImageMetadata; alt: string; title?:
   },
   kitchenDiner: {
     src: kitchenDiner,
-    alt: 'Open-plan kitchen, dining and living space with a wall-mounted air conditioning unit above the kitchen',
-    title: 'Open-plan air conditioning',
+    alt: 'Kitchen diner with a wall-mounted air conditioning unit beside doors to the garden',
+    title: 'Kitchen diner air conditioning',
   },
   thermostat: {
     src: thermostat,

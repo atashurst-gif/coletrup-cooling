@@ -55,12 +55,12 @@ const siteConfig = {
   },
 
   contact: {
-    /** Display format, e.g. '0161 000 0000' — TO BE SUPPLIED */
-    phoneDisplay: '',
-    /** International format for tel: links, e.g. '+441610000000' — TO BE SUPPLIED */
-    phoneE164: '',
-    /** WhatsApp number, digits only with country code, e.g. '447700900000' — TO BE SUPPLIED */
-    whatsapp: '',
+    /** Display format (business mobile, also on WhatsApp — supplied 8 Oct 2026) */
+    phoneDisplay: '07367 751704',
+    /** International format for tel: links */
+    phoneE164: '+447367751704',
+    /** WhatsApp number, digits only with country code */
+    whatsapp: '447367751704',
     /** Enquiries email */
     email: 'info@coletrupcooling.co.uk',
     /** Opening hours as display lines, e.g. ['Mon–Fri 8:00–17:30'] — TO BE SUPPLIED (optional) */

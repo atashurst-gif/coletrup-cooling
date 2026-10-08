@@ -84,7 +84,7 @@ for (const f of files) {
 const hr = '─'.repeat(72);
 console.log(`\n${hr}\nCOLETRUP COOLING — CONTENT AUDIT${strict ? ' (STRICT)' : ''}\n${hr}`);
 if (missing.length) {
-  console.log(`\n✖ ${missing.length} verified item(s) still MISSING (placeholders are showing on the site):`);
+  console.log(`\n✖ ${missing.length} verified item(s) still MISSING (left off the site until supplied):`);
   missing.forEach((m) => console.log(`   • ${m}`));
 } else console.log('\n✔ All required verified content supplied.');
 if (warnings.length) {
