@@ -5,7 +5,7 @@
 import Icon from './Icon.astro';
 import Button from './Button.astro';
 import NorthWestMap from './NorthWestMap.astro';
-import { site, confirmedAreas, areaPages } from '../lib/site';
+import { site, visibleAreas, areaPages } from '../lib/site';
 
 export interface Props {
   id?: string;
@@ -23,9 +23,9 @@ const { id = 'areas', compact = false } = Astro.props;
         We provide air conditioning installation, servicing and repairs for homes and businesses {site.region.phrase}, alongside specialist refrigeration servicing, maintenance and repairs.
       </p>
       {
-        confirmedAreas.length > 0 ? (
+        visibleAreas.length > 0 ? (
           <ul class="areas__list">
-            {confirmedAreas.map((a) => (
+            {visibleAreas.map((a) => (
               <li>
                 <Icon name="pin" size={18} strokeWidth={2} />
                 {areaPages.some((p) => p.slug === a.slug) ? <a href={`/areas-we-cover/${a.slug}/`}>{a.name}</a> : <span>{a.name}</span>}

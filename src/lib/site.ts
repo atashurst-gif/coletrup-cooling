@@ -42,6 +42,8 @@ export function whatsappHref(message?: string): string {
 export const defaultWhatsAppMessage = "Hi Coletrup Cooling, I'd like to ask about air conditioning.";
 
 export const confirmedAreas = siteConfig.areas.filter((a) => a.confirmed);
+/** Areas shown in on-page lists and map pins (empty when the owner wants footer links only). */
+export const visibleAreas = (siteConfig as any).showAreasOnSite === false ? [] : confirmedAreas;
 /** Areas that can have their own page: confirmed AND with unique content. */
 export const areaPages = confirmedAreas.filter((a) => a.intro && a.details && a.details.length >= 3);
 

@@ -9,7 +9,7 @@
  * Pure CSS animation; static (already zoomed and lit) under prefers-reduced-motion.
  */
 import uk from '../data/uk-map.json';
-import { site, confirmedAreas } from '../lib/site';
+import { site, visibleAreas } from '../lib/site';
 
 const m = uk as any;
 const { proj, counties, nwBox, labels } = m;
@@ -17,7 +17,7 @@ const project = (lat: number, lon: number) => ({
   x: (lon - proj.lon0) * proj.k * proj.cos,
   y: (proj.lat0 - lat) * proj.k,
 });
-const pins = confirmedAreas
+const pins = visibleAreas
   .filter((a: any) => typeof a.lat === 'number' && typeof a.lon === 'number')
   .map((a: any) => ({ name: a.name, ...project(a.lat, a.lon) }));
 

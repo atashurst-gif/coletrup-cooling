@@ -6,7 +6,7 @@ import Placeholder from '../../components/Placeholder.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import FinalCTA from '../../components/FinalCTA.astro';
 import MidCTA from '../../components/MidCTA.astro';
-import { site, confirmedAreas, areaPages } from '../../lib/site';
+import { site, visibleAreas, areaPages } from '../../lib/site';
 
 const title = 'Areas We Cover | Air Conditioning & Refrigeration, North West | Coletrup Cooling';
 const description = 'Professional air conditioning and refrigeration services across Manchester and the North West, for homes and businesses. Check we cover your area.';
@@ -24,7 +24,7 @@ const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
     whatsappMessage="Hi Coletrup Cooling, do you cover my area? My postcode is "
   />
 
-  {confirmedAreas.length > 0 && (
+  {visibleAreas.length > 0 && (
   <section class="section tone-white areas-list" aria-labelledby="areas-list-title">
     <div class="container">
       <div class="section-head section-head--split">
@@ -35,9 +35,9 @@ const breadcrumbs = [{ label: 'Areas We Cover', href: '/areas-we-cover/' }];
         <p>We only list areas we genuinely cover. If yours isn't shown, send us your postcode and we'll confirm.</p>
       </div>
       {
-        confirmedAreas.length > 0 ? (
+        visibleAreas.length > 0 ? (
           <ul class="areas-list__grid">
-            {confirmedAreas.map((a) => {
+            {visibleAreas.map((a) => {
               const hasPage = areaPages.some((p) => p.slug === a.slug);
               return (
                 <li class:list={['card', hasPage && 'card--lift', 'areas-list__item']}>
