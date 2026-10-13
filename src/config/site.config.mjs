@@ -92,7 +92,7 @@ const siteConfig = {
   region: {
     name: 'North West',
     phrase: 'across the North West',
-    confirmed: false,
+    confirmed: true,
   },
 
   /**

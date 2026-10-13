@@ -9,7 +9,7 @@ import { site, hasPhone, hasWhatsApp, hasEmail, hasCompanyDetails, telHref, what
 // Only the contact routes that have been supplied are shown (nothing is left as a placeholder).
 const routes = [hasWhatsApp && 'WhatsApp', hasPhone && 'phone', hasEmail && 'email'].filter(Boolean) as string[];
 const routesText = routes.length > 1 ? `${routes.slice(0, -1).join(', ')} or ${routes[routes.length - 1]}` : routes[0];
-const title = 'Contact & Get a Quote | Coletrup Cooling';
+const title = 'Contact Us & Get a Free Quote | Coletrup Cooling';
 const description = `Request a free air conditioning or refrigeration quote from Coletrup Cooling in four quick steps${routesText ? `, or get in touch by ${routesText}` : ''}.`;
 const breadcrumbs = [{ label: 'Contact & Get a Quote', href: '/contact/' }];
 ---

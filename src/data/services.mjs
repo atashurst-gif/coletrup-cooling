@@ -48,7 +48,7 @@ export const services = [
     group: 'residential',
     navLabel: 'Residential Air Conditioning',
     seo: {
-      title: 'Residential Air Conditioning for Homes | Coletrup Cooling',
+      title: 'Home Air Conditioning North West | Installation & Repairs | Coletrup',
       description:
         'Professional residential air conditioning installation, servicing and repairs, providing efficient heating and cooling with solutions tailored to suit your property.',
     },
@@ -153,7 +153,7 @@ export const services = [
     group: 'residential',
     navLabel: 'Air Conditioning Installation',
     seo: {
-      title: 'Air Conditioning Installation | Coletrup Cooling',
+      title: 'Air Conditioning Installation North West | Coletrup Cooling',
       description:
         "Professional air conditioning installation for homes and businesses. We'll recommend the right system for your requirements and install it from start to finish.",
     },
@@ -234,7 +234,7 @@ export const services = [
     group: 'residential',
     navLabel: 'Air Conditioning Repairs',
     seo: {
-      title: 'Air Conditioning Repairs & Fault Finding | Coletrup Cooling',
+      title: 'Air Conditioning Repairs North West | Coletrup Cooling',
       description:
         "Air conditioning not heating or cooling, leaking water or making unusual noises? We'll diagnose the fault and identify the right repair. Request a repair online or on WhatsApp.",
     },
@@ -316,7 +316,7 @@ export const services = [
     group: 'residential',
     navLabel: 'Air Conditioning Service & Maintenance',
     seo: {
-      title: 'Air Conditioning Service & Maintenance | Coletrup Cooling',
+      title: 'Air Conditioning Servicing North West | Coletrup Cooling',
       description:
         'Regular air conditioning servicing helps maintain performance, efficiency and reliability, and allows potential issues to be identified early.',
     },
@@ -396,7 +396,7 @@ export const services = [
     group: 'commercial',
     navLabel: 'Commercial Air Conditioning',
     seo: {
-      title: 'Commercial Air Conditioning for Businesses | Coletrup Cooling',
+      title: 'Commercial Air Conditioning North West | Coletrup Cooling',
       description:
         'Professional air conditioning installation, servicing, maintenance and repairs for businesses across Manchester and the North West.',
     },
@@ -495,7 +495,7 @@ export const services = [
     group: 'commercial',
     navLabel: 'Commercial Air Conditioning Service & Repairs',
     seo: {
-      title: 'Commercial Air Conditioning Service & Repairs | Coletrup Cooling',
+      title: 'Commercial Air Conditioning Repairs North West | Coletrup Cooling',
       description:
         'Professional fault finding and repairs for commercial air conditioning systems across Manchester and the North West.',
     },
@@ -679,7 +679,7 @@ export const services = [
     group: 'refrigeration',
     navLabel: 'Refrigeration Repairs & Maintenance',
     seo: {
-      title: 'Commercial Refrigeration Repairs & Maintenance | Coletrup Cooling',
+      title: 'Commercial Refrigeration Repairs North West | Coletrup Cooling',
       description:
         'Professional servicing, maintenance, fault finding and repairs for commercial refrigeration systems across Manchester and the North West.',
     },
