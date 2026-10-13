@@ -23,7 +23,7 @@ const siteConfig = {
    * On Netlify, the production site URL is used automatically if left blank.
    * If no URL is available the build is marked NOINDEX (safe preview mode).
    */
-  url: '',
+  url: 'https://coletrupcooling.co.uk',
 
   brand: {
     /**
